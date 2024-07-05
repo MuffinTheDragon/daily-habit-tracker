@@ -68,7 +68,7 @@ export const AddHabit = ({ paused }: { paused: boolean }) => {
 			<DialogTrigger disabled={paused}>
 				<div
 					className={cn(
-						"flex border-4 border-dashed rounded-xl min-h-96 min-w-96",
+						"flex border-4 border-dashed rounded-xl h-full min-h-96 min-w-96",
 						{
 							"hover:bg-muted": !paused,
 							"hover:cursor-not-allowed": paused,
