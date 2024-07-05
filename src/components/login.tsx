@@ -1,8 +1,7 @@
 import { db } from "@/db";
 import { DXCInputField, resolveText } from "dexie-cloud-addon";
 import { useObservable } from "dexie-react-hooks";
-import { useState } from "react";
-import { toast } from "sonner";
+import { useEffect, useState } from "react";
 import {
 	Credenza,
 	CredenzaContent,
@@ -16,6 +15,7 @@ import { Alert, AlertDescription } from "./ui/alert";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
+import { toast } from "sonner";
 
 export const Login = () => {
 	const userId = db.cloud.currentUserId;
@@ -24,16 +24,20 @@ export const Login = () => {
 	const [params, setParams] = useState<{ [param: string]: string }>({});
 	const [open, setOpen] = useState(false);
 
-	if (userId !== "unauthorized") {
-		toast.success("Success! You are logged in", {
-			description: (
-				<p>
-					Current user: <b>{userId}</b>
-				</p>
-			),
-			closeButton: true,
-		});
+	useEffect(() => {
+		if (userId !== "unauthorized") {
+			toast.success("Success! You are logged in", {
+				description: (
+					<p>
+						Current user: <b>{userId}</b>
+					</p>
+				),
+				closeButton: true,
+			});
+		}
+	}, [userId]);
 
+	if (userId !== "unauthorized") {
 		return null;
 	}
 
