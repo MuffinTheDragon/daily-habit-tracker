@@ -145,7 +145,7 @@ const FillPreviousDays = ({
 		const dayNumber = getDayOfYear(day);
 
 		if (model.graph.at(-1)!.daysChecked.includes(dayNumber)) return true;
-		return day >= addDays(getCurrentDate(), -1);
+		return day >= addDays(new Date(), -1);
 	};
 
 	return (

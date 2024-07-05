@@ -24,7 +24,6 @@ import { Graph } from "./graph";
 import { HabitCardDescription } from "./habit-card-description";
 import { HabitCardStats } from "./habit-card-stats";
 import { HabitCardTitle } from "./habit-card-title";
-import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
 import { Badge } from "./ui/badge";
 
 export const BaseNumberOfFreezes = 3;
@@ -41,9 +40,6 @@ export const HabitCard = ({
 	const [model, setModel] = useState<HabitType>(habit);
 	const [editingTitle, setEditingTitle] = useState(false);
 	const [editingDescription, setEditingDescription] = useState(false);
-
-	const [showAlert, setShowAlert] = useState(false);
-	const [alertMsg, setAlertMsg] = useState("");
 
 	const [initialFreezes, setInitialFreezes] = useState(BaseNumberOfFreezes);
 
@@ -122,7 +118,6 @@ export const HabitCard = ({
 		const checked = v ? true : false;
 
 		const graph = [...model.graph];
-		setShowAlert(!checked);
 
 		const currentYear = new Date().getFullYear();
 		const dayOfYear = getDayOfYear();
@@ -177,7 +172,7 @@ export const HabitCard = ({
 	};
 
 	return (
-		<Card className="relative min-w-80 sm:min-w-96 flex flex-col">
+		<Card className="relative flex flex-col">
 			{habit.archived && (
 				<Badge
 					variant="secondary"
@@ -206,14 +201,6 @@ export const HabitCard = ({
 							setModel,
 						}}
 					/>
-					{showAlert && alertMsg && (
-						<Alert className="my-4" variant="destructive">
-							<AlertTitle>Careful!</AlertTitle>
-							<AlertDescription className="text-sm">
-								{alertMsg}
-							</AlertDescription>
-						</Alert>
-					)}
 					<div className="flex mt-2 justify-between">
 						<HabitCardStats habit={model} />
 					</div>

@@ -16,26 +16,6 @@ export function daysInYear(year: number) {
 }
 
 /**
- * Given a day number (e.g. 250th day of the year), return its readable format
- * @param dayNumber
- * @returns Readable format: DDD MMM dd
- */
-export function getMonthAndDayOfWeek(dayNumber: number) {
-	var date = new Date(new Date().getFullYear(), 0);
-
-	date.setDate(dayNumber);
-
-	// Get month and day
-	var month = date.toLocaleString("default", { month: "short" });
-	var dayOfWeek = date.toLocaleString("default", { weekday: "short" });
-	var dayOfMonth = date.getDate();
-
-	var result = `${dayOfWeek} ${month} ${dayOfMonth}`;
-
-	return result;
-}
-
-/**
  * Given a day number (e.g. 250th day of the year), return its full date (MMMM dd YYYY)
  * @param dayNumber
  * @returns full date
