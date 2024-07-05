@@ -69,7 +69,7 @@ export default function Home() {
 		<>
 			<Login />
 			<main className="flex flex-col items-center justify-between p-4 md:py-24 space-y-8">
-				<div className="grid grid-flow-col auto-cols-max gap-4">
+				<div className="grid gap-4">
 					<div className="flex justify-between items-center col-span-1 lg:col-span-2 gap-4">
 						<div className="space-y-4">
 							<h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
@@ -82,7 +82,11 @@ export default function Home() {
 
 						<Credenza>
 							<CredenzaTrigger asChild>
-								<Button variant="outline" size="icon">
+								<Button
+									variant="outline"
+									size="icon"
+									className="ms-4"
+								>
 									<Cog6ToothIcon className="w-4 h-4" />
 								</Button>
 							</CredenzaTrigger>
