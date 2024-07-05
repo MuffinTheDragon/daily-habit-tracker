@@ -1,5 +1,6 @@
 import { HabitType } from "@/data/HabitType";
-import { diffInDaysFromNow, getActiveDays } from "@/lib/utils";
+import { db } from "@/db";
+import { useLiveQuery } from "dexie-react-hooks";
 import { Stat } from "./stat";
 import {
 	Tooltip,
@@ -7,8 +8,6 @@ import {
 	TooltipProvider,
 	TooltipTrigger,
 } from "./ui/tooltip";
-import { useLiveQuery } from "dexie-react-hooks";
-import { db } from "@/db";
 
 export const HabitCardStats = ({ habit }: { habit: HabitType }) => {
 	const user = useLiveQuery(() => db.user.toArray());
@@ -43,16 +42,7 @@ export const HabitCardStats = ({ habit }: { habit: HabitType }) => {
 			</div>
 			<div className="space-y-4">
 				<Stat title="Checks" number={habit.checks} />
-				<Stat
-					title="Consistency %"
-					number={
-						~~(
-							(habit.checks /
-								(getActiveDays(user[0], habit) + 0)) *
-							100
-						)
-					}
-				/>
+				<Stat title="Longest streak" number={habit.longestStreak} />
 			</div>
 		</>
 	);

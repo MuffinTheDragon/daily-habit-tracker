@@ -9,6 +9,8 @@ export type HabitType = {
 	name: string;
 	description: string;
 	streak: number;
+	longestStreak: number;
+	longestStreakDateSet: Date;
 	checks: number;
 	archived: boolean;
 	archivedDate: Date | null;

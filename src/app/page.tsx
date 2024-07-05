@@ -126,7 +126,7 @@ export default function Home() {
 							<div className="mt-2 hidden md:block">
 								<p>
 									Track your streaks for each habit. Along
-									with stats for completions and consistency
+									with your completions and longest streaks
 								</p>
 							</div>
 						</div>
@@ -239,7 +239,7 @@ export default function Home() {
 										your streaks
 									</p>
 								</div>
-								<div>
+								<div className="w-full flex justify-center">
 									<Image
 										src={pauseDark}
 										alt="map"
@@ -265,7 +265,7 @@ export default function Home() {
 										habit with a simple visual map
 									</p>
 								</div>
-								<div>
+								<div className="w-full flex justify-center">
 									<Image
 										src={mapDark}
 										alt="map"

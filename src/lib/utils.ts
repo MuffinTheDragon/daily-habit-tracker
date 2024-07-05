@@ -1,14 +1,5 @@
-import { GraphType, HabitType } from "@/data/HabitType";
-import { UserType } from "@/data/userType";
 import { type ClassValue, clsx } from "clsx";
-import {
-	differenceInDays,
-	differenceInHours,
-	format,
-	isEqual,
-	max,
-	parse,
-} from "date-fns";
+import { differenceInHours, format, parse } from "date-fns";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
@@ -51,7 +42,6 @@ export function getMonthAndDayOfWeek(dayNumber: number) {
  */
 export function getDateByDayNumber(dayNumber: number) {
 	const parsedDate = parse(dayNumber.toString(), "DDD", new Date());
-	console.log(parsedDate);
 	return parsedDate;
 }
 
@@ -95,26 +85,6 @@ export function diffInDaysFromNow(date: Date) {
 	return Math.abs(diff);
 }
 
-/**
- * Get absolute difference a given date and today. Ceil the result for consistency calculation
- * @param givenDate
- * @returns
- */
-export function daysBetweenDatesAbsolute(givenDate: Date) {
-	const start = getDayOfYear();
-
-	const end = getDayOfYear(givenDate);
-
-	return start - end;
-}
-
-export function diffInDaysBetween(dateLeft: Date, dateRight: Date) {
-	// const diff = differenceInDays(dateLeft, dateRight);
-	const diff = Math.trunc(differenceInHours(dateLeft, dateRight) / 24) | 0;
-
-	return Math.abs(diff);
-}
-
 export function getCurrentDate() {
 	const newDate = new Date();
 	newDate.setHours(0);
@@ -123,57 +93,4 @@ export function getCurrentDate() {
 	newDate.setMilliseconds(0);
 
 	return newDate;
-}
-
-export function getActiveDays(user: UserType, habit: HabitType) {
-	// calculate total available days
-
-	// if archived, the total span would be between created - archived
-	// otherwise it would be created - now
-
-	const now = getCurrentDate();
-
-	let totalDays = 0;
-	if (habit.archived) {
-		totalDays = diffInDaysBetween(habit.created, habit.archivedDate!);
-
-		if (isEqual(habit.archivedDate!, habit.lastChecked)) totalDays += 1;
-	} else {
-		totalDays = diffInDaysFromNow(habit.created);
-		if (isEqual(now, habit.lastChecked)) totalDays += 1;
-	}
-
-	// calculate total number of paused days
-	let totalPausedDays = 0;
-	user?.pauses.forEach((pause) => {
-		console.log(totalPausedDays);
-		const daysPaused = diffInDaysBetween(pause.start, pause.end);
-		totalPausedDays += daysPaused;
-
-		if (isEqual(habit.lastChecked, pause.start) && daysPaused > 0) {
-			console.log("less 1");
-			totalPausedDays -= 1;
-		}
-
-		if (isEqual(habit.lastChecked, pause.end) && daysPaused > 0) {
-			console.log("less 2");
-			totalPausedDays -= 1;
-		}
-		console.log(pause);
-		console.log(totalPausedDays);
-	});
-
-	// if currently paused, also ignore days from when pause started to now
-	if (user?.pauseStreaks && !habit.archived) {
-		totalPausedDays += diffInDaysFromNow(user.pauseStartDate!);
-
-		if (isEqual(habit.lastChecked, user.pauseStartDate!))
-			totalPausedDays -= 1;
-	}
-
-	console.log(totalDays, totalPausedDays);
-	// subtract total paused days
-	const activeDays = totalDays - Math.max(totalPausedDays, 0);
-
-	return activeDays;
 }

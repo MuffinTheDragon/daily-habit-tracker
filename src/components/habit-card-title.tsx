@@ -31,7 +31,6 @@ export const HabitCardTitle = ({ props }: { props: Props }) => {
 		paused,
 	} = props;
 
-	console.log(model.graph.at(-1)!.daysChecked.at(-1), dayOfYear);
 	const isDoneForToday = model.graph.at(-1)!.daysChecked.at(-1) == dayOfYear;
 
 	const onCheckChange = (value: CheckedState) => {

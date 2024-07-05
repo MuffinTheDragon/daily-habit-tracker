@@ -11,11 +11,13 @@ import {
 import { HabitType } from "@/data/HabitType";
 import { db } from "@/db";
 import {
+	diffInDaysFromNow,
+	getCurrentDate,
 	getDateByDayNumber,
 	getDayOfYear,
-	diffInDaysFromNow,
 } from "@/lib/utils";
 import { CheckedState } from "@radix-ui/react-checkbox";
+import { isEqual } from "date-fns";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { Graph } from "./graph";
@@ -93,7 +95,7 @@ export const HabitCard = ({
 					closeButton: true,
 					description: (
 						<p>
-							You missed a day for your{" "}
+							You missed {diff - 1} day(s) for your{" "}
 							<b className="underline">{habit.name}</b> habit and
 							used up a streak freeze. If you run out, your streak
 							will reset.
@@ -148,10 +150,26 @@ export const HabitCard = ({
 			? getDateByDayNumber(lastCheckedDay)
 			: model.created;
 
+		const newStreak = checked ? model.streak + 1 : model.streak - 1;
+
+		let longestStreak = model.longestStreak;
+		let longestStreakDateSet = model.longestStreakDateSet;
+
+		const now = getCurrentDate();
+
+		if (newStreak > model.longestStreak) {
+			longestStreak = newStreak;
+			longestStreakDateSet = now;
+		} else if (isEqual(longestStreakDateSet, now)) {
+			longestStreak -= 1;
+		}
+
 		setModel({
 			...model,
 			graph,
-			streak: checked ? model.streak + 1 : model.streak - 1,
+			streak: newStreak,
+			longestStreak,
+			longestStreakDateSet,
 			streakFreezes: checked ? BaseNumberOfFreezes : initialFreezes,
 			checks: checked ? model.checks + 1 : model.checks - 1,
 			lastChecked: lastCheckedDate,
@@ -211,7 +229,7 @@ export const HabitCard = ({
 			<CardFooter>
 				<div className="flex flex-col space-y-1 text-xs text-muted-foreground">
 					<p>Created: {model.created.toDateString()}</p>
-					<p>Last checked: {model.lastChecked.toDateString()}</p>
+					{/* <p>Last checked: {model.lastChecked.toDateString()}</p> */}
 				</div>
 			</CardFooter>
 		</Card>

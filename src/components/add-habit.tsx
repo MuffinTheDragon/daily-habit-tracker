@@ -1,5 +1,6 @@
 import { HabitType } from "@/data/HabitType";
 import { db } from "@/db";
+import { getCurrentDate } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -24,7 +25,6 @@ import {
 	FormMessage,
 } from "./ui/form";
 import { Input } from "./ui/input";
-import { getCurrentDate } from "@/lib/utils";
 
 const formSchema = z.object({
 	name: z.string().min(1, { message: "Name is required" }),
@@ -45,13 +45,17 @@ export const AddHabit = ({ paused }: { paused: boolean }) => {
 	const addHabit = async (values: z.infer<typeof formSchema>) => {
 		const year = new Date().getFullYear();
 
+		const now = getCurrentDate();
+
 		const habit: HabitType = {
 			id: uuidv4(),
-			created: getCurrentDate(),
-			lastChecked: getCurrentDate(),
+			created: new Date(), // store time for sorting purposes
+			lastChecked: now,
 			name: values.name,
 			description: values.description,
 			streak: 0,
+			longestStreak: 0,
+			longestStreakDateSet: now,
 			checks: 0,
 			archived: false,
 			archivedDate: null,
