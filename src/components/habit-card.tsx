@@ -172,7 +172,7 @@ export const HabitCard = ({
 	};
 
 	return (
-		<Card className="relative flex flex-col">
+		<Card className="relative min-w-80 sm:min-w-96 flex flex-col">
 			{habit.archived && (
 				<Badge
 					variant="secondary"
