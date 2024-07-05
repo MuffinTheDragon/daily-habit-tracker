@@ -1,0 +1,157 @@
+@tailwind base;
+  @tailwind components;
+  @tailwind utilities;
+
+  * {
+    --sb-track-color: #232e33;
+    --sb-thumb-color: #6baf8d;
+  }
+  
+* {
+    scrollbar-width: thin;
+  }
+
+  @layer base {
+    :root {
+      --background: 0 0% 100%;
+      --foreground: 224 71.4% 4.1%;
+
+      --card: 0 0% 100%;
+      --card-foreground: 224 71.4% 4.1%;
+
+      --popover: 0 0% 100%;
+      --popover-foreground: 224 71.4% 4.1%;
+
+      --primary: 220.9 39.3% 11%;
+      --primary-foreground: 210 20% 98%;
+
+      --secondary: 220 14.3% 95.9%;
+      --secondary-foreground: 220.9 39.3% 11%;
+
+      --muted: 220 14.3% 95.9%;
+      --muted-foreground: 220 8.9% 46.1%;
+
+      --accent: 220 14.3% 95.9%;
+      --accent-foreground: 220.9 39.3% 11%;
+
+      --destructive: 0 84.2% 60.2%;
+      --destructive-foreground: 210 20% 98%;
+
+      --border: 220 13% 91%;
+      --input: 220 13% 91%;
+      --ring: 224 71.4% 4.1%;
+
+      --radius: 0.5rem;
+    }
+
+    .dark {
+      --background: 224 71.4% 4.1%;
+      --foreground: 210 20% 98%;
+
+      --card: 224 71.4% 4.1%;
+      --card-foreground: 210 20% 98%;
+
+      --popover: 224 71.4% 4.1%;
+      --popover-foreground: 210 20% 98%;
+
+      --primary: 210 20% 98%;
+      --primary-foreground: 220.9 39.3% 11%;
+
+      --secondary: 215 27.9% 16.9%;
+      --secondary-foreground: 210 20% 98%;
+
+      --muted: 215 27.9% 16.9%;
+      --muted-foreground: 217.9 10.6% 64.9%;
+
+      --accent: 15 27.9% 16.9%;
+      --accent-foreground: 210 20% 98%;
+
+      --destructive: 0 84.2% 60.2%;
+      --destructive-foreground: 0 0% 98%;
+
+      --border: 215 27.9% 16.9%;
+      --input: 215 27.9% 16.9%;
+      --ring: 216 12.2% 83.9%;
+    }
+  }
+
+  @layer base {
+    * {
+      @apply border-border;
+    }
+    body {
+      @apply bg-background text-foreground;
+    }
+  }
+
+  :root {
+    --square-size: 15px;
+    --square-gap: 5px;
+    --week-width: calc(var(--square-size) + var(--square-gap));
+  }
+  
+  .months { grid-area: months; }
+  .days { grid-area: days; }
+  .squares { grid-area: squares; }
+  
+  .graph {
+    display: inline-grid;
+    grid-template-areas: "empty months"
+                         "days squares";
+    grid-template-columns: auto 1fr;
+    grid-gap: 10px;
+    font-size: 12px;
+    margin-bottom: 1rem;
+  }
+  
+  .months {
+    display: grid;
+    grid-template-columns: calc(var(--week-width) * 4) /* Jan */
+                           calc(var(--week-width) * 4) /* Feb */
+                           calc(var(--week-width) * 4) /* Mar */
+                           calc(var(--week-width) * 5) /* Apr */
+                           calc(var(--week-width) * 4) /* May */
+                           calc(var(--week-width) * 4) /* Jun */
+                           calc(var(--week-width) * 5) /* Jul */
+                           calc(var(--week-width) * 4) /* Aug */
+                           calc(var(--week-width) * 4) /* Sep */
+                           calc(var(--week-width) * 5) /* Oct */
+                           calc(var(--week-width) * 4) /* Nov */
+                           calc(var(--week-width) * 5) /* Dec */;
+  }
+  
+  .days,
+  .squares {
+    display: grid;
+    grid-gap: var(--square-gap);
+    grid-template-rows: repeat(7, var(--square-size));
+  }
+  
+  .squares {
+    grid-auto-flow: column;
+    grid-auto-columns: var(--square-size);
+  }
+  
+  
+  /* Other styling */
+  
+  .days li:nth-child(even) {
+    visibility: hidden;
+  }
+  
+  .squares li {
+    background-color: hsl(var(--muted));
+    border-radius: 5px;
+  }
+  
+  .squares li[data-level="1"] {
+    background-color: #c6e48b;
+  }
+  
+  .squares li[data-level="2"] {
+    background-color: #7bc96f;
+  }
+  
+  .squares li[data-level="3"] {
+    background-color: #196127;
+  }
