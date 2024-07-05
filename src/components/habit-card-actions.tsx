@@ -192,10 +192,10 @@ const DeleteHabit = ({ model }: { model: HabitType }) => {
 			</CredenzaHeader>
 			<CredenzaFooter>
 				<CredenzaClose asChild>
-					<Button variant="secondary">Cancel</Button>
+					<Button onClick={deleteHabit}>Delete</Button>
 				</CredenzaClose>
 				<CredenzaClose asChild>
-					<Button onClick={deleteHabit}>Delete</Button>
+					<Button variant="secondary">Cancel</Button>
 				</CredenzaClose>
 			</CredenzaFooter>
 		</CredenzaContent>

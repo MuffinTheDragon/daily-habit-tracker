@@ -27,6 +27,14 @@ import {
 	FormMessage,
 } from "./ui/form";
 import { Input } from "./ui/input";
+import {
+	Credenza,
+	CredenzaContent,
+	CredenzaDescription,
+	CredenzaHeader,
+	CredenzaTitle,
+	CredenzaTrigger,
+} from "./responsive-dialog";
 
 const formSchema = z.object({
 	name: z.string().min(1, { message: "Name is required" }),
@@ -64,8 +72,8 @@ export const AddHabit = ({ paused }: { paused: boolean }) => {
 	};
 
 	return (
-		<Dialog open={open} onOpenChange={setOpen}>
-			<DialogTrigger disabled={paused}>
+		<Credenza open={open} onOpenChange={setOpen}>
+			<CredenzaTrigger disabled={paused}>
 				<div
 					className={cn(
 						"flex border-4 border-dashed rounded-xl h-full min-h-80 min-w-80",
@@ -80,15 +88,15 @@ export const AddHabit = ({ paused }: { paused: boolean }) => {
 						<p className="mt-1">Add habit</p>
 					</div>
 				</div>
-			</DialogTrigger>
-			<DialogContent>
-				<DialogHeader>
-					<DialogTitle>Add a new daily habit</DialogTitle>
-					<DialogDescription>
+			</CredenzaTrigger>
+			<CredenzaContent className="px-4 md:p-0">
+				<CredenzaHeader>
+					<CredenzaTitle>Add a new daily habit</CredenzaTitle>
+					<CredenzaDescription>
 						Fill in the fields below to create a new habit. You can
 						change this anytime.
-					</DialogDescription>
-				</DialogHeader>
+					</CredenzaDescription>
+				</CredenzaHeader>
 				<Form {...form}>
 					<form
 						onSubmit={form.handleSubmit(addHabit)}
@@ -130,7 +138,7 @@ export const AddHabit = ({ paused }: { paused: boolean }) => {
 						</Button>
 					</form>
 				</Form>
-			</DialogContent>
-		</Dialog>
+			</CredenzaContent>
+		</Credenza>
 	);
 };

@@ -55,7 +55,7 @@ export const Login = () => {
 			<CredenzaTrigger asChild>
 				<Alert className="rounded-none text-center flex justify-center items-center space-x-2 border-s-0 border-e-0">
 					<p className="text-sm">
-						To sync between devices please sign in
+						To sync between devices, please sign in
 					</p>
 					<Button variant="secondary" size="sm" onClick={login}>
 						Login
@@ -83,13 +83,15 @@ export const Login = () => {
 							)}
 						</CredenzaDescription>
 					</CredenzaHeader>
-					{ui.alerts?.map((alert, i) => (
-						<Alert key={i}>
-							<AlertDescription>
-								{resolveText(alert)}
-							</AlertDescription>
-						</Alert>
-					))}
+					<div className="px-4 md:p-0 my-2">
+						{ui.alerts?.map((alert, i) => (
+							<Alert key={i}>
+								<AlertDescription>
+									{resolveText(alert)}
+								</AlertDescription>
+							</Alert>
+						))}
+					</div>
 					<form
 						className="px-4 md:p-0"
 						onSubmit={(ev) => {
@@ -110,9 +112,9 @@ export const Login = () => {
 								<Label key={idx}>
 									{label ? label : "Email"}
 									<Input
+										autoFocus={false}
 										type={type}
 										name={fieldName}
-										autoFocus
 										placeholder={placeholder}
 										value={params[fieldName] || ""}
 										onChange={(ev) => {
@@ -129,11 +131,11 @@ export const Login = () => {
 						)}
 					</form>
 					<CredenzaFooter>
-						<Button variant="secondary" onClick={cancelLogin}>
-							{ui.cancelLabel}
-						</Button>
 						<Button onClick={() => ui.onSubmit(params)}>
 							{ui.submitLabel}
+						</Button>
+						<Button variant="secondary" onClick={cancelLogin}>
+							{ui.cancelLabel}
 						</Button>
 					</CredenzaFooter>
 				</CredenzaContent>

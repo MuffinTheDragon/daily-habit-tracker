@@ -38,6 +38,7 @@ interface CredenzaProps extends BaseProps {
 	className?: string;
 	asChild?: true;
 	onClick?: () => void;
+	disabled?: boolean;
 }
 
 const desktop = "(min-width: 768px)";
