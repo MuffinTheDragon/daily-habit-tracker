@@ -161,8 +161,8 @@ export default function Home() {
 							</div>
 							<div className="mt-2 hidden md:block">
 								<p>
-									View your daily completions on simple to use
-									visual map
+									View your daily completions on a simple to
+									use visual map
 								</p>
 							</div>
 						</div>
