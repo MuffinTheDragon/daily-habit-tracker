@@ -31,15 +31,46 @@ export default function Home() {
 
 	const updatePause = async (value: boolean) => {
 		db.transaction("rw", [db.habits, db.user], async () => {
+			const currentYear = new Date().getFullYear();
+			const currentDate = getCurrentDate();
+
 			if (user[0]) {
-				await db.user.where({ id: user[0].id }).modify((i) => {
-					i.pauseStreaks = value;
-					i.pauseEndDate = !value ? getCurrentDate() : undefined;
-				});
+				// start pause
+				if (value) {
+					const pauses = [...user[0].pauses];
+
+					if (pauses.at(-1)?.year !== currentYear) {
+						pauses.push({ year: currentYear, time: [] });
+					}
+
+					await db.user.where({ id: user[0].id }).modify((i) => {
+						i.pauseStreaks = value;
+						i.pauseStartDate = currentDate;
+						i.pauses = pauses;
+					});
+				}
+
+				// end pause
+				else {
+					const pauses = [...user[0].pauses];
+
+					pauses.at(-1)?.time.push({
+						start: user[0].pauseStartDate!,
+						end: currentDate,
+					});
+
+					await db.user.where({ id: user[0].id }).modify((i) => {
+						i.pauseStreaks = value;
+						i.pauseEndDate = currentDate;
+						i.pauses = pauses;
+					});
+				}
 			} else {
 				await db.user.add({
 					id: "user",
 					pauseStreaks: value,
+					pauseStartDate: currentDate,
+					pauses: [{ year: currentYear, time: [] }],
 				});
 			}
 		});

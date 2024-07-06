@@ -227,7 +227,7 @@ export const HabitCard = ({
 			<CardFooter>
 				<div className="flex flex-col space-y-1 text-xs text-muted-foreground">
 					<p>Created: {model.created.toDateString()}</p>
-					<p>Last update: {model.lastChecked.toDateString()}</p>
+					{/* <p>Last update: {model.lastChecked.toDateString()}</p> */}
 				</div>
 			</CardFooter>
 		</Card>
