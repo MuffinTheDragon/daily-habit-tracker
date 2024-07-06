@@ -1,15 +1,21 @@
 "use client";
 
-import { GraphType } from "@/data/HabitType";
-import { daysInYear } from "@/lib/utils";
+import { GraphType, HabitType } from "@/data/HabitType";
+import { daysInYear, getDateByDayNumber } from "@/lib/utils";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
-import { getDayOfYear } from "date-fns";
+import { getDayOfYear, isAfter, isBefore, isFuture } from "date-fns";
 import { useLiveQuery } from "dexie-react-hooks";
 import { db } from "@/db";
 
-export const Graph = ({ graph }: { graph: GraphType[] }) => {
+export const Graph = ({
+	graph,
+	habit,
+}: {
+	graph: GraphType[];
+	habit: HabitType;
+}) => {
 	const [index, setIndex] = useState(graph.length - 1);
 
 	useEffect(() => setIndex(graph.length - 1), [graph]);
@@ -40,13 +46,13 @@ export const Graph = ({ graph }: { graph: GraphType[] }) => {
 				</Button>
 			</div>
 			<div className="flex overflow-x-auto overflow-y-hidden">
-				<GetGraph graph={graph[index]} />
+				<GetGraph graph={graph[index]} habit={habit} />
 			</div>
 		</div>
 	);
 };
 
-const GetGraph = ({ graph }: { graph: GraphType }) => {
+const GetGraph = ({ graph, habit }: { graph: GraphType; habit: HabitType }) => {
 	const user = useLiveQuery(() => db.user.toArray());
 
 	if (!user) return null;
@@ -63,7 +69,15 @@ const GetGraph = ({ graph }: { graph: GraphType }) => {
 		const endDay = getDayOfYear(time.end);
 
 		for (let i = startDay; i < endDay; i++) {
-			arr[i - 1] = 1;
+			const pausedDate = getDateByDayNumber(i);
+
+			const pausedAfterCreated = isAfter(pausedDate, habit.created);
+
+			const pausedBeforeArchived = habit.archivedDate
+				? isBefore(pausedDate, habit.archivedDate)
+				: true;
+
+			if (pausedAfterCreated && pausedBeforeArchived) arr[i - 1] = 1;
 		}
 	});
 

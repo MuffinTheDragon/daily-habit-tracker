@@ -58,7 +58,6 @@ export const HabitCard = ({
 
 	// compute streak freezes
 	useEffect(() => {
-		console.log("riunm");
 		if (paused) return;
 
 		if (model.streak < 1) return;
@@ -220,13 +219,16 @@ export const HabitCard = ({
 			<CardContent>
 				{showMap && (
 					<div className="mt-8">
-						<Graph graph={habit.graph} />
+						<Graph graph={habit.graph} habit={habit} />
 					</div>
 				)}
 			</CardContent>
 			<CardFooter>
 				<div className="flex flex-col space-y-1 text-xs text-muted-foreground">
 					<p>Created: {model.created.toDateString()}</p>
+					{model.archivedDate && (
+						<p>Archived: {model.archivedDate.toDateString()}</p>
+					)}
 					{/* <p>Last update: {model.lastChecked.toDateString()}</p> */}
 				</div>
 			</CardFooter>
