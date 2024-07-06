@@ -35,7 +35,7 @@ export const Graph = ({
 				>
 					<ChevronLeftIcon className="w-4 h-4" />
 				</Button>
-				<p>{graph[index].year}</p>
+				<p className="text-sm">{graph[index].year}</p>
 				<Button
 					variant="outline"
 					size="icon"

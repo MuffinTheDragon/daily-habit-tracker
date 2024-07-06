@@ -7,8 +7,10 @@ export const Stat = ({
 }) => {
 	return (
 		<div className="items-center flex flex-col">
-			<div className="text-sm text-muted-foreground">{title}</div>
-			<div className="text-2xl font-semibold text-foreground">
+			<div className="text-xs md:text-sm text-muted-foreground">
+				{title}
+			</div>
+			<div className="text-xl md:text-2xl font-semibold text-foreground">
 				{number}
 			</div>
 		</div>

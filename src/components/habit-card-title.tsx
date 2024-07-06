@@ -74,7 +74,7 @@ export const HabitCardTitle = ({ props }: { props: Props }) => {
 				<div className="flex items-center space-x-2">
 					<CardTitle
 						className={cn(
-							"hover:cursor-text border border-background hover:border-border py-1 rounded w-full text-xl",
+							"hover:cursor-text border border-background hover:border-border py-1 rounded w-full md:text-xl",
 							{ "line-through": isDoneForToday }
 						)}
 						onClick={() => setEditingTitle(true)}
@@ -85,7 +85,7 @@ export const HabitCardTitle = ({ props }: { props: Props }) => {
 						<Checkbox
 							disabled={paused}
 							checked={isDoneForToday}
-							className="rounded-full w-6 h-6 border-gray-500"
+							className="rounded-full h-5 w-5 md:w-6 md:h-6 border-gray-500"
 							onCheckedChange={onCheckChange}
 						/>
 						<HabbitCardActions

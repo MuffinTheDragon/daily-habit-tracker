@@ -70,7 +70,12 @@ export const AddHabit = ({ paused }: { paused: boolean }) => {
 	return (
 		<Credenza open={open} onOpenChange={setOpen}>
 			<CredenzaTrigger asChild>
-				<Button disabled={paused}>Add habit</Button>
+				<Button
+					disabled={paused}
+					className="h-8 rounded-md px-3 text-xs md:h-9 md:px-4 md:py-2 md:text-sm"
+				>
+					Add habit
+				</Button>
 			</CredenzaTrigger>
 			<CredenzaContent>
 				<CredenzaHeader>

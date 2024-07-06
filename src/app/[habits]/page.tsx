@@ -95,7 +95,7 @@ export default function Home() {
 							<h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
 								My habits
 							</h1>
-							<h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
+							<h3 className="scroll-m-20 text-lg md:text-2xl font-semibold tracking-tight">
 								{new Date().toDateString()}
 							</h3>
 						</div>
@@ -152,7 +152,7 @@ export default function Home() {
 						<Button
 							variant="outline"
 							onClick={() => setShowMap(!showMap)}
-							className="w-fit col-span-1 lg:col-span-2"
+							className="w-fit col-span-1 lg:col-span-2 h-8 rounded-md px-3 text-xs md:h-9 md:px-4 md:py-2 md:text-sm"
 						>
 							{showMap ? "Hide map" : "Show map"}
 						</Button>
