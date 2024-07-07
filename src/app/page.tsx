@@ -10,6 +10,8 @@ import pauseDark from "@/app/assets/pause-dark.png";
 import pauseLight from "@/app/assets/pause-light.png";
 import streaksDark from "@/app/assets/streaks-dark.png";
 import streaksLight from "@/app/assets/streaks-light.png";
+import githubDark from "@/app/assets/github-mark.png";
+import githubLight from "@/app/assets/github-mark-white.png";
 import logo from "@/app/favicon.ico";
 import { ThemePicker } from "@/components/theme-picker";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -41,11 +43,27 @@ export default function Home() {
 								width={28}
 								height={28}
 							/>
-							<p className="font-semibold text-base tracking-tight">
-								Daily habit tracker
-							</p>
 						</Link>
 						<div className="flex items-center space-x-2">
+							<Link
+								href="https://github.com/MuffinTheDragon/daily-habit-tracker"
+								target="_blank"
+							>
+								<Image
+									src={githubDark}
+									width={28}
+									height={28}
+									alt="github"
+									className="dark:hidden"
+								/>
+								<Image
+									width={28}
+									height={28}
+									src={githubLight}
+									alt="github"
+									className="hidden dark:block"
+								/>
+							</Link>
 							<ThemePicker />
 							<Link href="/habits">
 								<Button variant="secondary" size="sm">

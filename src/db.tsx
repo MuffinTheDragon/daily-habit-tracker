@@ -1,8 +1,7 @@
 "use client";
 import Dexie, { Table } from "dexie";
-import { HabitType } from "./data/HabitType";
 import dexieCloud from "dexie-cloud-addon";
-import { defaultHabits } from "./data/defaultHabits";
+import { HabitType } from "./data/HabitType";
 import { UserType } from "./data/userType";
 
 export class Db extends Dexie {
@@ -43,6 +42,9 @@ async function populate(db: Db) {
 	// }
 
 	if (userCount == 0) {
-		// await db.user.add({ id: "user", pauseStreaks: false });
+		// await db.user.add({
+		// 	id: uuidv4(),
+		// 	pauses: [],
+		// });
 	}
 }

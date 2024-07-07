@@ -90,6 +90,10 @@
     --week-width: calc(var(--square-size) + var(--square-gap));
   }
   
+input, textarea {
+  font-size: 16px !important;
+}
+
   .months { grid-area: months; }
   .days { grid-area: days; }
   .squares { grid-area: squares; }

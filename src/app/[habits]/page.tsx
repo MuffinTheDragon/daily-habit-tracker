@@ -3,110 +3,24 @@
 import { AddHabit } from "@/components/add-habit";
 import { HabitCard } from "@/components/habit-card";
 import { Login } from "@/components/login";
-import {
-	Credenza,
-	CredenzaContent,
-	CredenzaHeader,
-	CredenzaTitle,
-	CredenzaTrigger,
-} from "@/components/responsive-dialog";
-import { ThemePicker } from "@/components/theme-picker";
+import { Settings } from "@/components/settings";
+import { ToggleView } from "@/components/toggle-view";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { Switch } from "@/components/ui/switch";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { db } from "@/db";
-import { getCurrentDate } from "@/lib/utils";
-import {
-	ArrowsPointingInIcon,
-	ArrowsPointingOutIcon,
-	Cog6ToothIcon,
-} from "@heroicons/react/24/outline";
 import { useLiveQuery } from "dexie-react-hooks";
 import { useState } from "react";
-import { toast } from "sonner";
 
 export default function Home() {
-	const userId = db.cloud.currentUserId;
 	const habits = useLiveQuery(() =>
 		db.habits.orderBy("created").reverse().toArray()
 	);
-	const user = useLiveQuery(() => db.user.toArray());
+
+	const user = useLiveQuery(() => db.user.toCollection().first());
 	const [showMap, setShowMap] = useState(false);
 
-	const currentYear = new Date().getFullYear();
-	const currentDate = getCurrentDate();
-
-	if (!habits || !user) return null;
-
-	const updatePause = async (value: boolean) => {
-		db.transaction("rw", [db.habits, db.user], async () => {
-			if (user[0]) {
-				// start pause
-				if (value) {
-					const pauses = [...user[0].pauses];
-
-					if (pauses.at(-1)?.year !== currentYear) {
-						pauses.push({ year: currentYear, time: [] });
-					}
-
-					await db.user.where({ id: user[0].id }).modify((i) => {
-						i.pauseStreaks = value;
-						i.pauseStartDate = currentDate;
-						i.pauses = pauses;
-					});
-				}
-
-				// end pause
-				else {
-					const pauses = [...user[0].pauses];
-
-					pauses.at(-1)?.time.push({
-						start: user[0].pauseStartDate!,
-						end: currentDate,
-					});
-
-					await db.user.where({ id: user[0].id }).modify((i) => {
-						i.pauseStreaks = value;
-						i.pauseEndDate = currentDate;
-						i.pauses = pauses;
-					});
-				}
-			} else {
-				await db.user.add({
-					id: "user",
-					pauseStreaks: value,
-					pauseStartDate: currentDate,
-					pauses: [{ year: currentYear, time: [] }],
-				});
-			}
-		});
-	};
-
-	const onToggleChange = async (collapsed: boolean) => {
-		if (user[0]) {
-			db.user.where({ id: user[0].id }).modify((i) => {
-				i.collapsed = collapsed;
-			});
-		} else {
-			await db.user.add({
-				id: "user",
-				pauseStreaks: false,
-				pauses: [{ year: currentYear, time: [] }],
-				collapsed,
-			});
-		}
-	};
-
-	const logout = async () => {
-		await db.cloud.logout();
-		// await db.user.add({ id: "user", pauseStreaks: false });
-
-		toast.success("Success! You are logged out", {
-			closeButton: true,
-		});
-	};
+	if (!habits) return null;
 
 	return (
 		<>
@@ -123,53 +37,7 @@ export default function Home() {
 							</h3>
 						</div>
 
-						<Credenza>
-							<CredenzaTrigger asChild>
-								<Button
-									variant="outline"
-									size="icon"
-									className="ms-4"
-								>
-									<Cog6ToothIcon className="w-4 h-4" />
-								</Button>
-							</CredenzaTrigger>
-							<CredenzaContent>
-								<CredenzaHeader>
-									<CredenzaTitle>Settings</CredenzaTitle>
-								</CredenzaHeader>
-								<div className="px-4 pb-4 md:p-0">
-									<div className="flex justify-between items-center">
-										<div>
-											<p>Pause app</p>
-											<p className="text-xs text-muted-foreground pe-24">
-												If you are away or need a break,
-												you can pause the app. This will
-												also stop your streaks from
-												breaking
-											</p>
-										</div>
-										<Switch
-											checked={user[0]?.pauseStreaks}
-											onCheckedChange={updatePause}
-										/>
-									</div>
-									<div className="flex justify-between items-center">
-										<p>Theme</p>
-										<ThemePicker />
-									</div>
-									{userId !== "unauthorized" && (
-										<Button
-											onClick={logout}
-											variant="secondary"
-											size="sm"
-											className="mt-4 w-full"
-										>
-											Logout
-										</Button>
-									)}
-								</div>
-							</CredenzaContent>
-						</Credenza>
+						<Settings user={user} />
 					</div>
 					<div className="flex items-center space-x-2 col-span-1 md:col-span-2">
 						<Button
@@ -179,38 +47,15 @@ export default function Home() {
 						>
 							{showMap ? "Hide map" : "Show map"}
 						</Button>
-						<AddHabit paused={user[0]?.pauseStreaks ?? false} />
+						<AddHabit paused={user?.pauseStreaks ?? false} />
 						<Separator
 							orientation="vertical"
 							className="h-8 bg-border"
 						/>
-						<ToggleGroup
-							value={user[0]?.collapsed ? "0" : "1"}
-							type="single"
-							className="rounded-lg border"
-						>
-							<ToggleGroupItem
-								value="0"
-								onClick={() => onToggleChange(true)}
-								title="Collapse habits"
-							>
-								<ArrowsPointingInIcon className="w-4 h-4" />
-							</ToggleGroupItem>
-							<Separator
-								orientation="vertical"
-								className="h-4 bg-border"
-							/>
-							<ToggleGroupItem
-								value="1"
-								onClick={() => onToggleChange(false)}
-								title="Expand habits"
-							>
-								<ArrowsPointingOutIcon className="w-4 h-4" />
-							</ToggleGroupItem>
-						</ToggleGroup>
+						<ToggleView user={user} />
 					</div>
 
-					{user[0]?.pauseStreaks && (
+					{user?.pauseStreaks && (
 						<Alert className="w-fut col-span-1 md:col-span-2">
 							<AlertDescription>
 								The app is currently paused. Change in settings
@@ -228,10 +73,10 @@ export default function Home() {
 								<HabitCard
 									key={habit.id}
 									habit={habit}
-									user={user[0]}
+									user={user}
 									showMap={showMap}
 									paused={
-										user[0]?.pauseStreaks || habit.archived
+										user?.pauseStreaks || habit.archived
 									}
 								/>
 							</div>
