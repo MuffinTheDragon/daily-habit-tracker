@@ -49,7 +49,7 @@ export default function Home() {
 							<ThemePicker />
 							<Link href="/habits">
 								<Button variant="secondary" size="sm">
-									Try for free
+									Track your habits
 								</Button>
 							</Link>
 						</div>
@@ -64,7 +64,7 @@ export default function Home() {
 							Track all your daily habits
 							<div>
 								<Link href="/habits">
-									<Button>Try now</Button>
+									<Button>Track your habits</Button>
 								</Link>
 								<p className="underline text-xs underline-offset-4 mt-4">
 									No account required
