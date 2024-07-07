@@ -1,5 +1,6 @@
 export type UserType = {
 	id: string;
+	created: Date;
 	pauseStreaks?: boolean;
 	pauseEndDate?: Date;
 	pauseStartDate?: Date;

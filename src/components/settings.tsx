@@ -16,6 +16,7 @@ import { getCurrentDate } from "@/lib/utils";
 import { Cog6ToothIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { toast } from "sonner";
+import { v4 as uuidv4 } from "uuid";
 
 export const Settings = ({ user }: { user?: UserType }) => {
 	const userId = db.cloud.currentUserId;
@@ -58,7 +59,8 @@ export const Settings = ({ user }: { user?: UserType }) => {
 				}
 			} else {
 				await db.user.add({
-					id: "user",
+					id: uuidv4(),
+					created: new Date(),
 					pauseStreaks: value,
 					pauseStartDate: currentDate,
 					pauses: [{ year: currentYear, time: [] }],
@@ -108,7 +110,7 @@ export const Settings = ({ user }: { user?: UserType }) => {
 					</div>
 					<div className="w-full flex">
 						<Link
-							href="https://github.com/MuffinTheDragon/daily-habit-tracker"
+							href="https://github.com/MuffinTheDragon/daily-habit-tracker/issues"
 							target="_blank"
 							className="underline underline-offset-4"
 						>

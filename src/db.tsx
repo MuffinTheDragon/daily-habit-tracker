@@ -1,6 +1,7 @@
 "use client";
 import Dexie, { Table } from "dexie";
 import dexieCloud from "dexie-cloud-addon";
+import { v4 as uuidv4 } from "uuid";
 import { HabitType } from "./data/HabitType";
 import { UserType } from "./data/userType";
 
@@ -12,10 +13,20 @@ export class Db extends Dexie {
 
 	constructor() {
 		super("habit", { addons: [dexieCloud], cache: "immutable" });
-		this.version(1).stores({
-			habits: "id, created", // Primary key and indexed props
-			user: "id",
-		});
+		this.version(2)
+			.stores({
+				habits: "id, created", // Primary key and indexed props
+				user: "id, created",
+			})
+			.upgrade((tx) => {
+				return tx
+					.table("user")
+					.toCollection()
+					.modify((user) => {
+						user.id = uuidv4();
+						user.created = new Date();
+					});
+			});
 		this.on("populate", () => {
 			this.on("ready", () => {
 				return populate(this);

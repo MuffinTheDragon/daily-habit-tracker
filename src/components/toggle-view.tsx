@@ -8,6 +8,7 @@ import {
 	ArrowsPointingInIcon,
 	ArrowsPointingOutIcon,
 } from "@heroicons/react/24/outline";
+import { v4 as uuidv4 } from "uuid";
 
 export const ToggleView = ({ user }: { user?: UserType }) => {
 	const currentYear = new Date().getFullYear();
@@ -19,7 +20,8 @@ export const ToggleView = ({ user }: { user?: UserType }) => {
 			});
 		} else {
 			await db.user.add({
-				id: "user",
+				id: uuidv4(),
+				created: new Date(),
 				pauseStreaks: false,
 				pauses: [{ year: currentYear, time: [] }],
 				collapsed,
