@@ -9,13 +9,12 @@ import {
 } from "@/components/ui/card";
 
 import { HabitType } from "@/data/HabitType";
+import { UserType } from "@/data/userType";
 import { db } from "@/db";
 import {
 	cn,
 	diffInDaysFromNow,
 	getCurrentDate,
-	getDateByDayNumber,
-	getDayOfYear,
 	getLastActiveDate,
 } from "@/lib/utils";
 import { CheckedState } from "@radix-ui/react-checkbox";
@@ -27,7 +26,7 @@ import { HabitCardDescription } from "./habit-card-description";
 import { HabitCardStats } from "./habit-card-stats";
 import { HabitCardTitle } from "./habit-card-title";
 import { Badge } from "./ui/badge";
-import { UserType } from "@/data/userType";
+import { Separator } from "./ui/separator";
 
 export const BaseNumberOfFreezes = 3;
 
@@ -219,6 +218,13 @@ export const HabitCard = ({
 							<HabitCardStats habit={model} />
 						</div>
 					</CardDescription>
+				)}
+				{user?.collapsed && (
+					<div className="text-sm flex space-x-4 items-center text-muted-foreground">
+						<div>Streak: {model.streak}</div>
+						<Separator orientation="vertical" className="h-4" />
+						<div>Checks: {habit.checks}</div>
+					</div>
 				)}
 			</CardHeader>
 			{showMap && (

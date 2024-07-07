@@ -1,13 +1,13 @@
 "use client";
 
 import { GraphType, HabitType } from "@/data/HabitType";
+import { db } from "@/db";
 import { daysInYear, getDateByDayNumber } from "@/lib/utils";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
+import { getDayOfYear, isAfter, isBefore, isEqual, startOfDay } from "date-fns";
+import { useLiveQuery } from "dexie-react-hooks";
 import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
-import { getDayOfYear, isAfter, isBefore, isEqual, isFuture } from "date-fns";
-import { useLiveQuery } from "dexie-react-hooks";
-import { db } from "@/db";
 
 export const Graph = ({
 	graph,
@@ -72,8 +72,8 @@ const GetGraph = ({ graph, habit }: { graph: GraphType; habit: HabitType }) => {
 			const pausedDate = getDateByDayNumber(i);
 
 			const pausedAfterCreated =
-				isAfter(pausedDate, habit.created.setHours(0, 0, 0, 0)) ||
-				isEqual(pausedDate, habit.created.setHours(0, 0, 0, 0));
+				isAfter(pausedDate, startOfDay(habit.created)) ||
+				isEqual(pausedDate, startOfDay(habit.created));
 
 			const pausedBeforeArchived = habit.archivedDate
 				? isBefore(pausedDate, habit.archivedDate) ||

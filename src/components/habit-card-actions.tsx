@@ -21,7 +21,7 @@ import {
 	TrashIcon,
 } from "@heroicons/react/24/outline";
 import { EllipsisVerticalIcon } from "@heroicons/react/24/solid";
-import { addDays, format, getDayOfYear } from "date-fns";
+import { addDays, format, startOfDay } from "date-fns";
 import { Dispatch, SetStateAction, useState } from "react";
 import {
 	Credenza,
@@ -137,7 +137,7 @@ const FillPreviousDays = ({
 	};
 
 	const isDayDisabled = (day: Date) => {
-		if (day <= addDays(model.created.setHours(0, 0, 0, 0), -1)) {
+		if (day <= addDays(startOfDay(model.created), -1)) {
 			return true;
 		}
 

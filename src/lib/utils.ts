@@ -1,12 +1,6 @@
-import { GraphType, HabitType } from "@/data/HabitType";
+import { GraphType } from "@/data/HabitType";
 import { type ClassValue, clsx } from "clsx";
-import {
-	addDays,
-	differenceInHours,
-	format,
-	parse,
-	startOfYear,
-} from "date-fns";
+import { differenceInHours, format, parse, startOfDay } from "date-fns";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
@@ -38,12 +32,7 @@ export function getDateByDayNumber(dayNumber: number) {
  * @returns day number of the year
  */
 export function getDayOfYear(date?: Date) {
-	const now = date ? date : new Date();
-
-	now.setHours(0);
-	now.setMinutes(0);
-	now.setSeconds(0);
-	now.setMilliseconds(0);
+	const now = startOfDay(date ? date : new Date());
 
 	const dayOfYear = format(now, "DDD");
 	return parseInt(dayOfYear);
@@ -55,11 +44,7 @@ export function getDayOfYear(date?: Date) {
  * @returns
  */
 export function diffInDaysFromNow(date: Date) {
-	const now = new Date();
-	now.setHours(0);
-	now.setMinutes(0);
-	now.setSeconds(0);
-	now.setMilliseconds(0);
+	const now = startOfDay(new Date());
 
 	const diff = Math.trunc(differenceInHours(now, date) / 24) | 0;
 
@@ -73,13 +58,7 @@ export function diffInDaysFromNow(date: Date) {
 }
 
 export function getCurrentDate() {
-	const newDate = new Date();
-	newDate.setHours(0);
-	newDate.setMinutes(0);
-	newDate.setSeconds(0);
-	newDate.setMilliseconds(0);
-
-	return newDate;
+	return startOfDay(new Date());
 }
 
 export function getLastActiveDate(graph: GraphType[], created: Date) {
@@ -93,7 +72,7 @@ export function getLastActiveDate(graph: GraphType[], created: Date) {
 		}
 	}
 
-	if (!lastCheckedDate) return new Date(created.setHours(0, 0, 0, 0));
+	if (!lastCheckedDate) return startOfDay(created);
 
 	return lastCheckedDate;
 }

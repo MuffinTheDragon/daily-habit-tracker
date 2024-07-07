@@ -1,7 +1,7 @@
 "use client";
 
 import { AddHabit } from "@/components/add-habit";
-import { BaseNumberOfFreezes, HabitCard } from "@/components/habit-card";
+import { HabitCard } from "@/components/habit-card";
 import { Login } from "@/components/login";
 import {
 	Credenza,
@@ -13,7 +13,9 @@ import {
 import { ThemePicker } from "@/components/theme-picker";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { db } from "@/db";
 import { getCurrentDate } from "@/lib/utils";
 import {
@@ -24,12 +26,12 @@ import {
 import { useLiveQuery } from "dexie-react-hooks";
 import { useState } from "react";
 import { toast } from "sonner";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { Separator } from "@/components/ui/separator";
 
 export default function Home() {
 	const userId = db.cloud.currentUserId;
-	const habits = useLiveQuery(() => db.habits.orderBy("created").toArray());
+	const habits = useLiveQuery(() =>
+		db.habits.orderBy("created").reverse().toArray()
+	);
 	const user = useLiveQuery(() => db.user.toArray());
 	const [showMap, setShowMap] = useState(false);
 
@@ -82,9 +84,7 @@ export default function Home() {
 		});
 	};
 
-	const onToggleChange = async (value: string) => {
-		const collapsed = value === "0" ? true : false;
-
+	const onToggleChange = async (collapsed: boolean) => {
 		if (user[0]) {
 			db.user.where({ id: user[0].id }).modify((i) => {
 				i.collapsed = collapsed;
@@ -112,8 +112,8 @@ export default function Home() {
 		<>
 			<Login />
 			<main className="flex flex-col items-center justify-between p-4 md:py-24 space-y-8">
-				<div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-					<div className="flex justify-between items-center col-span-1 lg:col-span-2 gap-4">
+				<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+					<div className="flex justify-between items-center col-span-1 md:col-span-2 gap-4">
 						<div className="space-y-4">
 							<h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
 								My habits
@@ -171,7 +171,7 @@ export default function Home() {
 							</CredenzaContent>
 						</Credenza>
 					</div>
-					<div className="flex items-center space-x-2 col-span-1 lg:col-span-2">
+					<div className="flex items-center space-x-2 col-span-1 md:col-span-2">
 						<Button
 							variant="outline"
 							onClick={() => setShowMap(!showMap)}
@@ -186,25 +186,32 @@ export default function Home() {
 						/>
 						<ToggleGroup
 							value={user[0]?.collapsed ? "0" : "1"}
-							onValueChange={onToggleChange}
 							type="single"
 							className="rounded-lg border"
 						>
-							<ToggleGroupItem value="0" title="Collapse habits">
+							<ToggleGroupItem
+								value="0"
+								onClick={() => onToggleChange(true)}
+								title="Collapse habits"
+							>
 								<ArrowsPointingInIcon className="w-4 h-4" />
 							</ToggleGroupItem>
 							<Separator
 								orientation="vertical"
 								className="h-4 bg-border"
 							/>
-							<ToggleGroupItem value="1" title="Expand habits">
+							<ToggleGroupItem
+								value="1"
+								onClick={() => onToggleChange(false)}
+								title="Expand habits"
+							>
 								<ArrowsPointingOutIcon className="w-4 h-4" />
 							</ToggleGroupItem>
 						</ToggleGroup>
 					</div>
 
 					{user[0]?.pauseStreaks && (
-						<Alert className="w-fut col-span-1 lg:col-span-2">
+						<Alert className="w-fut col-span-1 md:col-span-2">
 							<AlertDescription>
 								The app is currently paused. Change in settings
 								to resume habit tracking
@@ -214,7 +221,7 @@ export default function Home() {
 					{habits.map((habit, i) => {
 						const spanClass =
 							i === habits.length - 1 && habits.length % 2
-								? "lg:col-span-2"
+								? "md:col-span-2"
 								: "";
 						return (
 							<div key={habit.id} className={spanClass}>
