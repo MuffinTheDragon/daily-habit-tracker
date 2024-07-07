@@ -16,10 +16,16 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { db } from "@/db";
 import { getCurrentDate } from "@/lib/utils";
-import { Cog6ToothIcon } from "@heroicons/react/24/outline";
+import {
+	ArrowsPointingInIcon,
+	ArrowsPointingOutIcon,
+	Cog6ToothIcon,
+} from "@heroicons/react/24/outline";
 import { useLiveQuery } from "dexie-react-hooks";
 import { useState } from "react";
 import { toast } from "sonner";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { Separator } from "@/components/ui/separator";
 
 export default function Home() {
 	const userId = db.cloud.currentUserId;
@@ -27,13 +33,13 @@ export default function Home() {
 	const user = useLiveQuery(() => db.user.toArray());
 	const [showMap, setShowMap] = useState(false);
 
+	const currentYear = new Date().getFullYear();
+	const currentDate = getCurrentDate();
+
 	if (!habits || !user) return null;
 
 	const updatePause = async (value: boolean) => {
 		db.transaction("rw", [db.habits, db.user], async () => {
-			const currentYear = new Date().getFullYear();
-			const currentDate = getCurrentDate();
-
 			if (user[0]) {
 				// start pause
 				if (value) {
@@ -74,6 +80,23 @@ export default function Home() {
 				});
 			}
 		});
+	};
+
+	const onToggleChange = async (value: string) => {
+		const collapsed = value === "0" ? true : false;
+
+		if (user[0]) {
+			db.user.where({ id: user[0].id }).modify((i) => {
+				i.collapsed = collapsed;
+			});
+		} else {
+			await db.user.add({
+				id: "user",
+				pauseStreaks: false,
+				pauses: [{ year: currentYear, time: [] }],
+				collapsed,
+			});
+		}
 	};
 
 	const logout = async () => {
@@ -157,6 +180,27 @@ export default function Home() {
 							{showMap ? "Hide map" : "Show map"}
 						</Button>
 						<AddHabit paused={user[0]?.pauseStreaks ?? false} />
+						<Separator
+							orientation="vertical"
+							className="h-8 bg-border"
+						/>
+						<ToggleGroup
+							value={user[0]?.collapsed ? "0" : "1"}
+							onValueChange={onToggleChange}
+							type="single"
+							className="rounded-lg border"
+						>
+							<ToggleGroupItem value="0" title="Collapse habits">
+								<ArrowsPointingInIcon className="w-4 h-4" />
+							</ToggleGroupItem>
+							<Separator
+								orientation="vertical"
+								className="h-4 bg-border"
+							/>
+							<ToggleGroupItem value="1" title="Expand habits">
+								<ArrowsPointingOutIcon className="w-4 h-4" />
+							</ToggleGroupItem>
+						</ToggleGroup>
 					</div>
 
 					{user[0]?.pauseStreaks && (

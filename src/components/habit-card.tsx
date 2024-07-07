@@ -11,6 +11,7 @@ import {
 import { HabitType } from "@/data/HabitType";
 import { db } from "@/db";
 import {
+	cn,
 	diffInDaysFromNow,
 	getCurrentDate,
 	getDateByDayNumber,
@@ -191,7 +192,9 @@ export const HabitCard = ({
 					Archived
 				</Badge>
 			)}
-			<CardHeader className="flex-1">
+			<CardHeader
+				className={cn("flex-1", { "px-4 py-2": user?.collapsed })}
+			>
 				<HabitCardTitle
 					props={{
 						editingTitle,
@@ -202,36 +205,38 @@ export const HabitCard = ({
 						paused,
 					}}
 				/>
-				<CardDescription>
-					<HabitCardDescription
-						props={{
-							editingDescription,
-							setEditingDescription,
-							model,
-							setModel,
-						}}
-					/>
-					<div className="flex mt-2 justify-between">
-						<HabitCardStats habit={model} />
-					</div>
-				</CardDescription>
-			</CardHeader>
-			<CardContent>
-				{showMap && (
-					<div className="mt-8">
-						<Graph graph={habit.graph} habit={habit} />
-					</div>
+				{!user?.collapsed && (
+					<CardDescription>
+						<HabitCardDescription
+							props={{
+								editingDescription,
+								setEditingDescription,
+								model,
+								setModel,
+							}}
+						/>
+						<div className="flex mt-2 justify-between">
+							<HabitCardStats habit={model} />
+						</div>
+					</CardDescription>
 				)}
-			</CardContent>
-			<CardFooter>
-				<div className="flex flex-col space-y-1 text-xs text-muted-foreground">
-					<p>Created: {model.created.toDateString()}</p>
-					{model.archivedDate && (
-						<p>Archived: {model.archivedDate.toDateString()}</p>
-					)}
-					{/* <p>Last update: {model.lastChecked.toDateString()}</p> */}
-				</div>
-			</CardFooter>
+			</CardHeader>
+			{showMap && (
+				<CardContent>
+					<Graph graph={habit.graph} habit={habit} />
+				</CardContent>
+			)}
+			{!user?.collapsed && (
+				<CardFooter className="mt-4">
+					<div className="flex flex-col space-y-1 text-xs text-muted-foreground">
+						<p>Created: {model.created.toDateString()}</p>
+						{model.archivedDate && (
+							<p>Archived: {model.archivedDate.toDateString()}</p>
+						)}
+						{/* <p>Last update: {model.lastChecked.toDateString()}</p> */}
+					</div>
+				</CardFooter>
+			)}
 		</Card>
 	);
 };
