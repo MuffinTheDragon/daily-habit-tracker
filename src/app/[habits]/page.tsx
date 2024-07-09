@@ -36,8 +36,8 @@ export default function Home() {
 			<Accordion type="single" collapsible>
 				<AccordionItem value="item-1" className="px-4">
 					{/* <div className="flex-col px-4"> */}
-					<AccordionTrigger className="flex justify-center items-center space-x-2">
-						<InformationCircleIcon className="w-4 h-4" />
+					<AccordionTrigger className="flex justify-center items-center space-x-2 hover:no-underline">
+						{/* <InformationCircleIcon className="w-4 h-4" /> */}
 						<p className="pe-2">This project is open source!</p>
 					</AccordionTrigger>
 					<AccordionContent className="text-center">
