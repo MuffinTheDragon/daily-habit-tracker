@@ -43,6 +43,6 @@ async function populate(db: Db) {
 	// }
 
 	if (userCount == 0) {
-		await db.user.add({ id: "user", pauseStreaks: false });
+		// await db.user.add({ id: "user", pauseStreaks: false });
 	}
 }

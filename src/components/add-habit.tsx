@@ -24,6 +24,7 @@ import {
 	FormMessage,
 } from "./ui/form";
 import { Input } from "./ui/input";
+import { getCurrentDate } from "@/lib/utils";
 
 const formSchema = z.object({
 	name: z.string().min(1, { message: "Name is required" }),
@@ -46,13 +47,14 @@ export const AddHabit = ({ paused }: { paused: boolean }) => {
 
 		const habit: HabitType = {
 			id: uuidv4(),
-			created: new Date(),
-			lastChecked: new Date(),
+			created: getCurrentDate(),
+			lastChecked: getCurrentDate(),
 			name: values.name,
 			description: values.description,
 			streak: 0,
 			checks: 0,
 			archived: false,
+			archivedDate: null,
 			streakFreezes: 3,
 			graph: [{ year, daysChecked: [] }],
 		};

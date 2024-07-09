@@ -1,5 +1,5 @@
 import { HabitType } from "@/data/HabitType";
-import { getDaysDifference } from "@/lib/utils";
+import { diffInDaysFromNow, getActiveDays } from "@/lib/utils";
 import { Stat } from "./stat";
 import {
 	Tooltip,
@@ -7,8 +7,14 @@ import {
 	TooltipProvider,
 	TooltipTrigger,
 } from "./ui/tooltip";
+import { useLiveQuery } from "dexie-react-hooks";
+import { db } from "@/db";
 
 export const HabitCardStats = ({ habit }: { habit: HabitType }) => {
+	const user = useLiveQuery(() => db.user.toArray());
+
+	if (!user) return null;
+
 	return (
 		<>
 			<div className="space-y-4">
@@ -42,7 +48,7 @@ export const HabitCardStats = ({ habit }: { habit: HabitType }) => {
 					number={
 						~~(
 							(habit.checks /
-								(getDaysDifference(habit.created) + 1)) *
+								(getActiveDays(user[0], habit) + 0)) *
 							100
 						)
 					}

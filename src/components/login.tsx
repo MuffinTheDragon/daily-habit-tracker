@@ -2,6 +2,7 @@ import { db } from "@/db";
 import { DXCInputField, resolveText } from "dexie-cloud-addon";
 import { useObservable } from "dexie-react-hooks";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 import {
 	Credenza,
 	CredenzaContent,
@@ -15,7 +16,6 @@ import { Alert, AlertDescription } from "./ui/alert";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
-import { toast } from "sonner";
 
 export const Login = () => {
 	const userId = db.cloud.currentUserId;
@@ -84,7 +84,14 @@ export const Login = () => {
 					</CredenzaHeader>
 					<div className="px-4 md:p-0 space-y-2">
 						{ui.alerts?.map((alert, i) => (
-							<Alert key={i}>
+							<Alert
+								key={i}
+								variant={
+									alert.type === "error"
+										? "destructive"
+										: "default"
+								}
+							>
 								<AlertDescription>
 									{resolveText(alert)}
 								</AlertDescription>

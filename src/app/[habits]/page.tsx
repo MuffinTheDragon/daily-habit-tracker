@@ -15,11 +15,14 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { db } from "@/db";
+import { getCurrentDate } from "@/lib/utils";
 import { Cog6ToothIcon } from "@heroicons/react/24/outline";
 import { useLiveQuery } from "dexie-react-hooks";
 import { useState } from "react";
+import { toast } from "sonner";
 
 export default function Home() {
+	const userId = db.cloud.currentUserId;
 	const habits = useLiveQuery(() => db.habits.orderBy("created").toArray());
 	const user = useLiveQuery(() => db.user.toArray());
 	const [showMap, setShowMap] = useState(false);
@@ -28,9 +31,28 @@ export default function Home() {
 
 	const updatePause = async (value: boolean) => {
 		db.transaction("rw", [db.habits, db.user], async () => {
-			await db.user.where({ id: user[0].id }).modify((i) => {
-				i.pauseStreaks = value;
-			});
+			if (user[0]) {
+				const start = value ? getCurrentDate() : user[0].pauseStartDate;
+
+				const end = !value ? getCurrentDate() : user[0].pauseEndDate;
+
+				await db.user.where({ id: user[0].id }).modify((i) => {
+					i.pauseStartDate = start;
+					i.pauseEndDate = end;
+					i.pauses = !value
+						? [...i.pauses, { start: start!, end: end! }]
+						: [...i.pauses];
+					i.pauseStreaks = value;
+				});
+			} else {
+				await db.user.add({
+					id: "user",
+					pauseStreaks: value,
+					pauseStartDate: getCurrentDate(),
+					pauseEndDate: null,
+					pauses: [],
+				});
+			}
 		});
 
 		// if unpausing, reset last checked for all habits
@@ -39,11 +61,20 @@ export default function Home() {
 
 			const modifiedHabits = allHabits.map((habit) => ({
 				...habit,
-				lastChecked: new Date(),
+				// lastChecked: getCurrentDate(),
 			}));
 
 			await db.habits.bulkPut(modifiedHabits);
 		}
+	};
+
+	const logout = async () => {
+		await db.cloud.logout();
+		// await db.user.add({ id: "user", pauseStreaks: false });
+
+		toast.success("Success! You are logged out", {
+			closeButton: true,
+		});
 	};
 
 	return (
@@ -51,7 +82,7 @@ export default function Home() {
 			<Login />
 			<main className="flex flex-col items-center justify-between p-4 md:py-24 space-y-8">
 				<div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-					<div className="flex w-80 justify-between items-center col-span-1 lg:col-span-2">
+					<div className="flex justify-between items-center col-span-1 lg:col-span-2 gap-4">
 						<div className="space-y-4">
 							<h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
 								My habits
@@ -83,7 +114,7 @@ export default function Home() {
 											</p>
 										</div>
 										<Switch
-											checked={user[0].pauseStreaks}
+											checked={user[0]?.pauseStreaks}
 											onCheckedChange={updatePause}
 										/>
 									</div>
@@ -91,6 +122,16 @@ export default function Home() {
 										<p>Theme</p>
 										<ThemePicker />
 									</div>
+									{userId !== "unauthorized" && (
+										<Button
+											onClick={logout}
+											variant="secondary"
+											size="sm"
+											className="mt-4 w-full"
+										>
+											Logout
+										</Button>
+									)}
 								</div>
 							</CredenzaContent>
 						</Credenza>
@@ -103,10 +144,10 @@ export default function Home() {
 						>
 							{showMap ? "Hide map" : "Show map"}
 						</Button>
-						<AddHabit paused={user[0].pauseStreaks} />
+						<AddHabit paused={user[0]?.pauseStreaks ?? false} />
 					</div>
 
-					{user[0].pauseStreaks && (
+					{user[0]?.pauseStreaks && (
 						<Alert className="w-fut col-span-1 lg:col-span-2">
 							<AlertDescription>
 								The app is currently paused. Change in settings
@@ -119,7 +160,7 @@ export default function Home() {
 							key={habit.id}
 							habit={habit}
 							showMap={showMap}
-							paused={user[0].pauseStreaks || habit.archived}
+							paused={user[0]?.pauseStreaks || habit.archived}
 						/>
 					))}
 				</div>

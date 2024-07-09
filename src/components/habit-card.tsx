@@ -13,7 +13,7 @@ import { db } from "@/db";
 import {
 	getDateByDayNumber,
 	getDayOfYear,
-	getDaysDifference,
+	diffInDaysFromNow,
 } from "@/lib/utils";
 import { CheckedState } from "@radix-ui/react-checkbox";
 import { useEffect, useRef, useState } from "react";
@@ -60,7 +60,7 @@ export const HabitCard = ({
 
 		if (model.streak < 1) return;
 
-		const diff = getDaysDifference(model.lastChecked);
+		const diff = diffInDaysFromNow(model.lastChecked);
 
 		if (diff > 1) {
 			// don't consider today in the calculation => we do -1
@@ -211,7 +211,7 @@ export const HabitCard = ({
 			<CardFooter>
 				<div className="flex flex-col space-y-1 text-xs text-muted-foreground">
 					<p>Created: {model.created.toDateString()}</p>
-					{/* <p>Last checked: {model.lastChecked.toDateString()}</p> */}
+					<p>Last checked: {model.lastChecked.toDateString()}</p>
 				</div>
 			</CardFooter>
 		</Card>

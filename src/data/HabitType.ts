@@ -11,6 +11,7 @@ export type HabitType = {
 	streak: number;
 	checks: number;
 	archived: boolean;
+	archivedDate: Date | null;
 	streakFreezes: number;
 	lastChecked: Date;
 	graph: GraphType[];

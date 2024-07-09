@@ -14,7 +14,7 @@ import {
 
 import { HabitType } from "@/data/HabitType";
 import { db } from "@/db";
-import { cn } from "@/lib/utils";
+import { cn, getCurrentDate } from "@/lib/utils";
 import {
 	ArchiveBoxIcon,
 	CalendarDaysIcon,
@@ -56,7 +56,7 @@ export const HabbitCardActions = ({
 	return (
 		<Credenza>
 			<DropdownMenu>
-				<DropdownMenuTrigger asChild disabled={paused}>
+				<DropdownMenuTrigger asChild>
 					<Button variant="ghost" size="icon">
 						<EllipsisVerticalIcon className="w-5 h-5" />
 					</Button>
@@ -66,6 +66,7 @@ export const HabbitCardActions = ({
 					<DropdownMenuSeparator />
 					<CredenzaTrigger
 						asChild
+						disabled={paused}
 						onClick={() => setDialog(Dialogs.addCheck)}
 					>
 						<DropdownMenuItem>
@@ -88,6 +89,7 @@ export const HabbitCardActions = ({
 					</CredenzaTrigger>
 					<CredenzaTrigger
 						asChild
+						disabled={paused}
 						onClick={() => setDialog(Dialogs.archive)}
 					>
 						<DropdownMenuItem>
@@ -143,7 +145,7 @@ const FillPreviousDays = ({
 		const dayNumber = getDayOfYear(day);
 
 		if (model.graph.at(-1)!.daysChecked.includes(dayNumber)) return true;
-		return day >= addDays(new Date(), -1);
+		return day >= addDays(getCurrentDate(), -1);
 	};
 
 	return (
@@ -222,6 +224,7 @@ const Archive = ({ model }: { model: HabitType }) => {
 	const archiveHabit = () => {
 		db.habits.where({ id: model.id }).modify((i) => {
 			i.archived = true;
+			i.archivedDate = getCurrentDate();
 		});
 	};
 
