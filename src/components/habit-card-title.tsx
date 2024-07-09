@@ -1,6 +1,10 @@
 import { CardTitle } from "@/components/ui/card";
 import { HabitType } from "@/data/HabitType";
-import { cn, getCurrentDate, getDayOfYear } from "@/lib/utils";
+import {
+	cn,
+	getLastCheckedDateNoDefault,
+	isHabitDoneForToday,
+} from "@/lib/utils";
 import { CheckCircleIcon } from "@heroicons/react/24/solid";
 import { CheckedState } from "@radix-ui/react-checkbox";
 import confetti from "canvas-confetti";
@@ -9,7 +13,6 @@ import { HabbitCardActions } from "./habit-card-actions";
 import { Button } from "./ui/button";
 import { Checkbox } from "./ui/checkbox";
 import { Input } from "./ui/input";
-import { isEqual } from "date-fns";
 
 type Props = {
 	editingTitle: boolean;
@@ -21,8 +24,6 @@ type Props = {
 };
 
 export const HabitCardTitle = ({ props }: { props: Props }) => {
-	const currentDate = getCurrentDate();
-
 	const {
 		editingTitle,
 		model,
@@ -32,10 +33,8 @@ export const HabitCardTitle = ({ props }: { props: Props }) => {
 		paused,
 	} = props;
 
-	const lastCheckedDate = model.graph.at(-1)?.daysChecked.at(-1);
-	const isDoneForToday = lastCheckedDate
-		? isEqual(lastCheckedDate, currentDate)
-		: false;
+	const lastCheckedDate = getLastCheckedDateNoDefault(model.graph);
+	const isDoneForToday = isHabitDoneForToday(lastCheckedDate);
 
 	const onCheckChange = (value: CheckedState) => {
 		if (value) {

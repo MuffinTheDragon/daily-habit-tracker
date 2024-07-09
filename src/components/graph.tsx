@@ -68,7 +68,7 @@ const GetGraph = ({ graph, habit }: { graph: GraphType; habit: HabitType }) => {
 		const startDay = getDayOfYear(time.start);
 		const endDay = getDayOfYear(time.end);
 
-		for (let i = startDay; i < endDay; i++) {
+		for (let i = startDay; i <= endDay; i++) {
 			const pausedDate = getDateByDayNumber(i);
 
 			const pausedAfterCreated =

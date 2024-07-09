@@ -15,9 +15,11 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { db } from "@/db";
-import { InformationCircleIcon } from "@heroicons/react/24/outline";
+import { getLastCheckedDateNoDefault, isHabitDoneForToday } from "@/lib/utils";
+import { Progress } from "@/components/ui/progress";
 import { useLiveQuery } from "dexie-react-hooks";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { HabitType } from "@/data/HabitType";
 
 export default function Home() {
 	const habits = useLiveQuery(() =>
@@ -27,6 +29,48 @@ export default function Home() {
 	// grab the first user created
 	const user = useLiveQuery(() => db.user.orderBy("created").first());
 	const [showMap, setShowMap] = useState(false);
+
+	const [dailyProgress, setDailyProgress] = useState(0);
+
+	const [activeHabits, setActiveHabits] = useState<HabitType[]>([]);
+	const [archivedHabits, setArchivedHabits] = useState<HabitType[]>([]);
+
+	useEffect(() => {
+		if (habits) {
+			const sortedActiveHabits = habits
+				.filter((i) => !i.archived)
+				.sort((a, b) => b.created.getTime() - a.created.getTime());
+
+			const sortedArchivedHabits = habits
+				.filter((i) => i.archived)
+				.sort(
+					(a, b) =>
+						b.archivedDate!.getTime() - a.archivedDate!.getTime()
+				);
+
+			setActiveHabits(sortedActiveHabits);
+			setArchivedHabits(sortedArchivedHabits);
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [habits]);
+
+	/**
+	 * sort habits such that all non-archived habits come first in ascending date of creation
+	 * all archived habits come last in ascending archived date
+	 */
+	useEffect(() => {
+		if (habits) {
+			const habitsFinished = habits.filter((i) => {
+				if (i.archived) return false;
+				const lastCheckedDate = getLastCheckedDateNoDefault(i.graph);
+				return isHabitDoneForToday(lastCheckedDate);
+			}).length;
+
+			const totalActiveHabits = habits.filter((i) => !i.archived).length;
+
+			setDailyProgress((habitsFinished / totalActiveHabits) * 100);
+		}
+	}, [habits]);
 
 	if (!habits) return null;
 
@@ -91,7 +135,11 @@ export default function Home() {
 							</AlertDescription>
 						</Alert>
 					)}
-					{habits.map((habit, i) => {
+					<Progress
+						value={dailyProgress}
+						className="col-span-1 md:col-span-2"
+					/>
+					{[...activeHabits, ...archivedHabits].map((habit, i) => {
 						const spanClass =
 							i === habits.length - 1 && habits.length % 2
 								? "md:col-span-2"

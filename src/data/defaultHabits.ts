@@ -6,7 +6,6 @@ export const defaultHabits: HabitType[] = [
 	{
 		id: "1",
 		created: new Date(),
-		lastChecked: new Date(),
 		name: "Daily habit",
 		description: "",
 		streak: 0,
@@ -21,7 +20,6 @@ export const defaultHabits: HabitType[] = [
 	{
 		id: "2",
 		created: new Date(),
-		lastChecked: new Date(),
 		name: "Daily habit 2",
 		description: "Habit description",
 		streak: 5,

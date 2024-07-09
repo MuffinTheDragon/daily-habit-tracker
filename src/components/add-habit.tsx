@@ -50,7 +50,6 @@ export const AddHabit = ({ paused }: { paused: boolean }) => {
 		const habit: HabitType = {
 			id: uuidv4(),
 			created: new Date(), // store time for sorting purposes
-			lastChecked: now,
 			name: values.name,
 			description: values.description,
 			streak: 0,
