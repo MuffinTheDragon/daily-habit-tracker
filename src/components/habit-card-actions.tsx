@@ -189,7 +189,6 @@ const FillPreviousDays = ({
 						toMonth={new Date(currentYear, 11, 31)}
 						selected={date}
 						onSelect={setDate}
-						initialFocus
 					/>
 				</PopoverContent>
 			</Popover>
