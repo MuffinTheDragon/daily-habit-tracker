@@ -17,6 +17,7 @@ import { Cog6ToothIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { toast } from "sonner";
 import { BaseNumberOfFreezes } from "./habit-card";
+import { v4 as uuidv4 } from "uuid";
 
 export const Settings = ({ user }: { user: UserType }) => {
 	const userId = db.cloud.currentUserId;
@@ -63,8 +64,12 @@ export const Settings = ({ user }: { user: UserType }) => {
 
 	const logout = async () => {
 		await db.cloud.logout();
-		// await db.user.add({ id: "user", pauseStreaks: false });
-
+		await db.user.add({
+			id: uuidv4(),
+			created: new Date(),
+			pauseStreaks: false,
+			pauses: [],
+		});
 		toast.success("Success! You are logged out", {
 			closeButton: true,
 		});
