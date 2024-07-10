@@ -4,6 +4,6 @@ export type UserType = {
 	pauseStreaks?: boolean;
 	pauseEndDate?: Date;
 	pauseStartDate?: Date;
-	pauses: { year: number; time: { start: Date; end: Date }[] }[];
+	pauses: [Date, Date][];
 	collapsed?: boolean;
 };

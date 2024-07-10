@@ -4,18 +4,27 @@ import { GraphType, HabitType } from "@/data/HabitType";
 import { db } from "@/db";
 import { daysInYear, getDateByDayNumber } from "@/lib/utils";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
-import { getDayOfYear, isAfter, isBefore, isEqual, startOfDay } from "date-fns";
+import {
+	addDays,
+	getDayOfYear,
+	isAfter,
+	isBefore,
+	isEqual,
+	startOfDay,
+} from "date-fns";
 import { useLiveQuery } from "dexie-react-hooks";
 import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
+import { UserType } from "@/data/userType";
 
 type Props = {
 	graph: GraphType[];
 	habit: HabitType;
+	user: UserType;
 };
 
 export const Graph = ({ ...props }: Props) => {
-	const { graph, habit } = props;
+	const { graph, user, habit } = props;
 
 	const [index, setIndex] = useState(graph.length - 1);
 
@@ -47,43 +56,54 @@ export const Graph = ({ ...props }: Props) => {
 				</Button>
 			</div>
 			<div className="flex overflow-x-auto overflow-y-hidden">
-				<GetGraph graph={graph[index]} habit={habit} />
+				<GetGraph graph={graph[index]} habit={habit} user={user} />
 			</div>
 		</div>
 	);
 };
 
-const GetGraph = ({ graph, habit }: { graph: GraphType; habit: HabitType }) => {
-	const user = useLiveQuery(() => db.user.toArray());
-
-	if (!user) return null;
-
-	const graphYear = graph.year;
-	const pauseTimes = user[0]?.pauses.find((i) => i.year === graphYear);
-
+const GetGraph = ({
+	graph,
+	habit,
+	user,
+}: {
+	graph: GraphType;
+	habit: HabitType;
+	user: UserType;
+}) => {
 	const numberOfDays = daysInYear(graph.year);
-
 	const arr: number[] = Array(numberOfDays).fill(0);
 
-	pauseTimes?.time.forEach((time) => {
-		const startDay = getDayOfYear(time.start);
-		const endDay = getDayOfYear(time.end);
+	const graphYear = graph.year;
+	const pausePeriod = user.pauses.at(-1);
 
-		for (let i = startDay; i <= endDay; i++) {
-			const pausedDate = getDateByDayNumber(graphYear, i);
+	if (pausePeriod) {
+		let currentDate = pausePeriod[0]; // start of pause
+
+		while (isAfter(currentDate, pausePeriod[1]) === false) {
+			// const pausedDate = getDateByDayNumber(graphYear, i);
 
 			const pausedAfterCreated =
-				isAfter(pausedDate, startOfDay(habit.created)) ||
-				isEqual(pausedDate, startOfDay(habit.created));
+				isAfter(currentDate, startOfDay(habit.created)) ||
+				isEqual(currentDate, startOfDay(habit.created));
 
 			const pausedBeforeArchived = habit.archivedDate
-				? isBefore(pausedDate, habit.archivedDate) ||
-				  isEqual(pausedDate, habit.archivedDate)
+				? isBefore(currentDate, habit.archivedDate) ||
+				  isEqual(currentDate, habit.archivedDate)
 				: true;
 
-			if (pausedAfterCreated && pausedBeforeArchived) arr[i - 1] = 1;
+			const index = getDayOfYear(currentDate);
+
+			if (
+				currentDate.getFullYear() === graphYear &&
+				pausedAfterCreated &&
+				pausedBeforeArchived
+			)
+				arr[index - 1] = 1;
+
+			currentDate = addDays(currentDate, 1);
 		}
-	});
+	}
 
 	graph.daysChecked.forEach((date) => {
 		const dayNumber = getDayOfYear(date);

@@ -167,7 +167,7 @@ export const HabitCard = ({ ...props }: Props) => {
 
 			{showMap && (
 				<CardContent>
-					<Graph graph={habit.graph} habit={habit} />
+					<Graph graph={habit.graph} habit={habit} user={user} />
 				</CardContent>
 			)}
 

@@ -34,17 +34,9 @@ export const Settings = ({ user }: { user: UserType }) => {
 	const startPause = async (value: boolean) => {
 		if (!user) return;
 
-		const pauses = [...user.pauses];
-
-		// pauses is sorted by year
-		if (pauses.at(-1)?.year !== currentYear) {
-			pauses.push({ year: currentYear, time: [] });
-		}
-
 		await db.user.where({ id: user.id }).modify((i) => {
 			i.pauseStreaks = value;
 			i.pauseStartDate = currentDate;
-			i.pauses = pauses;
 		});
 	};
 
@@ -53,11 +45,7 @@ export const Settings = ({ user }: { user: UserType }) => {
 
 		const pauses = [...user.pauses];
 
-		// pauses is sorted by year
-		pauses.at(-1)?.time.push({
-			start: user.pauseStartDate!,
-			end: currentDate,
-		});
+		pauses.push([user.pauseStartDate!, currentDate]);
 
 		await db.user.where({ id: user.id }).modify((i) => {
 			i.pauseStreaks = value;
