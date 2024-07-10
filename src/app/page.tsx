@@ -76,7 +76,7 @@ export default function Home() {
 			</div>
 
 			<div className="flex flex-col md:items-center justify-between p-4 md:py-24 space-y-8">
-				<div className="bg-secondary w-screen justify-center flex">
+				<div className="bg-secondary justify-center flex w-full">
 					<div className="grid md:grid-cols-3 px-4 items-center">
 						<h1 className="scroll-m-20 space-y-4 text-4xl font-extrabold tracking-wide lg:text-5xl ps-10 my-10 md:mt-0 md:w-48 md:col-span-1">
 							Track all your daily habits
@@ -111,7 +111,7 @@ export default function Home() {
 					Features
 				</h2>
 				<div className="flex flex-col">
-					<div className="relative z-10 flex gap-x-4 overflow-x-auto pb-4 whitespace-nowrap px-4 sm:whitespace-normal">
+					<div className="relative z-10 flex gap-x-4 overflow-x-auto pb-4 whitespace-nowrap px-4 sm:whitespace-normal sm:justify-center">
 						<div
 							onClick={() => setActiveCard(1)}
 							className={cn(
