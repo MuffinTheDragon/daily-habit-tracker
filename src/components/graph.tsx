@@ -2,7 +2,12 @@
 
 import { GraphType, HabitType } from "@/data/HabitType";
 import { db } from "@/db";
-import { daysInYear, getDateByDayNumber } from "@/lib/utils";
+import {
+	daysInYear,
+	getDateByDayNumber,
+	isAfterOrEqual,
+	isBeforeOrEqual,
+} from "@/lib/utils";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import {
 	addDays,
@@ -75,31 +80,34 @@ const GetGraph = ({
 	const arr: number[] = Array(numberOfDays).fill(0);
 
 	const graphYear = graph.year;
-	const pausePeriod = user.pauses.at(-1);
 
-	if (pausePeriod) {
-		let currentDate = pausePeriod[0]; // start of pause
+	for (let i = 0; i < user.pauses.length; i++) {
+		const pausePeriod = user.pauses[i];
 
-		while (isAfter(currentDate, pausePeriod[1]) === false) {
-			// const pausedDate = getDateByDayNumber(graphYear, i);
+		const pauseStart = pausePeriod[0];
+		const pauseEnd = pausePeriod[1];
 
-			const pausedAfterCreated =
-				isAfter(currentDate, startOfDay(habit.created)) ||
-				isEqual(currentDate, startOfDay(habit.created));
+		let currentDate = pauseStart; // start of pause
 
-			const pausedBeforeArchived = habit.archivedDate
-				? isBefore(currentDate, habit.archivedDate) ||
-				  isEqual(currentDate, habit.archivedDate)
-				: true;
+		while (!isAfter(currentDate, pauseEnd)) {
+			if (currentDate.getFullYear() !== graphYear) {
+				currentDate = addDays(currentDate, 1);
+				continue;
+			}
 
-			const index = getDayOfYear(currentDate);
+			const pausedAfterCreated = isAfterOrEqual(
+				currentDate,
+				startOfDay(habit.created)
+			);
 
-			if (
-				currentDate.getFullYear() === graphYear &&
-				pausedAfterCreated &&
-				pausedBeforeArchived
-			)
+			const pausedBeforeArchived =
+				!habit.archivedDate ||
+				isBeforeOrEqual(currentDate, habit.archivedDate);
+
+			if (pausedAfterCreated && pausedBeforeArchived) {
+				const index = getDayOfYear(currentDate);
 				arr[index - 1] = 1;
+			}
 
 			currentDate = addDays(currentDate, 1);
 		}

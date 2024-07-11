@@ -1,6 +1,14 @@
 import { GraphType, HabitType } from "@/data/HabitType";
 import { type ClassValue, clsx } from "clsx";
-import { differenceInHours, isEqual, max, parse, startOfDay } from "date-fns";
+import {
+	differenceInHours,
+	isAfter,
+	isBefore,
+	isEqual,
+	max,
+	parse,
+	startOfDay,
+} from "date-fns";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
@@ -136,4 +144,12 @@ export function isHabitDoneForToday(habit: HabitType) {
 	const now = getCurrentDate();
 
 	return isEqual(lastCheckedDate, now);
+}
+
+export function isAfterOrEqual(date1: Date, date2: Date) {
+	return isAfter(date1, date2) || isEqual(date1, date2);
+}
+
+export function isBeforeOrEqual(date1: Date, date2: Date) {
+	return isBefore(date1, date2) || isEqual(date1, date2);
 }
