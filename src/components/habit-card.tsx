@@ -125,7 +125,7 @@ export const HabitCard = ({ ...props }: Props) => {
 		}
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [model.streak]);
+	}, []);
 
 	return (
 		<Card className="relative min-w-[90vw] sm:min-w-96 flex flex-col">
