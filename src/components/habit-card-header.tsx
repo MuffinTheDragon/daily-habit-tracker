@@ -116,7 +116,7 @@ export const HabitCardHeader = ({ ...props }: Props) => {
 				<div className="flex items-center space-x-2">
 					<CardTitle
 						className={cn(
-							"hover:cursor-text border border-background hover:border-border py-1 rounded w-full md:text-xl",
+							"hover:cursor-text border border-background hover:border-border py-1 rounded w-full md:text-xl truncate",
 							{ "line-through": isDoneForToday }
 						)}
 						onClick={() => setEditingTitle(true)}
