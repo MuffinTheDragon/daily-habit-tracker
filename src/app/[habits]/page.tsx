@@ -17,9 +17,11 @@ import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
 import { HabitType } from "@/data/HabitType";
 import { db } from "@/db";
-import { getLastCheckedDateNoDefault, isHabitDoneForToday } from "@/lib/utils";
+import { isHabitDoneForToday } from "@/lib/utils";
 import { useLiveQuery } from "dexie-react-hooks";
+
 import { useEffect, useState } from "react";
+import { Section } from "./section";
 
 export default function Home() {
 	const habits = useLiveQuery(() =>
@@ -34,22 +36,29 @@ export default function Home() {
 	const [dailyProgress, setDailyProgress] = useState(0);
 
 	const [activeHabits, setActiveHabits] = useState<HabitType[]>([]);
+	const [completedHabits, setCompletedHabits] = useState<HabitType[]>([]);
 	const [archivedHabits, setArchivedHabits] = useState<HabitType[]>([]);
 
 	useEffect(() => {
 		if (habits) {
-			const filteredActiveHabits = habits.filter((i) => !i.archived);
+			const active = habits.filter(
+				(i) => !i.archived && !isHabitDoneForToday(i)
+			);
 
-			// sorted in descending order by archived date
-			const sortedArchivedHabits = habits
+			const archived = habits
 				.filter((i) => i.archived)
 				.sort(
 					(a, b) =>
 						b.archivedDate!.getTime() - a.archivedDate!.getTime()
 				);
 
-			setActiveHabits(filteredActiveHabits);
-			setArchivedHabits(sortedArchivedHabits);
+			const completed = habits.filter(
+				(i) => !i.archived && isHabitDoneForToday(i)
+			);
+
+			setActiveHabits(active);
+			setArchivedHabits(archived);
+			setCompletedHabits(completed);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [habits]);
@@ -62,8 +71,7 @@ export default function Home() {
 		if (habits) {
 			const habitsFinished = habits.filter((i) => {
 				if (i.archived) return false;
-				const lastCheckedDate = getLastCheckedDateNoDefault(i.graph);
-				return isHabitDoneForToday(lastCheckedDate);
+				return isHabitDoneForToday(i);
 			}).length;
 
 			const totalActiveHabits = habits.filter((i) => !i.archived).length;
@@ -136,9 +144,11 @@ export default function Home() {
 						value={dailyProgress}
 						className="col-span-1 md:col-span-2"
 					/>
-					{[...activeHabits, ...archivedHabits].map((habit, i) => {
+
+					{activeHabits.map((habit, i) => {
 						const spanClass =
-							i === habits.length - 1 && habits.length % 2
+							i === activeHabits.length - 1 &&
+							activeHabits.length % 2
 								? "md:col-span-2"
 								: "";
 						return (
@@ -152,6 +162,20 @@ export default function Home() {
 							</div>
 						);
 					})}
+
+					<Section
+						title="Completed"
+						array={completedHabits}
+						user={user}
+						showMap={showMap}
+					/>
+
+					<Section
+						title="Archived"
+						array={archivedHabits}
+						user={user}
+						showMap={showMap}
+					/>
 				</div>
 			</main>
 		</>

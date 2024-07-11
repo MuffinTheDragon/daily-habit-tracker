@@ -96,14 +96,6 @@ export function getLastUpdatedDate(
 	return lastUpdated;
 }
 
-export function isHabitDoneForToday(lastCheckedDate: Date | undefined) {
-	if (!lastCheckedDate) return false;
-
-	const now = getCurrentDate();
-
-	return isEqual(lastCheckedDate, now);
-}
-
 /**
  * compute the longest streak for a habit.
  * @param model
@@ -134,4 +126,14 @@ export function getLongestStreak(model: HabitType, newStreak: number) {
  */
 export function getLastCheckedDateNoDefault(graph: GraphType[]) {
 	return graph.at(-1)?.daysChecked.at(-1);
+}
+
+export function isHabitDoneForToday(habit: HabitType) {
+	const lastCheckedDate = getLastCheckedDateNoDefault(habit.graph);
+
+	if (!lastCheckedDate) return false;
+
+	const now = getCurrentDate();
+
+	return isEqual(lastCheckedDate, now);
 }

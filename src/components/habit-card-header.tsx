@@ -29,8 +29,7 @@ export const HabitCardHeader = ({ ...props }: Props) => {
 
 	const [editingTitle, setEditingTitle] = useState(false);
 
-	const lastCheckedDate = getLastCheckedDateNoDefault(model.graph);
-	const isDoneForToday = isHabitDoneForToday(lastCheckedDate);
+	const isDoneForToday = isHabitDoneForToday(model);
 
 	const markHabit = (v: CheckedState) => {
 		if (paused) return;
