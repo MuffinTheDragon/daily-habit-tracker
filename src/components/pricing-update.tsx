@@ -14,9 +14,9 @@ import {
 
 export const PricingUpdate = () => {
 	return (
-		<Alert className="flex justify-center rounded-none py-2">
+		<Alert className="flex justify-center rounded-none py-2 bg-[#fbf4cd] dark:bg-[#302801]">
 			<AlertDescription className="flex items-center space-x-2">
-				<p>Important updating about pricing</p>
+				<p>Important update about pricing</p>
 				<Credenza>
 					<CredenzaTrigger asChild>
 						<Button size="sm" variant="secondary">
