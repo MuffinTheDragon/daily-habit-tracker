@@ -31,28 +31,25 @@ export const PricingUpdate = () => {
 								entirely free and useable offline!
 							</CredenzaDescription>
 						</CredenzaHeader>
-						<div className="px-4 md:p-0 space-y-4">
+						<div className="px-4 md:p-0 space-y-4 mb-4">
 							<p>
 								This update strictly concerns the ability to
 								sync data between devices.
 							</p>
 							<p>
-								Since this is something I need to pay for per
-								user, those who would like to continue to sync
-								their data can upgrade to premium for{" "}
-								<b>$0.99 USD per month</b>
+								Since this is something I have to pay for per
+								user per month, those who would like to continue
+								to sync their data can upgrade to premium for{" "}
+								<b>$0.99 USD per month.</b>
 							</p>
 							<p>
-								Each new user has a certain number of eval days,
+								Each user has a certain number of eval days,
 								during which your data will sync for free (you
 								can see how many eval days you have left in the
-								settings). After which, you will need to upgrade
+								settings). After which, you will have to upgrade
 								if you want to continue syncing your data.
 							</p>
 						</div>
-						<CredenzaFooter>
-							<CredenzaClose asChild>Delete</CredenzaClose>
-						</CredenzaFooter>
 					</CredenzaContent>
 				</Credenza>
 			</AlertDescription>
