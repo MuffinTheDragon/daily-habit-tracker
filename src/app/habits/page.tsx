@@ -5,12 +5,6 @@ import { HabitCard } from "@/components/habit-card";
 import { Login } from "@/components/login";
 import { Settings } from "@/components/settings";
 import { ToggleView } from "@/components/toggle-view";
-import {
-	Accordion,
-	AccordionContent,
-	AccordionItem,
-	AccordionTrigger,
-} from "@/components/ui/accordion";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -20,6 +14,8 @@ import { db } from "@/db";
 import { isHabitDoneForToday } from "@/lib/utils";
 import { useLiveQuery } from "dexie-react-hooks";
 
+import { PricingUpdate } from "@/components/pricing-update";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Section } from "./section";
 
@@ -38,6 +34,22 @@ export default function Home() {
 	const [activeHabits, setActiveHabits] = useState<HabitType[]>([]);
 	const [completedHabits, setCompletedHabits] = useState<HabitType[]>([]);
 	const [archivedHabits, setArchivedHabits] = useState<HabitType[]>([]);
+
+	const params = useSearchParams();
+
+	// re-sync db on payment interaction
+	useEffect(() => {
+		const resync = async () => {
+			if (params.get("payment")) {
+				// @ts-ignore
+				await db.$logins
+					.toCollection()
+					.modify({ accessTokenExpiration: 1 });
+			}
+		};
+
+		resync();
+	}, [params]);
 
 	/**
 	 * temporary hotfix for users who still have pauses saved as: [{year, time: []}]
@@ -112,22 +124,7 @@ export default function Home() {
 	return (
 		<>
 			<Login />
-			<Accordion type="single" collapsible>
-				<AccordionItem value="item-1" className="px-4">
-					<AccordionTrigger className="flex justify-center items-center space-x-2 hover:no-underline">
-						<p className="pe-2">This project is open source!</p>
-					</AccordionTrigger>
-					<AccordionContent className="text-center">
-						<p className="text-sm">
-							For feedback, click on{" "}
-							<b className="underline underline-offset-4">
-								Report an issue
-							</b>{" "}
-							in settings
-						</p>
-					</AccordionContent>
-				</AccordionItem>
-			</Accordion>
+			<PricingUpdate />
 
 			<main className="flex flex-col items-center justify-between p-4 md:py-24 space-y-8">
 				<div className="grid grid-cols-1 md:grid-cols-2 gap-4">

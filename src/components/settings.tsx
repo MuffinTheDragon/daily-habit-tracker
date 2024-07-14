@@ -15,15 +15,19 @@ import { db } from "@/db";
 import { getCurrentDate } from "@/lib/utils";
 import { Cog6ToothIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
+import { useState } from "react";
 import { toast } from "sonner";
-import { BaseNumberOfFreezes } from "./habit-card";
 import { v4 as uuidv4 } from "uuid";
+import { BaseNumberOfFreezes } from "./habit-card";
+import { License } from "./license";
+import { Separator } from "./ui/separator";
 
 export const Settings = ({ user }: { user: UserType }) => {
 	const userId = db.cloud.currentUserId;
 
-	const currentYear = new Date().getFullYear();
 	const currentDate = getCurrentDate();
+
+	const [loadingSync, setLoadingSync] = useState(false);
 
 	const updatePause = async (value: boolean) => {
 		db.transaction("rw", [db.habits, db.user], async () => {
@@ -75,6 +79,14 @@ export const Settings = ({ user }: { user: UserType }) => {
 		});
 	};
 
+	const sync = async () => {
+		setLoadingSync(true);
+		// @ts-ignore
+		await db.$logins.toCollection().modify({ accessTokenExpiration: 1 });
+		await db.cloud.sync();
+		setLoadingSync(false);
+	};
+
 	return (
 		<Credenza>
 			<CredenzaTrigger asChild>
@@ -105,24 +117,41 @@ export const Settings = ({ user }: { user: UserType }) => {
 						<p>Theme</p>
 						<ThemePicker />
 					</div>
+					<Separator className="my-4" />
+					{userId !== "unauthorized" && (
+						<div className="flex justify-between items-center">
+							<p>Sync your data</p>
+							<Button size="sm" variant="outline" onClick={sync}>
+								{loadingSync ? "Syncing..." : "Sync"}
+							</Button>
+						</div>
+					)}
 					<div className="w-full flex">
 						<Link
 							href="https://github.com/MuffinTheDragon/daily-habit-tracker/issues"
 							target="_blank"
-							className="underline underline-offset-4"
+							className="underline underline-offset-4 text-sm"
 						>
 							Report an issue
 						</Link>
 					</div>
+
 					{userId !== "unauthorized" && (
-						<Button
-							onClick={logout}
-							variant="secondary"
-							size="sm"
-							className="mt-4 w-full"
-						>
-							Logout
-						</Button>
+						<div className="text-sm">
+							<Separator className="my-4" />
+							<License />
+							<Button
+								onClick={logout}
+								variant="secondary"
+								size="sm"
+								className="mt-4 w-full"
+							>
+								Logout
+							</Button>
+							<p className="text-center text-sm mt-1">
+								Logged in as: {userId}
+							</p>
+						</div>
 					)}
 				</div>
 			</CredenzaContent>
