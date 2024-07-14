@@ -3,16 +3,19 @@ import { Button } from "@/components/ui/button";
 
 import {
 	Credenza,
-	CredenzaClose,
 	CredenzaContent,
 	CredenzaDescription,
-	CredenzaFooter,
 	CredenzaHeader,
 	CredenzaTitle,
 	CredenzaTrigger,
 } from "@/components/responsive-dialog";
+import { db } from "@/db";
 
 export const PricingUpdate = () => {
+	const userId = db.cloud.currentUserId;
+
+	if (userId === "unauthorized") return null;
+
 	return (
 		<Alert className="flex justify-center rounded-none py-2 bg-[#fbf4cd] dark:bg-[#302801]">
 			<AlertDescription className="flex items-center space-x-2">
