@@ -1,5 +1,7 @@
 "use client";
 
+import githubLight from "@/app/assets/github-mark-white.png";
+import githubDark from "@/app/assets/github-mark.png";
 import habitsDark from "@/app/assets/habits-dark.png";
 import habitsLight from "@/app/assets/habits-light.png";
 import mapDark from "@/app/assets/map-dark.png";
@@ -10,8 +12,6 @@ import pauseDark from "@/app/assets/pause-dark.png";
 import pauseLight from "@/app/assets/pause-light.png";
 import streaksDark from "@/app/assets/streaks-dark.png";
 import streaksLight from "@/app/assets/streaks-light.png";
-import githubDark from "@/app/assets/github-mark.png";
-import githubLight from "@/app/assets/github-mark-white.png";
 import logo from "@/app/favicon.ico";
 import { ThemePicker } from "@/components/theme-picker";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -24,6 +24,11 @@ import {
 	PauseCircleIcon,
 	WifiIcon,
 } from "@heroicons/react/24/outline";
+import {
+	ArrowLeftIcon,
+	ArrowUpIcon,
+	CheckIcon,
+} from "@heroicons/react/24/solid";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
@@ -297,6 +302,60 @@ export default function Home() {
 								</div>
 							</div>
 						)}
+					</div>
+				</div>
+				<h2 className="scroll-m-20 pb-2 text-3xl font-semibold tracking-tight first:mt-0">
+					Pricing
+				</h2>
+				<div className="flex space-y-8 flex-col md:flex-row md:space-x-8 md:space-y-0">
+					<div className="border rounded-2xl p-10 w-[350px] space-y-4">
+						<h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
+							Free
+						</h3>
+						<p className="text-muted-foreground text-sm">
+							All the core features included for free
+						</p>
+						<div className="mt-4 space-y-4">
+							<div className="flex items-center">
+								<CheckIcon className="w-5 h-5 me-2" />
+								<p>Track unlimited habits</p>
+							</div>
+							<div className="flex items-center">
+								<CheckIcon className="w-5 h-5 me-2" />
+								<p>Offline use</p>
+							</div>
+							<div className="flex items-center">
+								<CheckIcon className="w-5 h-5 me-2" />
+								<p>Track streaks</p>
+							</div>
+							<div className="flex items-center">
+								<CheckIcon className="w-5 h-5 me-2" />
+								<p>Pause the app</p>
+							</div>
+							<div className="flex items-center">
+								<CheckIcon className="w-5 h-5 me-2" />
+								<p>Sync data for 30 days</p>
+							</div>
+						</div>
+					</div>
+					<div className="border rounded-2xl p-10 w-[350px] space-y-4">
+						<h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
+							Premium
+						</h3>
+						<p className="text-muted-foreground text-sm">
+							$0.99 USD per month
+						</p>
+						<div className="mt-4 space-y-4">
+							<div className="flex items-center">
+								<ArrowLeftIcon className="w-5 h-5 me-2 hidden md:block" />
+								<ArrowUpIcon className="w-5 h-5 me-2 md:hidden" />
+								<p> Everything in free</p>
+							</div>
+							<div className="flex items-center">
+								<CheckIcon className="w-5 h-5 me-2" />
+								<p>Sync data forever</p>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
