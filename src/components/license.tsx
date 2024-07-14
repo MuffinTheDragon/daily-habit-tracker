@@ -39,7 +39,7 @@ export const License = () => {
 			)}
 			{licenseType === "Premium" && (
 				<Link
-					href="https://billing.stripe.com/p/login/test_6oEeWpeyEcP71vGcMM"
+					href={process.env.NEXT_PUBLIC_STRIPE_PORTAL!}
 					target="_blank"
 				>
 					<Button size="sm">Manage</Button>
