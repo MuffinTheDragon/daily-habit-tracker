@@ -38,7 +38,7 @@ export default function Home() {
 
 	return (
 		<div>
-			<div className="sticky backdrop-blur-md top-0">
+			<div className="sticky backdrop-blur-md top-0 z-50">
 				<Alert className="border-s-0 border-e-0 rounded-none bg-background/40">
 					<AlertDescription className="flex justify-between items-center">
 						<Link className="flex items-center" href="/">
