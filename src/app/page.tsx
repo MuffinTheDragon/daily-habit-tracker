@@ -115,7 +115,7 @@ export default function Home() {
 				<h2 className="scroll-m-20 pb-2 text-3xl font-semibold tracking-tight first:mt-0">
 					Features
 				</h2>
-				<div className="flex flex-col">
+				<div className="flex flex-col border-b pb-8">
 					<div className="relative z-10 flex gap-x-4 overflow-x-auto pb-4 whitespace-nowrap px-4 sm:whitespace-normal sm:justify-center">
 						<div
 							onClick={() => setActiveCard(1)}
