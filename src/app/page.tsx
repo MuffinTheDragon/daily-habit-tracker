@@ -308,7 +308,7 @@ export default function Home() {
 					Pricing
 				</h2>
 				<div className="flex space-y-8 flex-col md:flex-row md:space-x-8 md:space-y-0">
-					<div className="border rounded-2xl p-10 w-[350px] space-y-4">
+					<div className="border rounded-2xl p-10 md:w-[350px] space-y-4">
 						<h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
 							Free
 						</h3>
@@ -338,7 +338,7 @@ export default function Home() {
 							</div>
 						</div>
 					</div>
-					<div className="border rounded-2xl p-10 w-[350px] space-y-4">
+					<div className="border rounded-2xl p-10 md:w-[350px] space-y-4">
 						<h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
 							Premium
 						</h3>
