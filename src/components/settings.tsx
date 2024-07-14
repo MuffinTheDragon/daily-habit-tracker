@@ -126,13 +126,20 @@ export const Settings = ({ user }: { user: UserType }) => {
 							</Button>
 						</div>
 					)}
-					<div className="w-full flex">
+					<div className="w-full flex space-x-4">
 						<Link
 							href="https://github.com/MuffinTheDragon/daily-habit-tracker/issues"
 							target="_blank"
 							className="underline underline-offset-4 text-sm"
 						>
 							Report an issue
+						</Link>
+						<Link
+							href="mailto:rdht.contact@gmail.com"
+							target="_blank"
+							className="underline underline-offset-4 text-sm"
+						>
+							Send an email
 						</Link>
 					</div>
 
