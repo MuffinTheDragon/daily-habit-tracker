@@ -49,6 +49,16 @@ export default function Home() {
 		resync();
 	}, [params]);
 
+	useEffect(() => {
+		const sync = async () => {
+			try {
+				await db.cloud.sync({ purpose: "pull", wait: true });
+			} catch {}
+		};
+
+		sync();
+	}, []);
+
 	/**
 	 * temporary hotfix for users who still have pauses saved as: [{year, time: []}]
 	 */
