@@ -13,8 +13,6 @@ import { HabitType } from "@/data/HabitType";
 import { db } from "@/db";
 import { isHabitDoneForToday } from "@/lib/utils";
 import { useLiveQuery } from "dexie-react-hooks";
-
-import { PricingUpdate } from "@/components/pricing-update";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Section } from "./section";
@@ -44,7 +42,7 @@ export default function Home() {
 				// @ts-ignore
 				await db.$logins
 					.toCollection()
-					.modify({ accessTokenExpiration: 1 });
+					.modify({ accessTokenExpiration: new Date() });
 			}
 		};
 
@@ -124,7 +122,6 @@ export default function Home() {
 	return (
 		<>
 			<Login />
-			<PricingUpdate />
 
 			<main className="flex flex-col items-center justify-between p-4 md:py-24 space-y-8">
 				<div className="grid grid-cols-1 md:grid-cols-2 gap-4">

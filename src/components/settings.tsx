@@ -82,7 +82,9 @@ export const Settings = ({ user }: { user: UserType }) => {
 	const sync = async () => {
 		setLoadingSync(true);
 		// @ts-ignore
-		await db.$logins.toCollection().modify({ accessTokenExpiration: 1 });
+		await db.$logins
+			.toCollection()
+			.modify({ accessTokenExpiration: new Date() });
 		await db.cloud.sync();
 		setLoadingSync(false);
 	};
@@ -121,7 +123,12 @@ export const Settings = ({ user }: { user: UserType }) => {
 					{userId !== "unauthorized" && (
 						<div className="flex justify-between items-center">
 							<p>Sync your data</p>
-							<Button size="sm" variant="outline" onClick={sync}>
+							<Button
+								size="sm"
+								variant="outline"
+								onClick={sync}
+								disabled={loadingSync}
+							>
 								{loadingSync ? "Syncing..." : "Sync"}
 							</Button>
 						</div>

@@ -2,6 +2,7 @@ import { db } from "@/db";
 import { useObservable } from "dexie-react-hooks";
 import { Button } from "./ui/button";
 import Link from "next/link";
+import { PricingUpdate } from "./pricing-update";
 
 export const License = () => {
 	const user = useObservable(db.cloud.currentUser);
@@ -28,7 +29,8 @@ export const License = () => {
 				<p>Tier: {licenseType}</p>
 				{licenseType === "Free" && (
 					<p className="text-xs text-muted-foreground pe-24">
-						Eval days left: {user.license.evalDaysLeft}
+						<PricingUpdate evalDays={user.license.evalDaysLeft} />
+						{/* Eval days left: {user.license.evalDaysLeft} */}
 					</p>
 				)}
 			</div>
