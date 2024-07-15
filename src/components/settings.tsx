@@ -81,11 +81,17 @@ export const Settings = ({ user }: { user: UserType }) => {
 
 	const sync = async () => {
 		setLoadingSync(true);
-		// @ts-ignore
-		await db.$logins
-			.toCollection()
-			.modify({ accessTokenExpiration: new Date() });
-		await db.cloud.sync();
+		try {
+			// @ts-ignore
+			await db.$logins
+				.toCollection()
+				.modify({ accessTokenExpiration: new Date() });
+			await db.cloud.sync();
+		} catch (error) {
+			toast.error(
+				"Sync error. If you are out of eval days, upgrade to continue syncing"
+			);
+		}
 		setLoadingSync(false);
 	};
 
