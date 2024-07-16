@@ -3,6 +3,7 @@ import {
 	Credenza,
 	CredenzaClose,
 	CredenzaContent,
+	CredenzaDescription,
 	CredenzaFooter,
 	CredenzaHeader,
 	CredenzaTitle,
@@ -37,6 +38,13 @@ export const Logout = () => {
 					<CredenzaTitle>
 						Are you sure you want to logout?
 					</CredenzaTitle>
+					<CredenzaDescription>
+						<p>
+							This will erase all of your local data. Unless your
+							data synced with the cloud,{" "}
+							<b>you will lose any changes you made</b>
+						</p>
+					</CredenzaDescription>
 				</CredenzaHeader>
 				<CredenzaFooter>
 					<CredenzaClose asChild>
