@@ -17,9 +17,9 @@ import { Cog6ToothIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { useState } from "react";
 import { toast } from "sonner";
-import { v4 as uuidv4 } from "uuid";
 import { BaseNumberOfFreezes } from "./habit-card";
 import { License } from "./license";
+import { Logout } from "./logout";
 import { Separator } from "./ui/separator";
 
 export const Settings = ({ user }: { user: UserType }) => {
@@ -63,19 +63,6 @@ export const Settings = ({ user }: { user: UserType }) => {
 		// but after pause its treated as if you have 3
 		await db.habits.toCollection().modify((i) => {
 			i.streakFreezes = BaseNumberOfFreezes;
-		});
-	};
-
-	const logout = async () => {
-		await db.cloud.logout();
-		await db.user.add({
-			id: uuidv4(),
-			created: new Date(),
-			pauseStreaks: false,
-			pauses: [],
-		});
-		toast.success("Success! You are logged out", {
-			closeButton: true,
 		});
 	};
 
@@ -160,14 +147,7 @@ export const Settings = ({ user }: { user: UserType }) => {
 						<div className="text-sm">
 							<Separator className="my-4" />
 							<License />
-							<Button
-								onClick={logout}
-								variant="secondary"
-								size="sm"
-								className="mt-4 w-full"
-							>
-								Logout
-							</Button>
+							<Logout />
 							<p className="text-center text-sm mt-1">
 								Logged in as: {userId}
 							</p>
