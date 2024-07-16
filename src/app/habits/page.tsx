@@ -59,33 +59,6 @@ export default function Home() {
 		sync();
 	}, []);
 
-	/**
-	 * temporary hotfix for users who still have pauses saved as: [{year, time: []}]
-	 */
-	useEffect(() => {
-		const migratePauseStorage = async () => {
-			await db.user.toCollection().modify((i) => {
-				if (i.pauses.length > 0 && !Array.isArray(i.pauses[0])) {
-					i.pauses = i.pauses.reduce((accumulator, item: any) => {
-						if (item.time && item.time.length > 0) {
-							const dates = item.time.map((entry: any) => [
-								entry.start,
-								entry.end,
-							]);
-							1;
-
-							// @ts-ignore
-							accumulator.push(...dates);
-						}
-						return accumulator;
-					}, []);
-				}
-			});
-		};
-
-		migratePauseStorage();
-	}, []);
-
 	useEffect(() => {
 		if (habits) {
 			const active = habits.filter(
