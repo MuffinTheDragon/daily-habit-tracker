@@ -16,6 +16,7 @@ import { useLiveQuery } from "dexie-react-hooks";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Section } from "./section";
+import { LicenseWarning } from "@/components/license-warning";
 
 export default function Home() {
 	const habits = useLiveQuery(() =>
@@ -105,6 +106,7 @@ export default function Home() {
 	return (
 		<>
 			<Login />
+			<LicenseWarning />
 
 			<main className="flex flex-col items-center justify-between p-4 md:py-24 space-y-8">
 				<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
