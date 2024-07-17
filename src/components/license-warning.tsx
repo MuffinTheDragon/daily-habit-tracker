@@ -35,7 +35,7 @@ export const LicenseWarning = () => {
 
 	return (
 		showLicenseWarning && (
-			<Alert className="rounded-none text-center bg-destructive/40 border-0">
+			<Alert className="rounded-none text-center bg-red-500 dark:bg-red-800 border-0 py-1.5">
 				Your eval period will expire {format.map((i) => i.value)}
 				<Credenza>
 					<CredenzaTrigger asChild>
