@@ -85,8 +85,8 @@
   }
 
   :root {
-    --square-size: 15px;
-    --square-gap: 5px;
+    --square-size: 12px;
+    --square-gap: 3px;
     --week-width: calc(var(--square-size) + var(--square-gap));
   }
   
@@ -145,7 +145,7 @@ input, textarea {
   
   .squares li, .legend div[data-level="0"] {
     background-color: hsl(var(--muted));
-    border-radius: 5px;
+    border-radius: 3px;
   }
   
   .squares li[data-level="1"], .legend div[data-level="1"] {

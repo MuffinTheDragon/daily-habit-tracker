@@ -1,26 +1,12 @@
 "use client";
 
 import { GraphType, HabitType } from "@/data/HabitType";
-import { db } from "@/db";
-import {
-	daysInYear,
-	getDateByDayNumber,
-	isAfterOrEqual,
-	isBeforeOrEqual,
-} from "@/lib/utils";
+import { UserType } from "@/data/userType";
+import { daysInYear, isAfterOrEqual, isBeforeOrEqual } from "@/lib/utils";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
-import {
-	addDays,
-	getDayOfYear,
-	isAfter,
-	isBefore,
-	isEqual,
-	startOfDay,
-} from "date-fns";
-import { useLiveQuery } from "dexie-react-hooks";
+import { addDays, getDayOfYear, isAfter, startOfDay } from "date-fns";
 import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
-import { UserType } from "@/data/userType";
 
 type Props = {
 	graph: GraphType[];
@@ -161,28 +147,28 @@ const GetGraph = ({
 				<div className="flex items-center">
 					<div
 						data-level={0}
-						className="w-4 h-4 rounded-[5px] me-1"
+						className="w-3 h-3 rounded-[3px] me-1"
 					/>
 					Missed
 				</div>
 				<div className="flex items-center">
 					<div
 						data-level={1}
-						className="w-4 h-4 rounded-[5px] me-1"
+						className="w-3 h-3 rounded-[3px] me-1"
 					/>
 					Paused
 				</div>
 				<div className="flex items-center">
 					<div
 						data-level={3}
-						className="w-4 h-4 rounded-[5px] me-1"
+						className="w-3 h-3 rounded-[3px] me-1"
 					/>
 					Retro checked
 				</div>
 				<div className="flex items-center">
 					<div
 						data-level={2}
-						className="w-4 h-4 rounded-[5px] me-1"
+						className="w-3 h-3 rounded-[3px] me-1"
 					/>
 					Checked
 				</div>
