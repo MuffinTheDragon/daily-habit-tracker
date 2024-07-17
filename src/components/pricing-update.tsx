@@ -26,7 +26,8 @@ export const PricingUpdate = ({ evalDays }: { evalDays?: number }) => {
 					</h4>
 					<p>
 						How long you can continue syncing your data for free.
-						Once this period ends, you can upgrade to Premium to
+						Once this period ends, your data will <b>only</b> be
+						available on this device. You can upgrade to Premium to
 						resume syncing between devices.
 					</p>
 				</div>
