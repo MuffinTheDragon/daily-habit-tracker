@@ -82,10 +82,10 @@ export default function Home() {
 
 			<div className="flex flex-col md:items-center justify-between p-4 md:py-24 space-y-8">
 				<div className="bg-secondary justify-center flex w-full">
-					<div className="grid md:grid-cols-3 px-4 items-center">
-						<h1 className="scroll-m-20 space-y-4 text-4xl font-extrabold tracking-wide lg:text-5xl ps-10 my-10 md:mt-0 md:w-48 md:col-span-1">
+					<div className="px-4 items-center">
+						<h1 className="scroll-m-20 space-y-4 text-4xl font-extrabold tracking-wide lg:text-5xl my-10 text-center">
 							Track all your daily habits
-							<div>
+							<div className="text-center">
 								<Link href="/habits">
 									<Button>Track your habits</Button>
 								</Link>
@@ -94,20 +94,16 @@ export default function Home() {
 								</p>
 							</div>
 						</h1>
-						<div className="md:col-span-2 items-center hidden md:flex">
-							<Separator
-								orientation="vertical"
-								className="h-[34rem] mx-4"
-							/>
+						<div className="mb-2 justify-center flex">
 							<Image
 								src={habitsDark}
 								alt="habits"
-								className="rounded-3xl hidden dark:block"
+								className="rounded-lg hidden dark:block"
 							/>
 							<Image
 								src={habitsLight}
 								alt="habits"
-								className="rounded-3xl dark:hidden"
+								className="rounded-lg dark:hidden"
 							/>
 						</div>
 					</div>
