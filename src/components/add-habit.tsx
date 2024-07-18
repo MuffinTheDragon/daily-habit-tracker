@@ -94,10 +94,10 @@ export const AddHabit = ({ paused }: { paused: boolean }) => {
 								name="name"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>Name</FormLabel>
+										<FormLabel>Habit name</FormLabel>
 										<FormControl>
 											<Input
-												placeholder="Name"
+												placeholder="E.g. read for 10 minutes"
 												{...field}
 											/>
 										</FormControl>
@@ -111,10 +111,10 @@ export const AddHabit = ({ paused }: { paused: boolean }) => {
 								name="description"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>Description</FormLabel>
+										<FormLabel>Habit description</FormLabel>
 										<FormControl>
 											<AutoGrowTextArea
-												placeholder="Description"
+												placeholder="E.g. spend 10 minutes each day reading to relax, learn, and unwind."
 												{...field}
 											/>
 										</FormControl>
