@@ -46,7 +46,7 @@ export const HabitCard = ({ ...props }: Props) => {
 	useEffect(() => {
 		const updateDb = async () => {
 			if (hasPageBeenRendered.current) {
-				await db.habits.put(model, model.id);
+				await db.habits.update(model.id, { ...model });
 			}
 
 			hasPageBeenRendered.current = true;

@@ -35,7 +35,6 @@ export class Db extends Dexie {
 
 		this.cloud.configure({
 			databaseUrl: process.env.NEXT_PUBLIC_DBURL!,
-			tryUseServiceWorker: true, // true!
 			requireAuth: false, // optional
 			customLoginGui: true,
 		});
