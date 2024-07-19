@@ -21,7 +21,8 @@ export const OfflineStatus = () => {
 			</PopoverTrigger>
 			<PopoverContent>
 				Cloud sync is disabled. Your network may be offline or your
-				evaluation period has expired.
+				evaluation period has expired. Any changes you make are only
+				available on this device until you go back online.
 			</PopoverContent>
 		</Popover>
 	);

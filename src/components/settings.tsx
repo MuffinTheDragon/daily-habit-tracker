@@ -42,7 +42,9 @@ export const Settings = ({ user }: { user: UserType }) => {
 		if (!user) return;
 
 		await db.user.update(user.id, {
+			// @ts-ignore
 			pauseStreaks: value,
+			// @ts-ignore
 			pauseStartDate: currentDate,
 		});
 	};
@@ -55,8 +57,11 @@ export const Settings = ({ user }: { user: UserType }) => {
 		pauses.push([user.pauseStartDate!, currentDate]);
 
 		await db.user.update(user.id, {
+			// @ts-ignore
 			pauseStreaks: value,
+			// @ts-ignore
 			pauseEndDate: currentDate,
+			// @ts-ignore
 			pauses,
 		});
 

@@ -11,6 +11,7 @@ import {
 
 export const ToggleView = ({ user }: { user: UserType }) => {
 	const onToggleChange = async (collapsed: boolean) => {
+		// @ts-ignore
 		await db.user.update(user.id, { collapsed });
 	};
 
