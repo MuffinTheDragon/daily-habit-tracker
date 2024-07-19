@@ -18,6 +18,7 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Section } from "./section";
 import { OfflineStatus } from "@/components/offline-status";
+import { ServiceWorkerAlert } from "../../components/service-worker-alert";
 
 export const Habits = () => {
 	const habits = useLiveQuery(() =>
@@ -100,6 +101,7 @@ export const Habits = () => {
 		<>
 			<Login />
 			<LicenseWarning />
+			<ServiceWorkerAlert />
 
 			<main className="flex flex-col items-center justify-between p-4 md:py-24 space-y-8">
 				<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
