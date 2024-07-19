@@ -10,6 +10,7 @@
     "test": "vitest"
   },
   "dependencies": {
+    "@ducanh2912/next-pwa": "^10.2.8",
     "@heroicons/react": "^2.1.4",
     "@hookform/resolvers": "^3.7.0",
     "@radix-ui/react-accordion": "^1.2.0",

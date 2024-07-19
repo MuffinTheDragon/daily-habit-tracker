@@ -17,6 +17,7 @@ import { useLiveQuery } from "dexie-react-hooks";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Section } from "./section";
+import { OfflineStatus } from "@/components/offline-status";
 
 export const Habits = () => {
 	const habits = useLiveQuery(() =>
@@ -111,8 +112,10 @@ export const Habits = () => {
 								{new Date().toDateString()}
 							</h3>
 						</div>
-
-						<Settings user={user} />
+						<div className="flex items-center">
+							<OfflineStatus />
+							<Settings user={user} />
+						</div>
 					</div>
 					<div className="flex items-center space-x-2 col-span-1 md:col-span-2">
 						<Button
