@@ -1,0 +1,1 @@
+import "dexie-cloud-addon/service-worker";
