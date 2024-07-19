@@ -111,7 +111,9 @@ export const AddHabit = ({ paused }: { paused: boolean }) => {
 								name="description"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>Habit description</FormLabel>
+										<FormLabel>
+											Habit description (optional)
+										</FormLabel>
 										<FormControl>
 											<AutoGrowTextArea
 												placeholder="E.g. spend 10 minutes each day reading to relax, learn, and unwind."

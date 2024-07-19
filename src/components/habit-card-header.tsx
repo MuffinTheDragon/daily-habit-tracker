@@ -1,16 +1,16 @@
 import { CardTitle } from "@/components/ui/card";
 import { HabitType } from "@/data/HabitType";
+import { db } from "@/db";
 import {
 	cn,
 	getCurrentDate,
-	getLastCheckedDateNoDefault,
 	getLongestStreak,
 	isHabitDoneForToday,
 } from "@/lib/utils";
 import { CheckCircleIcon } from "@heroicons/react/24/solid";
 import { CheckedState } from "@radix-ui/react-checkbox";
 import confetti from "canvas-confetti";
-import { Dispatch, SetStateAction, useState } from "react";
+import { useState } from "react";
 import { BaseNumberOfFreezes } from "./habit-card";
 import { HabbitCardActions } from "./habit-card-actions";
 import { Button } from "./ui/button";
@@ -19,19 +19,18 @@ import { Input } from "./ui/input";
 
 type Props = {
 	model: HabitType;
-	setModel: Dispatch<SetStateAction<HabitType>>;
 	initialFreezes: number;
 	paused: boolean;
 };
 
 export const HabitCardHeader = ({ ...props }: Props) => {
-	const { model, setModel, initialFreezes, paused } = props;
+	const { model, initialFreezes, paused } = props;
 
 	const [editingTitle, setEditingTitle] = useState(false);
 
 	const isDoneForToday = isHabitDoneForToday(model);
 
-	const markHabit = (v: CheckedState) => {
+	const markHabit = async (v: CheckedState) => {
 		if (paused) return;
 
 		const checked = v ? true : false;
@@ -67,8 +66,7 @@ export const HabitCardHeader = ({ ...props }: Props) => {
 			newStreak
 		);
 
-		setModel({
-			...model,
+		await db.habits.update(model.id, {
 			graph,
 			streak: newStreak,
 			longestStreak,
@@ -92,6 +90,10 @@ export const HabitCardHeader = ({ ...props }: Props) => {
 		markHabit(value);
 	};
 
+	const updateName = async (val: string) => {
+		await db.habits.update(model.id, { name: val });
+	};
+
 	return (
 		<>
 			{editingTitle ? (
@@ -99,9 +101,7 @@ export const HabitCardHeader = ({ ...props }: Props) => {
 					<Input
 						autoFocus
 						value={model.name}
-						onChange={(v) =>
-							setModel({ ...model, name: v.target.value })
-						}
+						onChange={(v) => updateName(v.target.value)}
 					/>
 					<Button
 						variant="ghost"
@@ -129,11 +129,7 @@ export const HabitCardHeader = ({ ...props }: Props) => {
 							className="rounded-full h-5 w-5 md:w-6 md:h-6 border-gray-500"
 							onCheckedChange={onCheckChange}
 						/>
-						<HabbitCardActions
-							model={model}
-							setModel={setModel}
-							paused={paused}
-						/>
+						<HabbitCardActions model={model} paused={paused} />
 					</div>
 				</div>
 			)}

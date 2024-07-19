@@ -1,18 +1,22 @@
 import { CardTitle } from "@/components/ui/card";
 import { HabitType } from "@/data/HabitType";
+import { db } from "@/db";
 import { CheckCircleIcon } from "@heroicons/react/24/solid";
-import { Dispatch, SetStateAction, useState } from "react";
+import { useState } from "react";
 import AutoGrowTextArea from "./auto-grow-textarea";
 import { Button } from "./ui/button";
 
 type Props = {
 	model: HabitType;
-	setModel: Dispatch<SetStateAction<HabitType>>;
 };
 export const HabitCardDescription = ({ ...props }: Props) => {
-	const { model, setModel } = props;
+	const { model } = props;
 
 	const [editingDescription, setEditingDescription] = useState(false);
+
+	const updateDescription = async (val: string) => {
+		await db.habits.update(model.id, { description: val });
+	};
 
 	return (
 		<>
@@ -21,12 +25,7 @@ export const HabitCardDescription = ({ ...props }: Props) => {
 					<AutoGrowTextArea
 						autoFocus
 						value={model.description}
-						onChange={(v) =>
-							setModel({
-								...model,
-								description: v.target.value,
-							})
-						}
+						onChange={(v) => updateDescription(v.target.value)}
 					/>
 					<Button
 						variant="ghost"

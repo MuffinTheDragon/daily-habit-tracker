@@ -22,7 +22,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { EllipsisVerticalIcon } from "@heroicons/react/24/solid";
 import { addDays, format, startOfDay } from "date-fns";
-import { Dispatch, SetStateAction, useState } from "react";
+import { useState } from "react";
 import {
 	Credenza,
 	CredenzaClose,
@@ -44,12 +44,11 @@ enum Dialogs {
 
 type Props = {
 	model: HabitType;
-	setModel: Dispatch<SetStateAction<HabitType>>;
 	paused: boolean;
 };
 
 export const HabbitCardActions = ({ ...props }: Props) => {
-	const { model, setModel, paused } = { ...props };
+	const { model, paused } = { ...props };
 
 	const [dialog, setDialog] = useState(Dialogs.addCheck);
 
@@ -102,21 +101,13 @@ export const HabbitCardActions = ({ ...props }: Props) => {
 				</DropdownMenuContent>
 			</DropdownMenu>
 			{dialog === Dialogs.deleteHabit && <DeleteHabit model={model} />}
-			{dialog === Dialogs.addCheck && (
-				<FillPreviousDays model={model} setModel={setModel} />
-			)}
+			{dialog === Dialogs.addCheck && <FillPreviousDays model={model} />}
 			{dialog === Dialogs.archive && <Archive model={model} />}
 		</Credenza>
 	);
 };
 
-const FillPreviousDays = ({
-	model,
-	setModel,
-}: {
-	model: HabitType;
-	setModel: Dispatch<SetStateAction<HabitType>>;
-}) => {
+const FillPreviousDays = ({ model }: { model: HabitType }) => {
 	const [date, setDate] = useState<Date | undefined>(undefined);
 
 	const currentYear = new Date().getFullYear();
@@ -131,7 +122,7 @@ const FillPreviousDays = ({
 
 		graph.at(-1)!.manualDaysChecked.push(date);
 
-		setModel({ ...model, graph, checks: model.checks + 1 });
+		await db.habits.update(model.id, { graph, checks: model.checks + 1 });
 
 		setDate(undefined);
 	};
@@ -203,7 +194,7 @@ const FillPreviousDays = ({
 
 const DeleteHabit = ({ model }: { model: HabitType }) => {
 	const deleteHabit = async () => {
-		await db.habits.delete(model.id);
+		await db.habits.where({ id: model.id }).delete();
 	};
 	return (
 		<CredenzaContent>
@@ -227,9 +218,9 @@ const DeleteHabit = ({ model }: { model: HabitType }) => {
 
 const Archive = ({ model }: { model: HabitType }) => {
 	const archiveHabit = async () => {
-		await db.habits.where({ id: model.id }).modify((i) => {
-			i.archived = true;
-			i.archivedDate = getCurrentDate();
+		await db.habits.update(model.id, {
+			archived: true,
+			archivedDate: getCurrentDate(),
 		});
 	};
 

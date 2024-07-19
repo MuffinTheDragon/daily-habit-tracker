@@ -14,6 +14,7 @@ import { UserType } from "@/data/userType";
 import { db } from "@/db";
 import { getCurrentDate } from "@/lib/utils";
 import { Cog6ToothIcon } from "@heroicons/react/24/outline";
+import { useObservable } from "dexie-react-hooks";
 import Link from "next/link";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -21,7 +22,6 @@ import { BaseNumberOfFreezes } from "./habit-card";
 import { License } from "./license";
 import { Logout } from "./logout";
 import { Separator } from "./ui/separator";
-import { useObservable } from "dexie-react-hooks";
 
 export const Settings = ({ user }: { user: UserType }) => {
 	const userId = db.cloud.currentUserId;
@@ -41,9 +41,9 @@ export const Settings = ({ user }: { user: UserType }) => {
 	const startPause = async (value: boolean) => {
 		if (!user) return;
 
-		await db.user.where({ id: user.id }).modify((i) => {
-			i.pauseStreaks = value;
-			i.pauseStartDate = currentDate;
+		await db.user.update(user.id, {
+			pauseStreaks: value,
+			pauseStartDate: currentDate,
 		});
 	};
 
@@ -54,10 +54,10 @@ export const Settings = ({ user }: { user: UserType }) => {
 
 		pauses.push([user.pauseStartDate!, currentDate]);
 
-		await db.user.where({ id: user.id }).modify((i) => {
-			i.pauseStreaks = value;
-			i.pauseEndDate = currentDate;
-			i.pauses = pauses;
+		await db.user.update(user.id, {
+			pauseStreaks: value,
+			pauseEndDate: currentDate,
+			pauses,
 		});
 
 		// after a pause ends, reset streak freezes

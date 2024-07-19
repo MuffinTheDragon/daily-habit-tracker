@@ -12,7 +12,7 @@ import { HabitType } from "@/data/HabitType";
 import { UserType } from "@/data/userType";
 import { db } from "@/db";
 import { cn, diffInDaysFromNow, getLastUpdatedDate } from "@/lib/utils";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Graph } from "./graph";
 import { HabitCardDescription } from "./habit-card-description";
@@ -32,98 +32,70 @@ type Props = {
 export const HabitCard = ({ ...props }: Props) => {
 	const { habit, user, showMap } = props;
 
-	const [model, setModel] = useState<HabitType>(habit);
-
 	const [initialFreezes, setInitialFreezes] = useState(BaseNumberOfFreezes);
 
-	const hasPageBeenRendered = useRef(false);
-
-	const paused = user.pauseStreaks || model.archived;
-
-	/**
-	 * if the model updates outside of inital page render, write to db
-	 */
-	useEffect(() => {
-		const updateDb = async () => {
-			if (hasPageBeenRendered.current) {
-				await db.habits.update(model.id, { ...model });
-			}
-
-			hasPageBeenRendered.current = true;
-		};
-		updateDb();
-	}, [model]);
-
-	/**
-	 * if the data from db doesn't match model, update model
-	 * used when data is mutated outside this component
-	 */
-	useEffect(() => {
-		if (JSON.stringify(habit) !== JSON.stringify(model)) {
-			setModel(habit);
-		}
-
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [habit]);
+	const paused = user.pauseStreaks || habit.archived;
 
 	// compute streak freezes
 	useEffect(() => {
-		if (paused) return;
+		const updateStreaks = async () => {
+			if (paused) return;
 
-		if (model.streak < 1) return;
+			if (habit.streak < 1) return;
 
-		// compute last active date
-		const lastUpdated = getLastUpdatedDate(
-			model.graph,
-			model.created,
-			user.pauseEndDate
-		);
+			// compute last active date
+			const lastUpdated = getLastUpdatedDate(
+				habit.graph,
+				habit.created,
+				user.pauseEndDate
+			);
 
-		const diff = diffInDaysFromNow(lastUpdated);
+			const diff = diffInDaysFromNow(lastUpdated);
 
-		if (diff <= 1) return;
+			if (diff <= 1) return;
 
-		// don't consider today in the calculation => we do -1
-		const newStreakFreezes = BaseNumberOfFreezes - (diff - 1);
+			// don't consider today in the calculation => we do -1
+			const newStreakFreezes = BaseNumberOfFreezes - (diff - 1);
 
-		if (newStreakFreezes < 0) {
-			setModel({
-				...model,
-				streak: 0,
-				streakFreezes: BaseNumberOfFreezes,
-			});
+			if (newStreakFreezes < 0) {
+				await db.habits.update(habit.id, {
+					streak: 0,
+					streakFreezes: BaseNumberOfFreezes,
+				});
 
-			toast.error("Attention!", {
-				duration: Infinity,
-				description: (
-					<p>
-						Your habit <b className="underline">{habit.name}</b> ran
-						out of streak freezes. Your streak has been reset.
-					</p>
-				),
-				closeButton: true,
-			});
-		} else {
-			setModel({
-				...model,
-				streakFreezes: newStreakFreezes,
-			});
+				toast.error("Attention!", {
+					duration: Infinity,
+					description: (
+						<p>
+							Your habit <b className="underline">{habit.name}</b>{" "}
+							ran out of streak freezes. Your streak has been
+							reset.
+						</p>
+					),
+					closeButton: true,
+				});
+			} else {
+				await db.habits.update(habit.id, {
+					streakFreezes: newStreakFreezes,
+				});
 
-			toast.warning("Careful!", {
-				duration: Infinity,
-				closeButton: true,
-				description: (
-					<p>
-						You missed {diff - 1} day(s) for your{" "}
-						<b className="underline">{habit.name}</b> habit and used
-						up a streak freeze. If you run out, your streak will
-						reset.
-					</p>
-				),
-			});
-			setInitialFreezes(newStreakFreezes);
-		}
+				toast.warning("Careful!", {
+					duration: Infinity,
+					closeButton: true,
+					description: (
+						<p>
+							You missed {diff - 1} day(s) for your{" "}
+							<b className="underline">{habit.name}</b> habit and
+							used up some of your streak freezes. If you run out,
+							your streak will reset.
+						</p>
+					),
+				});
+				setInitialFreezes(newStreakFreezes);
+			}
+		};
 
+		updateStreaks();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
@@ -142,23 +114,22 @@ export const HabitCard = ({ ...props }: Props) => {
 				className={cn("flex-1", { "px-4 py-2": user.collapsed })}
 			>
 				<HabitCardHeader
-					model={model}
-					setModel={setModel}
+					model={habit}
 					initialFreezes={initialFreezes}
 					paused={paused}
 				/>
 
 				{!user.collapsed && (
 					<CardDescription>
-						<HabitCardDescription {...{ model, setModel }} />
+						<HabitCardDescription model={habit} />
 						<div className="flex mt-2 justify-between">
-							<HabitCardStats habit={model} />
+							<HabitCardStats habit={habit} />
 						</div>
 					</CardDescription>
 				)}
 				{user.collapsed && (
 					<div className="text-sm flex space-x-4 items-center text-muted-foreground">
-						<div>Streak: {model.streak}</div>
+						<div>Streak: {habit.streak}</div>
 						<Separator orientation="vertical" className="h-4" />
 						<div>Checks: {habit.checks}</div>
 					</div>
@@ -174,9 +145,9 @@ export const HabitCard = ({ ...props }: Props) => {
 			{!user.collapsed && (
 				<CardFooter className="mt-4">
 					<div className="flex flex-col space-y-1 text-xs text-muted-foreground">
-						<p>Created: {model.created.toDateString()}</p>
-						{model.archivedDate && (
-							<p>Archived: {model.archivedDate.toDateString()}</p>
+						<p>Created: {habit.created.toDateString()}</p>
+						{habit.archivedDate && (
+							<p>Archived: {habit.archivedDate.toDateString()}</p>
 						)}
 						{/* <p>Last update: {model.lastChecked.toDateString()}</p> */}
 					</div>

@@ -11,9 +11,7 @@ import {
 
 export const ToggleView = ({ user }: { user: UserType }) => {
 	const onToggleChange = async (collapsed: boolean) => {
-		await db.user.where({ id: user.id }).modify((i) => {
-			i.collapsed = collapsed;
-		});
+		await db.user.update(user.id, { collapsed });
 	};
 
 	return (
