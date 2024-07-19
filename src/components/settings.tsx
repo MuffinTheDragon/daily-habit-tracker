@@ -21,10 +21,12 @@ import { BaseNumberOfFreezes } from "./habit-card";
 import { License } from "./license";
 import { Logout } from "./logout";
 import { Separator } from "./ui/separator";
+import { useObservable } from "dexie-react-hooks";
 
 export const Settings = ({ user }: { user: UserType }) => {
 	const userId = db.cloud.currentUserId;
 
+	const syncStatus = useObservable(db.cloud.syncState);
 	const currentDate = getCurrentDate();
 
 	const [loadingSync, setLoadingSync] = useState(false);
@@ -120,7 +122,10 @@ export const Settings = ({ user }: { user: UserType }) => {
 								size="sm"
 								variant="outline"
 								onClick={sync}
-								disabled={loadingSync}
+								disabled={
+									loadingSync ||
+									syncStatus?.status === "offline"
+								}
 							>
 								{loadingSync ? "Syncing..." : "Sync"}
 							</Button>
