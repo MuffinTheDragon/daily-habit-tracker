@@ -24,7 +24,7 @@ export const Section = ({ ...props }: Props) => {
 		<Accordion
 			type="single"
 			collapsible
-			className="col-span-1 md:col-span-2"
+			className="col-span-1 md:col-span-2 relative min-w-[90vw] sm:min-w-96"
 		>
 			<AccordionItem value="item-1">
 				<AccordionTrigger>{title}</AccordionTrigger>

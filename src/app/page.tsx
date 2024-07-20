@@ -14,9 +14,9 @@ import streaksDark from "@/app/assets/streaks-dark.png";
 import streaksLight from "@/app/assets/streaks-light.png";
 import logo from "@/app/favicon.ico";
 import { ThemePicker } from "@/components/theme-picker";
+import { Trail } from "@/components/trail";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import {
 	FireIcon,
@@ -29,12 +29,36 @@ import {
 	ArrowUpIcon,
 	CheckIcon,
 } from "@heroicons/react/24/solid";
+import {
+	animated,
+	AnimatedProps,
+	useSpringRef,
+	useTransition,
+} from "@react-spring/web";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { CSSProperties, useEffect, useState } from "react";
 
 export default function Home() {
-	const [activeCard, setActiveCard] = useState(1);
+	const [activeCard, setActiveCard] = useState(0);
+
+	const transRef = useSpringRef();
+
+	const transitions = useTransition(activeCard, {
+		ref: transRef,
+		keys: null,
+		from: { opacity: 0, transform: "translate3d(100%,0,0)" },
+		enter: { opacity: 1, transform: "translate3d(0%,0,0)" },
+	});
+
+	const onCardClick = (index: number) => {
+		setActiveCard(index);
+	};
+
+	useEffect(() => {
+		transRef.start();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [activeCard]);
 
 	return (
 		<div>
@@ -80,21 +104,27 @@ export default function Home() {
 				</Alert>
 			</div>
 
-			<div className="flex flex-col md:items-center justify-between p-4 md:py-24 space-y-8">
+			<div className="flex flex-col md:items-center justify-between p-4 space-y-8">
 				<div className="bg-secondary justify-center flex w-full">
 					<div className="px-4 items-center">
 						<h1 className="scroll-m-20 space-y-4 text-4xl font-extrabold tracking-wide lg:text-5xl my-10 text-center">
-							Track all your daily habits
-							<div className="text-center">
+							<Trail open>
+								<p>Track all your</p>
+								{/* <p>all</p> */}
+								{/* <p>your</p> */}
+								<p>daily habits</p>
+								{/* <p>habits</p> */}
+							</Trail>
+							<Trail open>
 								<Link href="/habits">
 									<Button>Track your habits</Button>
 								</Link>
 								<p className="underline text-xs underline-offset-4 mt-4">
 									No account required
 								</p>
-							</div>
+							</Trail>
 						</h1>
-						<div className="mb-2 justify-center flex">
+						<div className="-mt-10 mb-2 justify-center flex">
 							<Image
 								src={habitsDark}
 								alt="habits"
@@ -114,10 +144,10 @@ export default function Home() {
 				<div className="flex flex-col border-b pb-8">
 					<div className="relative z-10 flex gap-x-4 overflow-x-auto pb-4 whitespace-nowrap px-4 sm:whitespace-normal sm:justify-center">
 						<div
-							onClick={() => setActiveCard(1)}
+							onClick={() => onCardClick(0)}
 							className={cn(
 								"border max-w-sm cursor-pointer md:hover:bg-muted/40 rounded-lg p-2 sm:p-6",
-								{ "bg-muted": activeCard === 1 }
+								{ "bg-muted": activeCard === 0 }
 							)}
 						>
 							<div>
@@ -132,10 +162,10 @@ export default function Home() {
 							</div>
 						</div>
 						<div
-							onClick={() => setActiveCard(2)}
+							onClick={() => onCardClick(1)}
 							className={cn(
 								"border max-w-sm cursor-pointer md:hover:bg-muted/40 rounded-lg p-2 sm:p-6",
-								{ "bg-muted": activeCard === 2 }
+								{ "bg-muted": activeCard === 1 }
 							)}
 						>
 							<div>
@@ -150,10 +180,10 @@ export default function Home() {
 							</div>
 						</div>
 						<div
-							onClick={() => setActiveCard(3)}
+							onClick={() => onCardClick(2)}
 							className={cn(
 								"border max-w-sm cursor-pointer md:hover:bg-muted/40 rounded-lg p-2 sm:p-6",
-								{ "bg-muted": activeCard === 3 }
+								{ "bg-muted": activeCard === 2 }
 							)}
 						>
 							<div>
@@ -168,10 +198,10 @@ export default function Home() {
 							</div>
 						</div>
 						<div
-							onClick={() => setActiveCard(4)}
+							onClick={() => onCardClick(3)}
 							className={cn(
 								"border max-w-sm cursor-pointer md:hover:bg-muted/40 rounded-lg p-2 sm:p-6",
-								{ "bg-muted": activeCard === 4 }
+								{ "bg-muted": activeCard === 3 }
 							)}
 						>
 							<div>
@@ -187,117 +217,11 @@ export default function Home() {
 						</div>
 					</div>
 
-					<div className="mt-12 overflow-y-visible">
-						{activeCard === 1 && (
-							<div className="grid grid-cols-1 md:grid-cols-2 items-center">
-								<div className="md:px-12 mb-4 ms-4">
-									<h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
-										Offline use
-									</h3>
-									<p className="text-xl text-muted-foreground max-w-3xl">
-										This app can be fully used offline for
-										however long you want! You can sign in
-										with your email if you want to sync your
-										data between devices
-									</p>
-								</div>
-								<div className="w-full flex justify-center">
-									<Image
-										src={offlineDark}
-										alt="map"
-										className="rounded-3xl hidden dark:block"
-									/>
-									<Image
-										src={offlineLight}
-										alt="map"
-										className="rounded-3xl dark:hidden"
-									/>
-								</div>
-							</div>
-						)}
-
-						{activeCard === 2 && (
-							<div className="grid grid-cols-1 md:grid-cols-2 items-center">
-								<div className="md:px-12 mb-4 ms-4">
-									<h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
-										Track your streaks
-									</h3>
-									<p className="text-xl text-muted-foreground max-w-3xl">
-										Each time you complete a task, watch
-										your streak counter go up. You also get{" "}
-										<b>streak freezes</b> that will
-										automatically be used in case you miss a
-										day
-									</p>
-								</div>
-								<div className="w-full flex justify-center">
-									<Image
-										src={streaksDark}
-										alt="map"
-										className="rounded-3xl hidden dark:block"
-									/>
-									<Image
-										src={streaksLight}
-										alt="map"
-										className="rounded-3xl dark:hidden"
-									/>
-								</div>
-							</div>
-						)}
-
-						{activeCard === 3 && (
-							<div className="grid grid-cols-1 md:grid-cols-2 items-center">
-								<div className="md:px-12 mb-4 ms-4">
-									<h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
-										Pause your activity
-									</h3>
-									<p className="text-xl text-muted-foreground max-w-3xl">
-										Need a break? Pause your activity right
-										from the app. When you get back, pick up
-										right where you left off without losing
-										your streaks
-									</p>
-								</div>
-								<div className="w-full flex justify-center">
-									<Image
-										src={pauseDark}
-										alt="map"
-										className="rounded-3xl hidden dark:block"
-									/>
-									<Image
-										src={pauseLight}
-										alt="map"
-										className="rounded-3xl dark:hidden"
-									/>
-								</div>
-							</div>
-						)}
-
-						{activeCard === 4 && (
-							<div className="grid grid-cols-1 md:grid-cols-2 items-center">
-								<div className="md:px-12 mb-4 ms-4">
-									<h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
-										Visualize your progress
-									</h3>
-									<p className="text-xl text-muted-foreground max-w-3xl">
-										View your completion history for each
-										habit with a simple visual map
-									</p>
-								</div>
-								<div className="w-full flex justify-center">
-									<Image
-										src={mapDark}
-										alt="map"
-										className="rounded-3xl hidden dark:block"
-									/>
-									<Image
-										src={mapLight}
-										alt="map"
-										className="rounded-3xl dark:hidden"
-									/>
-								</div>
-							</div>
-						)}
+					<div className="mt-12 overflow-hidden">
+						{transitions((style, i) => {
+							const CardSection = cards[i];
+							return <CardSection style={style} />;
+						})}
 					</div>
 				</div>
 				<h2 className="scroll-m-20 pb-2 text-3xl font-semibold tracking-tight first:mt-0">
@@ -358,3 +282,119 @@ export default function Home() {
 		</div>
 	);
 }
+
+const cards: ((
+	props: AnimatedProps<{ style: CSSProperties }>
+) => React.ReactElement)[] = [
+	({ style }) => (
+		<animated.div style={{ ...style }}>
+			<div className="grid grid-cols-1 md:grid-cols-2 items-center">
+				<div className="md:px-12 mb-4 ms-4">
+					<h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
+						Offline use
+					</h3>
+					<p className="text-xl text-muted-foreground max-w-3xl">
+						This app can be fully used offline for however long you
+						want! You can sign in with your email if you want to
+						sync your data between devices
+					</p>
+				</div>
+				<div className="w-full flex justify-center">
+					<Image
+						src={offlineDark}
+						alt="map"
+						className="rounded-3xl hidden dark:block"
+					/>
+					<Image
+						src={offlineLight}
+						alt="map"
+						className="rounded-3xl dark:hidden"
+					/>
+				</div>
+			</div>
+		</animated.div>
+	),
+	({ style }) => (
+		<animated.div style={{ ...style }}>
+			<div className="grid grid-cols-1 md:grid-cols-2 items-center">
+				<div className="md:px-12 mb-4 ms-4">
+					<h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
+						Track your streaks
+					</h3>
+					<p className="text-xl text-muted-foreground max-w-3xl">
+						Each time you complete a task, watch your streak counter
+						go up. You also get <b>streak freezes</b> that will
+						automatically be used in case you miss a day
+					</p>
+				</div>
+				<div className="w-full flex justify-center">
+					<Image
+						src={streaksDark}
+						alt="map"
+						className="rounded-3xl hidden dark:block"
+					/>
+					<Image
+						src={streaksLight}
+						alt="map"
+						className="rounded-3xl dark:hidden"
+					/>
+				</div>
+			</div>
+		</animated.div>
+	),
+	({ style }) => (
+		<animated.div style={{ ...style }}>
+			<div className="grid grid-cols-1 md:grid-cols-2 items-center">
+				<div className="md:px-12 mb-4 ms-4">
+					<h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
+						Pause your activity
+					</h3>
+					<p className="text-xl text-muted-foreground max-w-3xl">
+						Need a break? Pause your activity right from the app.
+						When you get back, pick up right where you left off
+						without losing your streaks
+					</p>
+				</div>
+				<div className="w-full flex justify-center">
+					<Image
+						src={pauseDark}
+						alt="map"
+						className="rounded-3xl hidden dark:block"
+					/>
+					<Image
+						src={pauseLight}
+						alt="map"
+						className="rounded-3xl dark:hidden"
+					/>
+				</div>
+			</div>
+		</animated.div>
+	),
+	({ style }) => (
+		<animated.div style={{ ...style }}>
+			<div className="grid grid-cols-1 md:grid-cols-2 items-center">
+				<div className="md:px-12 mb-4 ms-4">
+					<h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
+						Visualize your progress
+					</h3>
+					<p className="text-xl text-muted-foreground max-w-3xl">
+						View your completion history for each habit with a
+						simple visual map
+					</p>
+				</div>
+				<div className="w-full flex justify-center">
+					<Image
+						src={mapDark}
+						alt="map"
+						className="rounded-3xl hidden dark:block"
+					/>
+					<Image
+						src={mapLight}
+						alt="map"
+						className="rounded-3xl dark:hidden"
+					/>
+				</div>
+			</div>
+		</animated.div>
+	),
+];
