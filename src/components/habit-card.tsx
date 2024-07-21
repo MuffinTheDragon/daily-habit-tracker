@@ -128,10 +128,12 @@ export const HabitCard = ({ ...props }: Props) => {
 					</CardDescription>
 				)}
 				{user.collapsed && (
-					<div className="text-sm flex space-x-4 items-center text-muted-foreground">
+					<div className="text-sm flex space-x-2 items-center text-muted-foreground">
 						<div>Streak: {habit.streak}</div>
 						<Separator orientation="vertical" className="h-4" />
 						<div>Checks: {habit.checks}</div>
+						<Separator orientation="vertical" className="h-4" />
+						<div>Freezes: {habit.streakFreezes}</div>
 					</div>
 				)}
 			</CardHeader>
