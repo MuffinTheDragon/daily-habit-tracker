@@ -2,7 +2,7 @@
 
 ## Daily habit tracker
 
-### Link: https://rdht.vercel.app/
+### Link: https://www.dailyhabits.dev/
 
 This is a simple, minimalistic app that lets you track your daily habits.
 
