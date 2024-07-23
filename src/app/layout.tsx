@@ -24,8 +24,11 @@ export const metadata: Metadata = {
 	alternates: {
 		canonical: "https://www.dailyhabits.dev",
 	},
+	other: {
+		"google-site-verification":
+			"iLTcI7uI0LeziF2sMHXi2Md64ULLsFf5oPld-5rBWxA",
+	},
 };
-
 export default function RootLayout({
 	children,
 }: Readonly<{
