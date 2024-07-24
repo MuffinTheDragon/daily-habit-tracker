@@ -32,14 +32,13 @@ export const Habits = () => {
 
 	const [dailyProgress, setDailyProgress] = useState(0);
 
-	const [activeHabits, setActiveHabits] = useState<HabitType[]>([]);
+	const [incompletedHabits, setIncompletedHabits] = useState<HabitType[]>([]);
 	const [completedHabits, setCompletedHabits] = useState<HabitType[]>([]);
 	const [archivedHabits, setArchivedHabits] = useState<HabitType[]>([]);
 
 	const params = useSearchParams();
 
 	// re-sync db on payment interaction
-
 	useEffect(() => {
 		const resync = async () => {
 			if (params.get("payment")) {
@@ -55,7 +54,7 @@ export const Habits = () => {
 
 	useEffect(() => {
 		if (habits) {
-			const active = habits.filter(
+			const incompleted = habits.filter(
 				(i) => !i.archived && !isHabitDoneForToday(i)
 			);
 
@@ -70,28 +69,15 @@ export const Habits = () => {
 				(i) => !i.archived && isHabitDoneForToday(i)
 			);
 
-			setActiveHabits(active);
+			setIncompletedHabits(incompleted);
 			setArchivedHabits(archived);
 			setCompletedHabits(completed);
+
+			const totalHabits = completed.length + incompleted.length;
+
+			setDailyProgress((completed.length / totalHabits) * 100);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [habits]);
-
-	/**
-	 * sort habits such that all non-archived habits come first in ascending date of creation
-	 * all archived habits come last in ascending archived date
-	 */
-	useEffect(() => {
-		if (habits) {
-			const habitsFinished = habits.filter((i) => {
-				if (i.archived) return false;
-				return isHabitDoneForToday(i);
-			}).length;
-
-			const totalActiveHabits = habits.filter((i) => !i.archived).length;
-
-			setDailyProgress((habitsFinished / totalActiveHabits) * 100);
-		}
 	}, [habits]);
 
 	if (!habits || !user) return null;
@@ -146,10 +132,10 @@ export const Habits = () => {
 						className="col-span-1 md:col-span-2"
 					/>
 
-					{activeHabits.map((habit, i) => {
+					{incompletedHabits.map((habit, i) => {
 						const spanClass =
-							i === activeHabits.length - 1 &&
-							activeHabits.length % 2
+							i === incompletedHabits.length - 1 &&
+							incompletedHabits.length % 2
 								? "md:col-span-2"
 								: "";
 						return (
