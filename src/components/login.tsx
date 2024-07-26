@@ -82,13 +82,15 @@ export const Login = () => {
 							)}
 						</CredenzaDescription>
 					</CredenzaHeader>
-					{ui.alerts?.map((alert, i) => (
-						<Alert key={i} className="px-4 md:p-0 my-2">
-							<AlertDescription>
-								{resolveText(alert)}
-							</AlertDescription>
-						</Alert>
-					))}
+					<div className="px-4 md:p-0 space-y-2">
+						{ui.alerts?.map((alert, i) => (
+							<Alert key={i}>
+								<AlertDescription>
+									{resolveText(alert)}
+								</AlertDescription>
+							</Alert>
+						))}
+					</div>
 					<form
 						className="px-4 md:p-0"
 						onSubmit={(ev) => {
