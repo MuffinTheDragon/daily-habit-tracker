@@ -10,6 +10,7 @@ export type HabitType = {
 	description: string;
 	streak: number;
 	checks: number;
+	archived: boolean;
 	streakFreezes: number;
 	lastChecked: Date;
 	graph: GraphType[];

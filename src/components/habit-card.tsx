@@ -23,6 +23,7 @@ import { HabitCardDescription } from "./habit-card-description";
 import { HabitCardStats } from "./habit-card-stats";
 import { HabitCardTitle } from "./habit-card-title";
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
+import { Badge } from "./ui/badge";
 
 export const BaseNumberOfFreezes = 3;
 
@@ -158,7 +159,15 @@ export const HabitCard = ({
 	};
 
 	return (
-		<Card className="min-w-80 sm:min-w-96 flex flex-col">
+		<Card className="relative min-w-80 sm:min-w-96 flex flex-col">
+			{habit.archived && (
+				<Badge
+					variant="secondary"
+					className="absolute rounded-full top-0 end-0 inline-flex -mt-2"
+				>
+					Archived
+				</Badge>
+			)}
 			<CardHeader className="flex-1">
 				<HabitCardTitle
 					props={{

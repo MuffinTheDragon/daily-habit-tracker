@@ -33,13 +33,12 @@ export default function Home() {
 			});
 		});
 
-		// if unpausing, reset freezes and last checked for all habits
+		// if unpausing, reset last checked for all habits
 		if (!value) {
 			const allHabits = await db.habits.toArray();
 
 			const modifiedHabits = allHabits.map((habit) => ({
 				...habit,
-				streakFreezes: BaseNumberOfFreezes,
 				lastChecked: new Date(),
 			}));
 
@@ -96,13 +95,16 @@ export default function Home() {
 							</CredenzaContent>
 						</Credenza>
 					</div>
-					<Button
-						variant="outline"
-						onClick={() => setShowMap(!showMap)}
-						className="w-fit col-span-1 lg:col-span-2"
-					>
-						{showMap ? "Hide map" : "Show map"}
-					</Button>
+					<div className="flex items-center space-x-2 col-span-1 lg:col-span-2">
+						<Button
+							variant="outline"
+							onClick={() => setShowMap(!showMap)}
+							className="w-fit col-span-1 lg:col-span-2"
+						>
+							{showMap ? "Hide map" : "Show map"}
+						</Button>
+						<AddHabit paused={user[0].pauseStreaks} />
+					</div>
 
 					{user[0].pauseStreaks && (
 						<Alert className="w-fut col-span-1 lg:col-span-2">
@@ -117,10 +119,9 @@ export default function Home() {
 							key={habit.id}
 							habit={habit}
 							showMap={showMap}
-							paused={user[0].pauseStreaks}
+							paused={user[0].pauseStreaks || habit.archived}
 						/>
 					))}
-					<AddHabit paused={user[0].pauseStreaks} />
 				</div>
 			</main>
 		</>

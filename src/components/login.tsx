@@ -69,8 +69,7 @@ export const Login = () => {
 						<CredenzaDescription>
 							{ui.type === "otp" && (
 								<>
-									Enter the OTP sent to your email. Look for
-									an email sent from{" "}
+									Look for an email sent from{" "}
 									<b className="underline">Dexie Cloud</b>
 								</>
 							)}
@@ -83,15 +82,13 @@ export const Login = () => {
 							)}
 						</CredenzaDescription>
 					</CredenzaHeader>
-					<div className="px-4 md:p-0 my-2">
-						{ui.alerts?.map((alert, i) => (
-							<Alert key={i}>
-								<AlertDescription>
-									{resolveText(alert)}
-								</AlertDescription>
-							</Alert>
-						))}
-					</div>
+					{ui.alerts?.map((alert, i) => (
+						<Alert key={i} className="px-4 md:p-0 my-2">
+							<AlertDescription>
+								{resolveText(alert)}
+							</AlertDescription>
+						</Alert>
+					))}
 					<form
 						className="px-4 md:p-0"
 						onSubmit={(ev) => {

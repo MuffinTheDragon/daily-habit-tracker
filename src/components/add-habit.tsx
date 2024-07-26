@@ -1,22 +1,19 @@
-import {
-	Dialog,
-	DialogContent,
-	DialogDescription,
-	DialogHeader,
-	DialogTitle,
-	DialogTrigger,
-} from "@/components/ui/dialog";
-
 import { HabitType } from "@/data/HabitType";
 import { db } from "@/db";
-import { cn } from "@/lib/utils";
-import { PlusCircleIcon } from "@heroicons/react/24/outline";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
 import AutoGrowTextArea from "./auto-grow-textarea";
+import {
+	Credenza,
+	CredenzaContent,
+	CredenzaDescription,
+	CredenzaHeader,
+	CredenzaTitle,
+	CredenzaTrigger,
+} from "./responsive-dialog";
 import { Button } from "./ui/button";
 import {
 	Form,
@@ -27,14 +24,6 @@ import {
 	FormMessage,
 } from "./ui/form";
 import { Input } from "./ui/input";
-import {
-	Credenza,
-	CredenzaContent,
-	CredenzaDescription,
-	CredenzaHeader,
-	CredenzaTitle,
-	CredenzaTrigger,
-} from "./responsive-dialog";
 
 const formSchema = z.object({
 	name: z.string().min(1, { message: "Name is required" }),
@@ -63,6 +52,7 @@ export const AddHabit = ({ paused }: { paused: boolean }) => {
 			description: values.description,
 			streak: 0,
 			checks: 0,
+			archived: false,
 			streakFreezes: 3,
 			graph: [{ year, daysChecked: [] }],
 		};
@@ -73,71 +63,62 @@ export const AddHabit = ({ paused }: { paused: boolean }) => {
 
 	return (
 		<Credenza open={open} onOpenChange={setOpen}>
-			<CredenzaTrigger disabled={paused}>
-				<div
-					className={cn(
-						"flex border-4 border-dashed rounded-xl h-full min-h-80 min-w-80",
-						{
-							"hover:bg-muted": !paused,
-							"hover:cursor-not-allowed": paused,
-						}
-					)}
-				>
-					<div className="m-auto text-muted-foreground">
-						<PlusCircleIcon className="w-8 h-8 mx-auto" />
-						<p className="mt-1">Add habit</p>
-					</div>
-				</div>
+			<CredenzaTrigger asChild>
+				<Button disabled={paused}>Add habit</Button>
 			</CredenzaTrigger>
-			<CredenzaContent className="px-4 md:p-0">
+			<CredenzaContent>
 				<CredenzaHeader>
 					<CredenzaTitle>Add a new daily habit</CredenzaTitle>
 					<CredenzaDescription>
-						Fill in the fields below to create a new habit. You can
-						change this anytime.
+						You can change this anytime.
 					</CredenzaDescription>
 				</CredenzaHeader>
-				<Form {...form}>
-					<form
-						onSubmit={form.handleSubmit(addHabit)}
-						className="space-y-8"
-					>
-						<FormField
-							control={form.control}
-							name="name"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Name</FormLabel>
-									<FormControl>
-										<Input placeholder="Name" {...field} />
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
+				<div className="px-4 md:p-0">
+					<Form {...form}>
+						<form
+							onSubmit={form.handleSubmit(addHabit)}
+							className="space-y-8"
+						>
+							<FormField
+								control={form.control}
+								name="name"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Name</FormLabel>
+										<FormControl>
+											<Input
+												placeholder="Name"
+												{...field}
+											/>
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
 
-						<FormField
-							control={form.control}
-							name="description"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Description</FormLabel>
-									<FormControl>
-										<AutoGrowTextArea
-											placeholder="Description"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
+							<FormField
+								control={form.control}
+								name="description"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Description</FormLabel>
+										<FormControl>
+											<AutoGrowTextArea
+												placeholder="Description"
+												{...field}
+											/>
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
 
-						<Button type="submit" className="float-right">
-							Add
-						</Button>
-					</form>
-				</Form>
+							<Button type="submit" className="float-right">
+								Add
+							</Button>
+						</form>
+					</Form>
+				</div>
 			</CredenzaContent>
 		</Credenza>
 	);

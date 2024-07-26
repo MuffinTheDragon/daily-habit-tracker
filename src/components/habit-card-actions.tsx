@@ -15,7 +15,11 @@ import {
 import { HabitType } from "@/data/HabitType";
 import { db } from "@/db";
 import { cn } from "@/lib/utils";
-import { CalendarDaysIcon, TrashIcon } from "@heroicons/react/24/outline";
+import {
+	ArchiveBoxIcon,
+	CalendarDaysIcon,
+	TrashIcon,
+} from "@heroicons/react/24/outline";
 import { EllipsisVerticalIcon } from "@heroicons/react/24/solid";
 import { addDays, format, getDayOfYear } from "date-fns";
 import { Dispatch, SetStateAction, useState } from "react";
@@ -35,6 +39,7 @@ import { Calendar } from "./ui/calendar";
 enum Dialogs {
 	"deleteHabit",
 	"addCheck",
+	"archive",
 }
 
 export const HabbitCardActions = ({
@@ -81,13 +86,24 @@ export const HabbitCardActions = ({
 							</span>
 						</DropdownMenuItem>
 					</CredenzaTrigger>
+					<CredenzaTrigger
+						asChild
+						onClick={() => setDialog(Dialogs.archive)}
+					>
+						<DropdownMenuItem>
+							<span className="flex items-center">
+								<ArchiveBoxIcon className="w-4 h-4 me-2" />
+								{model.archived ? "Unarchive" : "Archive"}
+							</span>
+						</DropdownMenuItem>
+					</CredenzaTrigger>
 				</DropdownMenuContent>
 			</DropdownMenu>
-			{dialog === Dialogs.deleteHabit ? (
-				<DeleteHabit model={model} />
-			) : (
+			{dialog === Dialogs.deleteHabit && <DeleteHabit model={model} />}
+			{dialog === Dialogs.addCheck && (
 				<FillPreviousDays model={model} setModel={setModel} />
 			)}
+			{dialog === Dialogs.archive && <Archive model={model} />}
 		</Credenza>
 	);
 };
@@ -193,6 +209,34 @@ const DeleteHabit = ({ model }: { model: HabitType }) => {
 			<CredenzaFooter>
 				<CredenzaClose asChild>
 					<Button onClick={deleteHabit}>Delete</Button>
+				</CredenzaClose>
+				<CredenzaClose asChild>
+					<Button variant="secondary">Cancel</Button>
+				</CredenzaClose>
+			</CredenzaFooter>
+		</CredenzaContent>
+	);
+};
+
+const Archive = ({ model }: { model: HabitType }) => {
+	const archiveHabit = () => {
+		db.habits.where({ id: model.id }).modify((i) => {
+			i.archived = true;
+		});
+	};
+
+	return (
+		<CredenzaContent>
+			<CredenzaHeader>
+				<CredenzaTitle>Archive</CredenzaTitle>
+				<CredenzaDescription>
+					You can archvie this habit if you no longer want to track
+					it. <b className="underline">This is permanent</b>
+				</CredenzaDescription>
+			</CredenzaHeader>
+			<CredenzaFooter>
+				<CredenzaClose asChild>
+					<Button onClick={archiveHabit}>Archive</Button>
 				</CredenzaClose>
 				<CredenzaClose asChild>
 					<Button variant="secondary">Cancel</Button>
