@@ -127,10 +127,7 @@ export const Settings = ({ user }: { user: UserType }) => {
 								size="sm"
 								variant="outline"
 								onClick={sync}
-								disabled={
-									loadingSync ||
-									syncStatus?.status === "offline"
-								}
+								disabled={loadingSync}
 							>
 								{loadingSync ? "Syncing..." : "Sync"}
 							</Button>

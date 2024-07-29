@@ -335,6 +335,38 @@ export default function Home() {
 					<Accordion type="single" collapsible className="space-y-4">
 						<AccordionItem value="item-1">
 							<AccordionTrigger>
+								How does offline mode work?
+							</AccordionTrigger>
+							<AccordionContent>
+								The data is always stored locally in your{" "}
+								<b>browser&apos;s cache</b> and the habits page
+								is cached, so the app will always work offline.
+								When you go back online, the changes you made
+								will sync with the cloud (assuming your account
+								can sync). For more information on syncing,{" "}
+								<Link
+									href="https://dexie.org/cloud/docs/consistency"
+									target="_blank"
+									className="underline underline-offset-4"
+								>
+									see the docs
+								</Link>
+								.
+							</AccordionContent>
+						</AccordionItem>
+						<AccordionItem value="item-2">
+							<AccordionTrigger>
+								What happens if my cache is erased?
+							</AccordionTrigger>
+							<AccordionContent>
+								Any changes you made after the last time your
+								data synced will be lost. If this happens, you
+								can reach out to us and we will be happy to help
+								you restore your data.
+							</AccordionContent>
+						</AccordionItem>
+						<AccordionItem value="item-3">
+							<AccordionTrigger>
 								When do the habits go to the next day?
 							</AccordionTrigger>
 							<AccordionContent>
@@ -342,7 +374,7 @@ export default function Home() {
 								your habit for that day.
 							</AccordionContent>
 						</AccordionItem>
-						<AccordionItem value="item-2">
+						<AccordionItem value="item-4">
 							<AccordionTrigger>
 								How do the streak freezes work?
 							</AccordionTrigger>
@@ -353,7 +385,7 @@ export default function Home() {
 								streak.
 							</AccordionContent>
 						</AccordionItem>
-						<AccordionItem value="item-3">
+						<AccordionItem value="item-5">
 							<AccordionTrigger>
 								What happens after 30 days of sync?
 							</AccordionTrigger>
@@ -365,28 +397,7 @@ export default function Home() {
 								to premium to continue syncing between devices.
 							</AccordionContent>
 						</AccordionItem>
-						<AccordionItem value="item-4">
-							<AccordionTrigger>
-								How does offline mode work?
-							</AccordionTrigger>
-							<AccordionContent>
-								The data is always stored locally on your device
-								and the habits page is cached, so the app will
-								always work offline. When you go back online,
-								the changes you made will sync with the cloud
-								(assuming your account can sync). For more
-								information on syncing,{" "}
-								<Link
-									href="https://dexie.org/cloud/docs/consistency"
-									target="_blank"
-									className="underline underline-offset-4"
-								>
-									see the docs
-								</Link>
-								.
-							</AccordionContent>
-						</AccordionItem>
-						<AccordionItem value="item-5">
+						<AccordionItem value="item-6">
 							<AccordionTrigger>
 								What happens if I completed a habit but forgot
 								to check it off?
@@ -399,7 +410,7 @@ export default function Home() {
 								help track your consistency.
 							</AccordionContent>
 						</AccordionItem>
-						<AccordionItem value="item-6">
+						<AccordionItem value="item-7">
 							<AccordionTrigger>
 								What happens if I need a break or will be away?
 							</AccordionTrigger>
@@ -438,7 +449,8 @@ const cards: ((
 						Offline use
 					</h3>
 					<p className="text-xl text-muted-foreground max-w-3xl">
-						This app can be fully used offline for however long you
+						The data is stored in your browser&apos;s cache, meaning
+						this app can be fully used offline for however long you
 						want! You can sign in with your email if you want to
 						sync your data between devices
 					</p>
