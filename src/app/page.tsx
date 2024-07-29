@@ -19,6 +19,13 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import {
+	Accordion,
+	AccordionContent,
+	AccordionItem,
+	AccordionTrigger,
+} from "@/components/ui/accordion";
+
+import {
 	FireIcon,
 	MapIcon,
 	PauseCircleIcon,
@@ -109,11 +116,13 @@ export default function Home() {
 					<div className="px-4 items-center">
 						<h1 className="scroll-m-20 space-y-4 text-4xl font-extrabold tracking-wide lg:text-5xl my-10 text-center">
 							<Trail open>
-								<p>Track all your</p>
-								{/* <p>all</p> */}
-								{/* <p>your</p> */}
-								<p>daily habits</p>
-								{/* <p>habits</p> */}
+								<p>Daily habit tracker</p>
+							</Trail>
+							<Trail open>
+								<p className="text-base tracking-normal font-normal">
+									Focus on building good habits while
+									eliminating all the stress
+								</p>
 							</Trail>
 							<Trail open>
 								<Link href="/habits">
@@ -123,8 +132,22 @@ export default function Home() {
 									No account required
 								</p>
 							</Trail>
+							<Trail open>
+								<a
+									href="https://www.producthunt.com/posts/daily-habit-tracker?embed=true&utm_source=badge-featured&utm_medium=badge&utm_souce=badge-daily&#0045;habit&#0045;tracker"
+									target="_blank"
+									className="flex justify-center"
+								>
+									<img
+										src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=473513&theme=light"
+										alt="Daily&#0032;habit&#0032;tracker - Minimalist&#0032;daily&#0032;habit&#0032;tracker | Product Hunt"
+										width="200"
+										height="54"
+									/>
+								</a>
+							</Trail>
 						</h1>
-						<div className="-mt-10 mb-2 justify-center flex">
+						<div className="-mt-4 mb-2 justify-center flex">
 							<Image
 								src={habitsDark}
 								alt="habits"
@@ -138,6 +161,15 @@ export default function Home() {
 						</div>
 					</div>
 				</div>
+				<h2 className="scroll-m-20 pb-2 text-3xl font-semibold tracking-tight first:mt-0">
+					Everything you need to effortlessly track all your habits
+				</h2>
+				<p className="leading-7 [&:not(:first-child)]:mt-6">
+					The perfect habit tracker to motivate and help you build
+					good habits, while being flexible enough to suit your daily
+					life.
+				</p>
+
 				<h2 className="scroll-m-20 pb-2 text-3xl font-semibold tracking-tight first:mt-0">
 					Features
 				</h2>
@@ -278,6 +310,118 @@ export default function Home() {
 						</div>
 					</div>
 				</div>
+				<div className="bg-muted flex flex-col w-full md:items-center p-10">
+					<h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
+						Get started now!
+					</h3>
+					<p className="leading-7 [&:not(:first-child)]:mt-6">
+						Start tracking your habits for free, no account
+						required!
+					</p>
+					<Link href="/habits">
+						<Button className="mt-4" size="lg">
+							Start now
+						</Button>
+					</Link>
+				</div>
+				<div className="w-full p-4 space-y-4 pb-16">
+					<h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
+						Frequently asked questions
+					</h3>
+					<p className="text-muted-foreground">
+						For other questions or concerns, send us an email at
+						rdht.contact@gmail.com
+					</p>
+					<Accordion type="single" collapsible className="space-y-4">
+						<AccordionItem value="item-1">
+							<AccordionTrigger>
+								When do the habits go to the next day?
+							</AccordionTrigger>
+							<AccordionContent>
+								You have until midnight each day to check off
+								your habit for that day.
+							</AccordionContent>
+						</AccordionItem>
+						<AccordionItem value="item-2">
+							<AccordionTrigger>
+								How do the streak freezes work?
+							</AccordionTrigger>
+							<AccordionContent>
+								Each habit has 3 streak freezes. Everyime you
+								check a habit for the day, your freezes reset.
+								You can miss up to 3 days before you lose your
+								streak.
+							</AccordionContent>
+						</AccordionItem>
+						<AccordionItem value="item-3">
+							<AccordionTrigger>
+								What happens after 30 days of sync?
+							</AccordionTrigger>
+							<AccordionContent>
+								After the 30 days, your data will no longer sync
+								with our server. You can continue to use the app
+								on your device. If you login to another device,
+								your data will not be available. You can upgrade
+								to premium to continue syncing between devices.
+							</AccordionContent>
+						</AccordionItem>
+						<AccordionItem value="item-4">
+							<AccordionTrigger>
+								How does offline mode work?
+							</AccordionTrigger>
+							<AccordionContent>
+								The data is always stored locally on your device
+								and the habits page is cached, so the app will
+								always work offline. When you go back online,
+								the changes you made will sync with the cloud
+								(assuming your account can sync). For more
+								information on syncing,{" "}
+								<Link
+									href="https://dexie.org/cloud/docs/consistency"
+									target="_blank"
+									className="underline underline-offset-4"
+								>
+									see the docs
+								</Link>
+								.
+							</AccordionContent>
+						</AccordionItem>
+						<AccordionItem value="item-5">
+							<AccordionTrigger>
+								What happens if I completed a habit but forgot
+								to check it off?
+							</AccordionTrigger>
+							<AccordionContent>
+								This will count as a missed day. You can use the
+								calendar option for each habit to check off
+								previously missed days. This will not update
+								your streaks or freezes and is simply there to
+								help track your consistency.
+							</AccordionContent>
+						</AccordionItem>
+						<AccordionItem value="item-6">
+							<AccordionTrigger>
+								What happens if I need a break or will be away?
+							</AccordionTrigger>
+							<AccordionContent>
+								The app is flexible to your needs. If you need
+								some time off, you can pause the app from the
+								settings. This will freeze the app in its
+								current state and you can pick up where you left
+								off when you get back.
+							</AccordionContent>
+						</AccordionItem>
+					</Accordion>
+				</div>
+				<div className="bg-muted p-10 w-full space-y-4">
+					<h4 className="scroll-m-20 text-xl font-semibold tracking-tight">
+						Daily habit tracker
+					</h4>
+					<p>A simple and minimalistic daily habit tracker app</p>
+					<p className="text-muted-foreground">
+						&copy; dailyhabits.dev
+					</p>
+				</div>
 			</div>
 		</div>
 	);
@@ -324,7 +468,7 @@ const cards: ((
 					<p className="text-xl text-muted-foreground max-w-3xl">
 						Each time you complete a task, watch your streak counter
 						go up. You also get <b>streak freezes</b> that will
-						automatically be used in case you miss a day
+						automatically be used in case you miss a few days
 					</p>
 				</div>
 				<div className="w-full flex justify-center">
