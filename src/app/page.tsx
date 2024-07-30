@@ -112,7 +112,7 @@ export default function Home() {
 			</div>
 
 			<div className="flex flex-col md:items-center justify-between p-4 space-y-8">
-				<div className="bg-secondary justify-center flex w-full">
+				<div className="bg-secondary justify-center flex w-full rounded-lg">
 					<div className="px-4 items-center">
 						<h1 className="scroll-m-20 space-y-4 text-4xl font-extrabold tracking-wide lg:text-5xl my-10 text-center">
 							<Trail open>
@@ -310,7 +310,7 @@ export default function Home() {
 						</div>
 					</div>
 				</div>
-				<div className="bg-muted flex flex-col w-full md:items-center p-10">
+				<div className="bg-muted flex flex-col w-full md:items-center p-10 rounded-lg">
 					<h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
 						Get started now!
 					</h3>
@@ -324,7 +324,7 @@ export default function Home() {
 						</Button>
 					</Link>
 				</div>
-				<div className="w-full p-10 space-y-4 pb-16">
+				<div className="w-full p-4 md:p-10 space-y-4 pb-16">
 					<h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
 						Frequently asked questions
 					</h3>
@@ -424,7 +424,7 @@ export default function Home() {
 						</AccordionItem>
 					</Accordion>
 				</div>
-				<div className="bg-muted p-10 w-full space-y-4">
+				<div className="bg-muted p-10 w-full space-y-4 rounded-lg">
 					<h4 className="scroll-m-20 text-xl font-semibold tracking-tight">
 						Daily habit tracker
 					</h4>
