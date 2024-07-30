@@ -324,7 +324,7 @@ export default function Home() {
 						</Button>
 					</Link>
 				</div>
-				<div className="w-full p-4 space-y-4 pb-16">
+				<div className="w-full p-10 space-y-4 pb-16">
 					<h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
 						Frequently asked questions
 					</h3>
@@ -334,7 +334,7 @@ export default function Home() {
 					</p>
 					<Accordion type="single" collapsible className="space-y-4">
 						<AccordionItem value="item-1">
-							<AccordionTrigger>
+							<AccordionTrigger className="text-left">
 								How does offline mode work?
 							</AccordionTrigger>
 							<AccordionContent>
@@ -355,7 +355,7 @@ export default function Home() {
 							</AccordionContent>
 						</AccordionItem>
 						<AccordionItem value="item-2">
-							<AccordionTrigger>
+							<AccordionTrigger className="text-left">
 								What happens if my cache is erased?
 							</AccordionTrigger>
 							<AccordionContent>
@@ -366,7 +366,7 @@ export default function Home() {
 							</AccordionContent>
 						</AccordionItem>
 						<AccordionItem value="item-3">
-							<AccordionTrigger>
+							<AccordionTrigger className="text-left">
 								When do the habits go to the next day?
 							</AccordionTrigger>
 							<AccordionContent>
@@ -375,7 +375,7 @@ export default function Home() {
 							</AccordionContent>
 						</AccordionItem>
 						<AccordionItem value="item-4">
-							<AccordionTrigger>
+							<AccordionTrigger className="text-left">
 								How do the streak freezes work?
 							</AccordionTrigger>
 							<AccordionContent>
@@ -386,7 +386,7 @@ export default function Home() {
 							</AccordionContent>
 						</AccordionItem>
 						<AccordionItem value="item-5">
-							<AccordionTrigger>
+							<AccordionTrigger className="text-left">
 								What happens after 30 days of sync?
 							</AccordionTrigger>
 							<AccordionContent>
@@ -398,7 +398,7 @@ export default function Home() {
 							</AccordionContent>
 						</AccordionItem>
 						<AccordionItem value="item-6">
-							<AccordionTrigger>
+							<AccordionTrigger className="text-left">
 								What happens if I completed a habit but forgot
 								to check it off?
 							</AccordionTrigger>
@@ -411,7 +411,7 @@ export default function Home() {
 							</AccordionContent>
 						</AccordionItem>
 						<AccordionItem value="item-7">
-							<AccordionTrigger>
+							<AccordionTrigger className="text-left">
 								What happens if I need a break or will be away?
 							</AccordionTrigger>
 							<AccordionContent>
