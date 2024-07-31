@@ -1,5 +1,4 @@
 import { db } from "@/db";
-import Dexie from "dexie";
 import download from "downloadjs";
 import { ChangeEvent } from "react";
 import { toast } from "sonner";
@@ -9,20 +8,29 @@ import { Input } from "./ui/input";
 export const DataBackup = () => {
 	const exportDb = async () => {
 		if (typeof window !== "undefined") {
-			await import("dexie-export-import");
+			const { exportDB } = await import("dexie-export-import");
+			const blob = await exportDB(db, { prettyJson: true });
+			download(
+				blob,
+				"daily-habit-tracker-backup.json",
+				"application/json"
+			);
 		}
-		const blob = await db.export({ prettyJson: true });
-		download(blob, "daily-habit-tracker-backup.json", "application/json");
 	};
 
 	const importDb = async (event: ChangeEvent<HTMLInputElement>) => {
-		const file = event.target.files?.[0];
-		if (!file) {
-			toast("Invalid file. File must be of type json");
-			return;
+		if (typeof window !== "undefined") {
+			const { importDB } = await import("dexie-export-import");
+			const file = event.target.files?.[0];
+			if (!file) {
+				toast("Invalid file. File must be of type json");
+				return;
+			}
+			await db.delete();
+			await importDB(file);
+
+			location.reload();
 		}
-		await db.delete();
-		await Dexie.import(file);
 	};
 
 	return (
