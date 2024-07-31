@@ -10,6 +10,7 @@ import {
 import { ThemePicker } from "@/components/theme-picker";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { UserType } from "@/data/userType";
 import { db } from "@/db";
 import { getCurrentDate } from "@/lib/utils";
@@ -18,6 +19,7 @@ import { useObservable } from "dexie-react-hooks";
 import Link from "next/link";
 import { useState } from "react";
 import { toast } from "sonner";
+import { DataBackup } from "./data-backup";
 import { BaseNumberOfFreezes } from "./habit-card";
 import { License } from "./license";
 import { Logout } from "./logout";
@@ -101,65 +103,79 @@ export const Settings = ({ user }: { user: UserType }) => {
 					<CredenzaTitle>Settings</CredenzaTitle>
 				</CredenzaHeader>
 				<div className="px-4 pb-4 md:p-0">
-					<div className="flex justify-between items-center">
-						<div>
-							<p>Pause app</p>
-							<p className="text-xs text-muted-foreground pe-24">
-								If you are away or need a break, you can pause
-								the app. This will also stop your streaks from
-								breaking
-							</p>
-						</div>
-						<Switch
-							checked={user?.pauseStreaks}
-							onCheckedChange={updatePause}
-						/>
-					</div>
-					<div className="flex justify-between items-center">
-						<p>Theme</p>
-						<ThemePicker />
-					</div>
-					<Separator className="my-4" />
-					{userId !== "unauthorized" && (
-						<div className="flex justify-between items-center">
-							<p>Sync your data</p>
-							<Button
-								size="sm"
-								variant="outline"
-								onClick={sync}
-								disabled={loadingSync}
-							>
-								{loadingSync ? "Syncing..." : "Sync"}
-							</Button>
-						</div>
-					)}
-					<div className="w-full flex space-x-4">
-						<Link
-							href="https://github.com/MuffinTheDragon/daily-habit-tracker/issues"
-							target="_blank"
-							className="underline underline-offset-4 text-sm"
-						>
-							Report an issue
-						</Link>
-						<Link
-							href="mailto:rdht.contact@gmail.com"
-							target="_blank"
-							className="underline underline-offset-4 text-sm"
-						>
-							Send an email
-						</Link>
-					</div>
+					<Tabs
+						defaultValue="account"
+						className="w-full flex flex-col"
+					>
+						<TabsList>
+							<TabsTrigger value="general">General</TabsTrigger>
+							<TabsTrigger value="account">Account</TabsTrigger>
+						</TabsList>
+						<TabsContent value="general" className="space-y-4 mt-4">
+							<div className="flex justify-between items-center">
+								<div>
+									<p>Pause app</p>
+									<p className="text-xs text-muted-foreground pe-24">
+										If you are away or need a break, you can
+										pause the app. This will also stop your
+										streaks from breaking
+									</p>
+								</div>
+								<Switch
+									checked={user?.pauseStreaks}
+									onCheckedChange={updatePause}
+								/>
+							</div>
+							<div className="flex justify-between items-center">
+								<p>Theme</p>
+								<ThemePicker />
+							</div>
+							<div className="w-full flex space-x-4">
+								<Link
+									href="https://github.com/MuffinTheDragon/daily-habit-tracker/issues"
+									target="_blank"
+									className="underline underline-offset-4 text-sm"
+								>
+									Report an issue
+								</Link>
+								<Link
+									href="mailto:rdht.contact@gmail.com"
+									target="_blank"
+									className="underline underline-offset-4 text-sm"
+								>
+									Send an email
+								</Link>
+							</div>
+						</TabsContent>
 
-					{userId !== "unauthorized" && (
-						<div className="text-sm">
-							<Separator className="my-4" />
-							<License />
-							<Logout />
-							<p className="text-center text-sm mt-1">
-								Logged in as: {userId}
-							</p>
-						</div>
-					)}
+						<TabsContent value="account">
+							{userId !== "unauthorized" && (
+								<div className="flex justify-between items-center mt-2">
+									<p className="text-sm">Sync your data</p>
+									<Button
+										size="sm"
+										variant="outline"
+										onClick={sync}
+										disabled={loadingSync}
+									>
+										{loadingSync ? "Syncing..." : "Sync"}
+									</Button>
+								</div>
+							)}
+							<Separator className="my-2" />
+							<DataBackup />
+							{userId !== "unauthorized" && (
+								<div className="text-sm">
+									<Separator className="my-4" />
+									<License />
+									<Logout />
+									<p className="text-center text-sm mt-1">
+										Logged in as: {userId}
+									</p>
+								</div>
+							)}
+						</TabsContent>
+					</Tabs>
 				</div>
 			</CredenzaContent>
 		</Credenza>
