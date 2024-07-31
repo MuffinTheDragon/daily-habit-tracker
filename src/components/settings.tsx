@@ -104,7 +104,7 @@ export const Settings = ({ user }: { user: UserType }) => {
 				</CredenzaHeader>
 				<div className="px-4 pb-4 md:p-0">
 					<Tabs
-						defaultValue="account"
+						defaultValue="general"
 						className="w-full flex flex-col"
 					>
 						<TabsList>
