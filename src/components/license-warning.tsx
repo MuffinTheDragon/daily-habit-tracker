@@ -65,11 +65,15 @@ export const LicenseWarning = () => {
 							</p>
 							<p>
 								<b>Note:</b> If, after your eval period, you
-								would like to use the app offline, please
-								continue using it on the same device. If you
-								switch devices and login, your data will not be
-								available (you can, however, import your data
-								from a local file through the settings).
+								would like to use the app without upgrading,
+								please continue using it on the same device. If
+								you switch devices and login, your data will not
+								be available.
+							</p>
+							<p>
+								If you want to switch to another device, you can
+								export your data from the settings on your
+								current device, and import on your new device.
 							</p>
 						</div>
 					</CredenzaContent>

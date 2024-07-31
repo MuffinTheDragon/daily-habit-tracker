@@ -410,10 +410,12 @@ export default function Home() {
 								After the 30 days, your data will no longer sync
 								with our server. You can continue to use the app
 								on your device. If you login to another device,
-								your data will not be available (you can,
-								however, import your data from a local file
-								through the settings). You can upgrade to
-								premium to continue syncing between devices.
+								your data will not be available. If you want to
+								switch to another device, you can export your
+								data from the settings on your current device,
+								and import on your new device. You can also
+								upgrade to premium to continue syncing between
+								devices.
 							</AccordionContent>
 						</AccordionItem>
 						<AccordionItem value="item-6">
