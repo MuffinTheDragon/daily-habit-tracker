@@ -46,7 +46,7 @@ export const Graph = ({ ...props }: Props) => {
 					<ChevronRightIcon className="w-4 h-4" />
 				</Button>
 			</div>
-			<div className="flex overflow-x-auto overflow-y-hidden">
+			<div className="flex overflow-x-auto overflow-y-hidden map">
 				<GetGraph graph={graph[index]} habit={habit} user={user} />
 			</div>
 		</div>

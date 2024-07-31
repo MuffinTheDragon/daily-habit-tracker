@@ -1,37 +1,61 @@
+import { getCurrentDate } from "@/lib/utils";
 import { HabitType } from "./HabitType";
-
-const year = new Date().getFullYear();
 
 export const defaultHabits: HabitType[] = [
 	{
 		id: "1",
-		created: new Date(),
-		name: "Daily habit",
+		created: new Date("2019 01 05"),
+		name: "Walk daily",
 		description: "",
-		streak: 0,
-		longestStreak: 0,
+		streak: 432,
+		longestStreak: 450,
 		longestStreakDateSet: new Date(),
-		checks: 0,
+		checks: 503,
 		archived: false,
 		archivedDate: null,
-		streakFreezes: 3,
-		graph: [{ year, daysChecked: [], manualDaysChecked: [] }],
+		streakFreezes: 1,
+		graph: [
+			{
+				year: 2024,
+				daysChecked: [getCurrentDate()],
+				manualDaysChecked: [],
+			},
+		],
 	},
 	{
 		id: "2",
-		created: new Date(),
-		name: "Daily habit 2",
-		description: "Habit description",
-		streak: 5,
-		longestStreak: 0,
+		created: new Date("2024 01 01"),
+		name: "Read for 10 minutes",
+		description: "",
+		streak: 11,
+		longestStreak: 12,
 		longestStreakDateSet: new Date(),
-		checks: 0,
+		checks: 14,
 		archived: false,
 		archivedDate: null,
 		streakFreezes: 3,
 		graph: [
-			{ year: 2017, daysChecked: [], manualDaysChecked: [] },
-			{ year, daysChecked: [], manualDaysChecked: [] },
+			{
+				year: 2024,
+				daysChecked: [
+					new Date("2024 01 07"),
+					new Date("2024 01 09"),
+					new Date("2024 01 10"),
+					new Date("2024 01 11"),
+					new Date("2024 01 14"),
+					new Date("2024 01 15"),
+					new Date("2024 01 18"),
+					new Date("2024 01 19"),
+					new Date("2024 01 20"),
+					new Date("2024 01 21"),
+					new Date("2024 01 23"),
+					new Date("2024 01 29"),
+				],
+				manualDaysChecked: [
+					new Date("2024 01 12"),
+					new Date("2024 01 13"),
+				],
+			},
 		],
 	},
 ];

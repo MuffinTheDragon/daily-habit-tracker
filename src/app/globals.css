@@ -159,3 +159,7 @@ input, textarea {
   .squares li[data-level="3"], .legend div[data-level="3"] {
     background-color: #1da138;
   }
+
+  .map {
+    pointer-events: auto;
+  }

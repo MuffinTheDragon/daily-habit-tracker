@@ -4,27 +4,33 @@ import githubLight from "@/app/assets/github-mark-white.png";
 import githubDark from "@/app/assets/github-mark.png";
 import habitsDark from "@/app/assets/habits-dark.png";
 import habitsLight from "@/app/assets/habits-light.png";
-import mapDark from "@/app/assets/map-dark.png";
-import mapLight from "@/app/assets/map-light.png";
-import offlineDark from "@/app/assets/offline-dark.png";
-import offlineLight from "@/app/assets/offline-light.png";
-import pauseDark from "@/app/assets/pause-dark.png";
-import pauseLight from "@/app/assets/pause-light.png";
-import streaksDark from "@/app/assets/streaks-dark.png";
-import streaksLight from "@/app/assets/streaks-light.png";
 import logo from "@/app/favicon.ico";
 import { ThemePicker } from "@/components/theme-picker";
 import { Trail } from "@/components/trail";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 import {
 	Accordion,
 	AccordionContent,
 	AccordionItem,
 	AccordionTrigger,
 } from "@/components/ui/accordion";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
+import { HabitCard } from "@/components/habit-card";
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardFooter,
+	CardHeader,
+	CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import { defaultHabits } from "@/data/defaultHabits";
+import { UserType } from "@/data/userType";
 import {
 	FireIcon,
 	MapIcon,
@@ -45,6 +51,17 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { CSSProperties, useEffect, useState } from "react";
+
+const user: UserType = {
+	id: "user",
+	created: new Date(),
+	pauseStreaks: true,
+	pauses: [
+		[new Date("2024 01 08"), new Date("2024 01 08")],
+		[new Date("2024 01 16"), new Date("2024 01 17")],
+		[new Date("2024 01 23"), new Date("2024 01 28")],
+	],
+};
 
 export default function Home() {
 	const [activeCard, setActiveCard] = useState(0);
@@ -456,16 +473,24 @@ const cards: ((
 					</p>
 				</div>
 				<div className="w-full flex justify-center">
-					<Image
-						src={offlineDark}
-						alt="map"
-						className="rounded-3xl hidden dark:block"
-					/>
-					<Image
-						src={offlineLight}
-						alt="map"
-						className="rounded-3xl dark:hidden"
-					/>
+					<Card className="w-[500px] space-y-2 pointer-events-none">
+						<CardHeader>
+							<CardTitle>Enter email address</CardTitle>
+							<CardDescription>
+								We support passwordless authentication. Just
+								enter an email, paste the verification code and
+								you are logged in!
+							</CardDescription>
+						</CardHeader>
+						<CardContent>
+							<Label htmlFor="email">Email</Label>
+							<Input placeholder="you@somedomain.com" />
+						</CardContent>
+						<CardFooter className="float-right space-x-2">
+							<Button variant="secondary">Cancel</Button>
+							<Button>Submit</Button>
+						</CardFooter>
+					</Card>
 				</div>
 			</div>
 		</animated.div>
@@ -483,16 +508,11 @@ const cards: ((
 						automatically be used in case you miss a few days
 					</p>
 				</div>
-				<div className="w-full flex justify-center">
-					<Image
-						src={streaksDark}
-						alt="map"
-						className="rounded-3xl hidden dark:block"
-					/>
-					<Image
-						src={streaksLight}
-						alt="map"
-						className="rounded-3xl dark:hidden"
+				<div className="w-full flex justify-center pointer-events-none">
+					<HabitCard
+						showMap={false}
+						habit={defaultHabits[0]}
+						user={user}
 					/>
 				</div>
 			</div>
@@ -512,16 +532,24 @@ const cards: ((
 					</p>
 				</div>
 				<div className="w-full flex justify-center">
-					<Image
-						src={pauseDark}
-						alt="map"
-						className="rounded-3xl hidden dark:block"
-					/>
-					<Image
-						src={pauseLight}
-						alt="map"
-						className="rounded-3xl dark:hidden"
-					/>
+					<Card className="w-[500px] space-y-2 pointer-events-none">
+						<CardHeader>
+							<CardTitle>Settings</CardTitle>
+						</CardHeader>
+						<CardContent>
+							<div className="flex justify-between items-center">
+								<div>
+									<p>Pause app</p>
+									<p className="text-xs text-muted-foreground pe-24">
+										If you are away or need a break, you can
+										pause the app. This will also stop your
+										streaks from breaking
+									</p>
+								</div>
+								<Switch />
+							</div>
+						</CardContent>
+					</Card>
 				</div>
 			</div>
 		</animated.div>
@@ -538,16 +566,11 @@ const cards: ((
 						simple visual map
 					</p>
 				</div>
-				<div className="w-full flex justify-center">
-					<Image
-						src={mapDark}
-						alt="map"
-						className="rounded-3xl hidden dark:block"
-					/>
-					<Image
-						src={mapLight}
-						alt="map"
-						className="rounded-3xl dark:hidden"
+				<div className="w-full flex justify-center pointer-events-none">
+					<HabitCard
+						habit={defaultHabits[1]}
+						user={user}
+						showMap={true}
 					/>
 				</div>
 			</div>
