@@ -68,7 +68,8 @@ export const LicenseWarning = () => {
 								would like to use the app offline, please
 								continue using it on the same device. If you
 								switch devices and login, your data will not be
-								available.
+								available (you can, however, import your data
+								from a local file through the settings).
 							</p>
 						</div>
 					</CredenzaContent>
