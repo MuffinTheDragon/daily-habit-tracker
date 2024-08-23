@@ -11,6 +11,7 @@ export const metadata: Metadata = {
 	title: "Daily habit tracker - Simple & Minimalist tracker",
 	description:
 		"Try this habit tracker app with streaks, freezes to protect streaks, and a visual map to see consistency. Track your habits effortlessly!",
+	manifest: "/manifest.json",
 	openGraph: {
 		type: "website",
 		url: "https://www.dailyhabits.dev",
