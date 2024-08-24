@@ -100,7 +100,9 @@ export const Settings = ({ user }: { user: UserType }) => {
 			</CredenzaTrigger>
 			<CredenzaContent>
 				<CredenzaHeader>
-					<CredenzaTitle>Settings</CredenzaTitle>
+					<CredenzaTitle className="text-center">
+						Settings
+					</CredenzaTitle>
 				</CredenzaHeader>
 				<div className="px-4 pb-4 md:p-0">
 					<Tabs
@@ -116,9 +118,8 @@ export const Settings = ({ user }: { user: UserType }) => {
 								<div>
 									<p>Pause app</p>
 									<p className="text-xs text-muted-foreground pe-24">
-										If you are away or need a break, you can
-										pause the app. This will also stop your
-										streaks from breaking
+										Your streaks are paused and will not
+										break until you unpause the app
 									</p>
 								</div>
 								<Switch
