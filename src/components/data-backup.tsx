@@ -34,11 +34,13 @@ export const DataBackup = () => {
 	};
 
 	return (
-		<div>
-			<div className="font-semibold">Advanced</div>
-			<p className="mb-2 text-sm">
-				Use the buttons below to export and import your data
-			</p>
+		<div className="space-y-4">
+			<div>
+				<p>Data control</p>
+				<p className="text-xs text-muted-foreground">
+					Use the buttons below to export and import your data
+				</p>
+			</div>
 			<div className="flex space-x-4">
 				<Button size="sm" className="w-fit" onClick={exportDb}>
 					Export data

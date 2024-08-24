@@ -28,7 +28,8 @@ import { Separator } from "./ui/separator";
 export const Settings = ({ user }: { user: UserType }) => {
 	const userId = db.cloud.currentUserId;
 
-	const syncStatus = useObservable(db.cloud.syncState);
+	const isAuthorized = userId !== "unauthorized";
+
 	const currentDate = getCurrentDate();
 
 	const [loadingSync, setLoadingSync] = useState(false);
@@ -111,7 +112,12 @@ export const Settings = ({ user }: { user: UserType }) => {
 					>
 						<TabsList>
 							<TabsTrigger value="general">General</TabsTrigger>
-							<TabsTrigger value="account">Account</TabsTrigger>
+							{isAuthorized && (
+								<TabsTrigger value="account">
+									Account
+								</TabsTrigger>
+							)}
+							<TabsTrigger value="advanced">Advanced</TabsTrigger>
 						</TabsList>
 						<TabsContent value="general" className="space-y-4 mt-4">
 							<div className="flex justify-between items-center">
@@ -150,7 +156,7 @@ export const Settings = ({ user }: { user: UserType }) => {
 						</TabsContent>
 
 						<TabsContent value="account">
-							{userId !== "unauthorized" && (
+							{isAuthorized && (
 								<div className="flex justify-between items-center mt-2">
 									<p className="text-sm">Sync your data</p>
 									<Button
@@ -163,11 +169,9 @@ export const Settings = ({ user }: { user: UserType }) => {
 									</Button>
 								</div>
 							)}
-							<Separator className="my-2" />
-							<DataBackup />
-							{userId !== "unauthorized" && (
+							{isAuthorized && (
 								<div className="text-sm">
-									<Separator className="my-4" />
+									<Separator className="my-2" />
 									<License />
 									<Logout />
 									<p className="text-center text-sm mt-1">
@@ -175,6 +179,9 @@ export const Settings = ({ user }: { user: UserType }) => {
 									</p>
 								</div>
 							)}
+						</TabsContent>
+						<TabsContent value="advanced">
+							<DataBackup />
 						</TabsContent>
 					</Tabs>
 				</div>
