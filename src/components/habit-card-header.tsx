@@ -112,7 +112,7 @@ export const HabitCardHeader = ({ ...props }: Props) => {
 					</Button>
 				</div>
 			) : (
-				<div className="flex items-center space-x-2">
+				<div className="flex items-center space-x-2 min-w-full sm:max-w-sm">
 					<CardTitle
 						className={cn(
 							"hover:cursor-text border border-background hover:border-border py-1 rounded w-full md:text-xl truncate",

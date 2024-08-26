@@ -36,9 +36,9 @@ export const HabitCardDescription = ({ ...props }: Props) => {
 					</Button>
 				</div>
 			) : (
-				<div className="flex items-center space-x-2">
+				<div className="flex items-center space-x-2 min-w-full sm:max-w-sm">
 					<CardTitle
-						className="break-words text-pretty hover:cursor-text border border-background hover:border-border py-1 rounded w-full text-sm"
+						className="truncate text-pretty hover:cursor-text border border-background hover:border-border py-1 rounded w-full text-sm"
 						onClick={() => setEditingDescription(true)}
 					>
 						{model.description

@@ -199,7 +199,9 @@ const DeleteHabit = ({ model }: { model: HabitType }) => {
 	return (
 		<CredenzaContent>
 			<CredenzaHeader>
-				<CredenzaTitle>Are you absolutely sure?</CredenzaTitle>
+				<CredenzaTitle className="min-w-full sm:max-w-sm">
+					<p className="truncate">Delete {model.name}?</p>
+				</CredenzaTitle>
 				<CredenzaDescription>
 					This will permanently delete this habit.
 				</CredenzaDescription>
@@ -227,7 +229,9 @@ const Archive = ({ model }: { model: HabitType }) => {
 	return (
 		<CredenzaContent>
 			<CredenzaHeader>
-				<CredenzaTitle>Archive</CredenzaTitle>
+				<CredenzaTitle className="min-w-full sm:max-w-sm">
+					<p className="truncate">Archive {model.name}?</p>
+				</CredenzaTitle>
 				<CredenzaDescription>
 					You can archvie this habit if you no longer want to track
 					it. <b className="underline">This is permanent</b>
