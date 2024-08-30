@@ -412,10 +412,10 @@ export default function Home() {
 								on your device. If you login to another device,
 								your data will not be available. If you want to
 								switch to another device, you can export your
-								data from the settings on your current device,
-								and import on your new device. You can also
-								upgrade to premium to continue syncing between
-								devices.
+								data from the settings on your current device.
+								Then, import on your new device and login. You
+								can also upgrade to premium to continue syncing
+								between devices.
 							</AccordionContent>
 						</AccordionItem>
 						<AccordionItem value="item-6">

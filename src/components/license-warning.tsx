@@ -73,7 +73,8 @@ export const LicenseWarning = () => {
 							<p>
 								If you want to switch to another device, you can
 								export your data from the settings on your
-								current device, and import on your new device.
+								current device. Then, import on your new device
+								and login with your account.
 							</p>
 						</div>
 					</CredenzaContent>

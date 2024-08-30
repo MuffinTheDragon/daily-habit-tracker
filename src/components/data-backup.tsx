@@ -9,7 +9,10 @@ export const DataBackup = () => {
 	const exportDb = async () => {
 		if (typeof window !== "undefined") {
 			const { exportDB } = await import("dexie-export-import");
-			const blob = await exportDB(db, { prettyJson: true });
+			const blob = await exportDB(db, {
+				prettyJson: true,
+				filter: (table) => table !== "$logins",
+			});
 			download(
 				blob,
 				"daily-habit-tracker-backup.json",
