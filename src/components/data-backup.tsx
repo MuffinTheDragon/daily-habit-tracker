@@ -11,7 +11,8 @@ export const DataBackup = () => {
 			const { exportDB } = await import("dexie-export-import");
 			const blob = await exportDB(db, {
 				prettyJson: true,
-				filter: (table) => table !== "$logins",
+				filter: (table, value, key) =>
+					table !== "$logins" && table !== "$syncState",
 			});
 			download(
 				blob,
