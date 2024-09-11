@@ -11,7 +11,12 @@ import {
 import { HabitType } from "@/data/HabitType";
 import { UserType } from "@/data/userType";
 import { db } from "@/db";
-import { cn, diffInDaysFromNow, getLastUpdatedDate } from "@/lib/utils";
+import {
+	cn,
+	diffInDaysFromNow,
+	getCurrentDate,
+	getLastUpdatedDate,
+} from "@/lib/utils";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Graph } from "./graph";
@@ -20,6 +25,7 @@ import { HabitCardHeader } from "./habit-card-header";
 import { HabitCardStats } from "./habit-card-stats";
 import { Badge } from "./ui/badge";
 import { Separator } from "./ui/separator";
+import { isEqual } from "date-fns";
 
 export const BaseNumberOfFreezes = 3;
 
@@ -57,6 +63,10 @@ export const HabitCard = ({ ...props }: Props) => {
 			// don't consider today in the calculation => we do -1
 			const newStreakFreezes = BaseNumberOfFreezes - (diff - 1);
 
+			const showWarningAlert =
+				!user.warningDismissDate ||
+				!isEqual(user.warningDismissDate, getCurrentDate());
+
 			if (newStreakFreezes < 0) {
 				await db.habits.update(habit.id, {
 					streak: 0,
@@ -64,7 +74,6 @@ export const HabitCard = ({ ...props }: Props) => {
 				});
 
 				toast.error("Attention!", {
-					duration: Infinity,
 					description: (
 						<p>
 							Your habit <b className="underline">{habit.name}</b>{" "}
@@ -79,18 +88,23 @@ export const HabitCard = ({ ...props }: Props) => {
 					streakFreezes: newStreakFreezes,
 				});
 
-				toast.warning("Careful!", {
-					duration: Infinity,
-					closeButton: true,
-					description: (
-						<p>
-							You missed {diff - 1} day(s) for your{" "}
-							<b className="underline">{habit.name}</b> habit and
-							used up some of your streak freezes. If you run out,
-							your streak will reset.
-						</p>
-					),
-				});
+				if (showWarningAlert)
+					toast.warning("Careful!", {
+						closeButton: true,
+						onDismiss: async () =>
+							await db.user.update(user.id, {
+								// @ts-ignore
+								warningDismissDate: getCurrentDate(),
+							}),
+						description: (
+							<p>
+								You missed {diff - 1} day(s) for your{" "}
+								<b className="underline">{habit.name}</b> habit
+								and used up some of your streak freezes. If you
+								run out, your streak will reset.
+							</p>
+						),
+					});
 				setInitialFreezes(newStreakFreezes);
 			}
 		};
