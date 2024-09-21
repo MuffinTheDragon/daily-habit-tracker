@@ -13,7 +13,7 @@ import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { UserType } from "@/data/userType";
 import { db } from "@/db";
-import { getCurrentDate } from "@/lib/utils";
+import { getCurrentDate, getStreakFreezes } from "@/lib/utils";
 import { Cog6ToothIcon } from "@heroicons/react/24/outline";
 import { useObservable } from "dexie-react-hooks";
 import Link from "next/link";
@@ -72,7 +72,7 @@ export const Settings = ({ user }: { user: UserType }) => {
 		// this avoids the issue where before pause you have < 3 freezes
 		// but after pause its treated as if you have 3
 		await db.habits.toCollection().modify((i) => {
-			i.streakFreezes = BaseNumberOfFreezes;
+			i.streakFreezes = getStreakFreezes(i.streak);
 		});
 	};
 

@@ -16,6 +16,7 @@ import {
 	diffInDaysFromNow,
 	getCurrentDate,
 	getLastUpdatedDate,
+	getStreakFreezes,
 } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -38,7 +39,8 @@ type Props = {
 export const HabitCard = ({ ...props }: Props) => {
 	const { habit, user, showMap } = props;
 
-	const [initialFreezes, setInitialFreezes] = useState(BaseNumberOfFreezes);
+	const initalFreezes = getStreakFreezes(habit.streak);
+	const [initialFreezes, setInitialFreezes] = useState(initalFreezes);
 
 	const paused = user.pauseStreaks || habit.archived;
 
@@ -59,7 +61,7 @@ export const HabitCard = ({ ...props }: Props) => {
 			if (diff <= 1) return;
 
 			// don't consider today in the calculation => we do -1
-			const newStreakFreezes = BaseNumberOfFreezes - (diff - 1);
+			const newStreakFreezes = initalFreezes - (diff - 1);
 
 			const showWarningAlert =
 				!user.warningDismissDate ||
@@ -68,7 +70,7 @@ export const HabitCard = ({ ...props }: Props) => {
 			if (newStreakFreezes < 0) {
 				await db.habits.update(habit.id, {
 					streak: 0,
-					streakFreezes: BaseNumberOfFreezes,
+					streakFreezes: getStreakFreezes(0),
 				});
 
 				toast.error("Attention!", {

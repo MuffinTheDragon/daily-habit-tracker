@@ -5,6 +5,7 @@ import {
 	cn,
 	getCurrentDate,
 	getLongestStreak,
+	getStreakFreezes,
 	isHabitDoneForToday,
 } from "@/lib/utils";
 import { CheckCircleIcon } from "@heroicons/react/24/solid";
@@ -71,7 +72,9 @@ export const HabitCardHeader = ({ ...props }: Props) => {
 			streak: newStreak,
 			longestStreak,
 			longestStreakDateSet,
-			streakFreezes: checked ? BaseNumberOfFreezes : initialFreezes,
+			streakFreezes: checked
+				? getStreakFreezes(newStreak)
+				: initialFreezes,
 			checks: checked ? model.checks + 1 : model.checks - 1,
 		});
 	};

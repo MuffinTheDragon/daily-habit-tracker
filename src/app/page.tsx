@@ -178,14 +178,17 @@ export default function Home() {
 						</div>
 					</div>
 				</div>
-				<h2 className="scroll-m-20 pb-2 text-3xl font-semibold tracking-tight first:mt-0">
-					Everything you need to effortlessly track all your habits
-				</h2>
-				<p className="leading-7 [&:not(:first-child)]:mt-6">
-					The perfect habit tracker to motivate and help you build
-					good habits, while being flexible enough to suit your daily
-					life.
-				</p>
+				<div className="max-w-2xl md:text-center">
+					<h2 className="scroll-m-20 pb-2 text-3xl font-semibold tracking-tight first:mt-0">
+						Everything you need to effortlessly track all your
+						habits
+					</h2>
+					<p className="leading-7 [&:not(:first-child)]:mt-6">
+						The perfect habit tracker to motivate and help you build
+						good habits, while being flexible enough to suit your
+						daily life.
+					</p>
+				</div>
 
 				<h2 className="scroll-m-20 pb-2 text-3xl font-semibold tracking-tight first:mt-0">
 					Features
@@ -273,6 +276,27 @@ export default function Home() {
 						})}
 					</div>
 				</div>
+				<div className="max-w-2xl md:text-center">
+					<h2 className="scroll-m-20 pb-2 text-3xl font-semibold tracking-tight first:mt-0">
+						Available on all of your devices
+					</h2>
+					<p className="leading-7 [&:not(:first-child)]:mt-6">
+						This app is a fully functional progressive web app,
+						which means it works seamlessly on both your laptop and
+						mobile device, just like any native app. To install it
+						on your mobile device, simply follow the instructions
+						provided here:{" "}
+					</p>
+					<br />
+					<a
+						href="https://www.howtogeek.com/196087/how-to-add-websites-to-the-home-screen-on-any-smartphone-or-tablet/"
+						className="underline underline-offset-2"
+						target="_blank"
+					>
+						https://www.howtogeek.com/196087/how-to-add-websites-to-the-home-screen-on-any-smartphone-or-tablet/
+					</a>
+				</div>
+
 				<h2 className="scroll-m-20 pb-2 text-3xl font-semibold tracking-tight first:mt-0">
 					Pricing
 				</h2>
@@ -509,7 +533,8 @@ const cards: ((
 					<p className="text-xl text-muted-foreground max-w-3xl">
 						Each time you complete a task, watch your streak counter
 						go up. You also get <b>streak freezes</b> that will
-						automatically be used in case you miss a few days
+						automatically be used in case you miss a few days. The
+						longer your streak, the more freezes you get
 					</p>
 				</div>
 				<div className="w-full flex justify-center pointer-events-none">

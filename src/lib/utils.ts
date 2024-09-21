@@ -153,3 +153,25 @@ export function isAfterOrEqual(date1: Date, date2: Date) {
 export function isBeforeOrEqual(date1: Date, date2: Date) {
 	return isBefore(date1, date2) || isEqual(date1, date2);
 }
+
+/**
+ * get the base number of streak freezes given a streak
+ * award more freezes for longer streaks so that its less discouraging if a streak breaks
+ * @param streaks
+ * @returns base number of freezes
+ */
+export function getStreakFreezes(streaks: number) {
+	if (streaks <= 7) return 3;
+
+	if (streaks <= 14) return 5;
+
+	if (streaks <= 21) return 7;
+
+	if (streaks <= 30) return 10;
+
+	if (streaks <= 45) return 12;
+
+	if (streaks <= 60) return 15;
+
+	return 20;
+}
