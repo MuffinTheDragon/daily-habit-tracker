@@ -17,4 +17,5 @@ export type HabitType = {
 	archivedDate: Date | null;
 	streakFreezes: number;
 	graph: GraphType[];
+	streaksDisabled?: boolean;
 };

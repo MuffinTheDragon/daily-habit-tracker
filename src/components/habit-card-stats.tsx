@@ -6,36 +6,49 @@ import {
 	TooltipProvider,
 	TooltipTrigger,
 } from "./ui/tooltip";
+import {
+	Popover,
+	PopoverContent,
+	PopoverTrigger,
+} from "@/components/ui/popover";
 
-export const HabitCardStats = ({ habit }: { habit: HabitType }) => (
-	<>
-		<div className="space-y-4">
-			<Stat title="Streak" number={habit.streak} />
-			<Stat
-				title={
-					<TooltipProvider delayDuration={100}>
-						<Tooltip>
-							<TooltipTrigger>
+export const HabitCardStats = ({ habit }: { habit: HabitType }) => {
+	if (habit.streaksDisabled) {
+		return (
+			<div className="space-y-4">
+				<p>Checks: {habit.checks}</p>
+			</div>
+		);
+	}
+
+	return (
+		<>
+			<div className="space-y-4">
+				<Stat title="Streak" number={habit.streak} />
+				<Stat
+					title={
+						<Popover>
+							<PopoverTrigger>
 								<p className="underline underline-offset-4">
 									Freezes
 								</p>
-							</TooltipTrigger>
-							<TooltipContent>
+							</PopoverTrigger>
+							<PopoverContent>
 								<p className="text-sm">
 									How many times your streak can break before
 									it resets. Complete your daily habit to
 									reset freezes
 								</p>
-							</TooltipContent>
-						</Tooltip>
-					</TooltipProvider>
-				}
-				number={habit.streakFreezes}
-			/>
-		</div>
-		<div className="space-y-4">
-			<Stat title="Checks" number={habit.checks} />
-			<Stat title="Longest streak" number={habit.longestStreak} />
-		</div>
-	</>
-);
+							</PopoverContent>
+						</Popover>
+					}
+					number={habit.streakFreezes}
+				/>
+			</div>
+			<div className="space-y-4">
+				<Stat title="Checks" number={habit.checks} />
+				<Stat title="Longest streak" number={habit.longestStreak} />
+			</div>
+		</>
+	);
+};

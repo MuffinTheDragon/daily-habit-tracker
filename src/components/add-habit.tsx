@@ -19,16 +19,19 @@ import { Button } from "./ui/button";
 import {
 	Form,
 	FormControl,
+	FormDescription,
 	FormField,
 	FormItem,
 	FormLabel,
 	FormMessage,
 } from "./ui/form";
 import { Input } from "./ui/input";
+import { Checkbox } from "./ui/checkbox";
 
 const formSchema = z.object({
 	name: z.string().min(1, { message: "Name is required" }),
 	description: z.string(),
+	streaksDisabled: z.boolean().default(false).optional(),
 });
 
 export const AddHabit = ({ paused }: { paused: boolean }) => {
@@ -39,6 +42,7 @@ export const AddHabit = ({ paused }: { paused: boolean }) => {
 		defaultValues: {
 			name: "",
 			description: "",
+			streaksDisabled: false,
 		},
 	});
 
@@ -46,12 +50,13 @@ export const AddHabit = ({ paused }: { paused: boolean }) => {
 		const year = new Date().getFullYear();
 
 		const now = getCurrentDate();
-
+		console.log(values);
 		const habit: HabitType = {
 			id: uuidv4(),
 			created: new Date(), // store time for sorting purposes
 			name: values.name,
 			description: values.description,
+			streaksDisabled: values.streaksDisabled,
 			streak: 0,
 			longestStreak: 0,
 			longestStreakDateSet: now,
@@ -121,6 +126,38 @@ export const AddHabit = ({ paused }: { paused: boolean }) => {
 											/>
 										</FormControl>
 										<FormMessage />
+									</FormItem>
+								)}
+							/>
+
+							<FormField
+								control={form.control}
+								name="streaksDisabled"
+								render={({ field }) => (
+									<FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+										<FormControl className="mt-0.5">
+											<Checkbox
+												checked={field.value}
+												onCheckedChange={field.onChange}
+											/>
+										</FormControl>
+										<div className="space-y-1 leading-none">
+											<FormLabel>
+												Disable streak tracking?
+											</FormLabel>
+											<FormDescription>
+												<p>
+													If you don&apos;t want to
+													worry about building streaks
+													and want to track your habit
+													manually.{" "}
+													<span className="font-bold">
+														This can&apos;t be
+														undone.
+													</span>
+												</p>
+											</FormDescription>
+										</div>
 									</FormItem>
 								)}
 							/>

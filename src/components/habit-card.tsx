@@ -45,9 +45,7 @@ export const HabitCard = ({ ...props }: Props) => {
 	// compute streak freezes
 	useEffect(() => {
 		const updateStreaks = async () => {
-			if (paused) return;
-
-			if (habit.streak < 1) return;
+			if (paused || habit.streak < 1 || habit.streaksDisabled) return;
 
 			// compute last active date
 			const lastUpdated = getLastUpdatedDate(
@@ -114,7 +112,7 @@ export const HabitCard = ({ ...props }: Props) => {
 	}, []);
 
 	return (
-		<Card className="relative min-w-[90vw] sm:min-w-96 flex flex-col">
+		<Card className="relative min-w-[90vw] sm:min-w-96 flex flex-col h-full">
 			{habit.archived && (
 				<Badge
 					variant="secondary"
@@ -143,11 +141,26 @@ export const HabitCard = ({ ...props }: Props) => {
 				)}
 				{user.collapsed && (
 					<div className="text-sm flex space-x-2 items-center text-muted-foreground">
-						<div>Streak: {habit.streak}</div>
-						<Separator orientation="vertical" className="h-4" />
+						{!habit.streaksDisabled && (
+							<>
+								<div>Streak: {habit.streak}</div>
+								<Separator
+									orientation="vertical"
+									className="h-4"
+								/>
+							</>
+						)}
 						<div>Checks: {habit.checks}</div>
-						<Separator orientation="vertical" className="h-4" />
-						<div>Freezes: {habit.streakFreezes}</div>
+						{!habit.streaksDisabled && (
+							<>
+								<Separator
+									orientation="vertical"
+									className="h-4"
+								/>
+
+								<div>Freezes: {habit.streakFreezes}</div>
+							</>
+						)}
 					</div>
 				)}
 			</CardHeader>
@@ -161,6 +174,9 @@ export const HabitCard = ({ ...props }: Props) => {
 			{!user.collapsed && (
 				<CardFooter className="mt-4">
 					<div className="flex flex-col space-y-1 text-xs text-muted-foreground">
+						{habit.streaksDisabled && (
+							<p>Streak tracking is disabled</p>
+						)}
 						<p>Created: {habit.created.toDateString()}</p>
 						{habit.archivedDate && (
 							<p>Archived: {habit.archivedDate.toDateString()}</p>
