@@ -22,9 +22,9 @@ export const LicenseWarning = () => {
 	const rtf1 = new Intl.RelativeTimeFormat("en", { numeric: "auto" });
 
 	const showLicenseWarning = user.license.validUntil
-		? user.license.validUntil < new Date(Date.now() + 7 * DAYS)
+		? user.license.validUntil < new Date(Date.now() + 3 * DAYS)
 		: user.license.evalDaysLeft
-		? user.license.evalDaysLeft <= 7
+		? user.license.evalDaysLeft <= 3
 		: false;
 
 	const evalDaysLeft = user.license.evalDaysLeft;
@@ -49,32 +49,25 @@ export const LicenseWarning = () => {
 								Eval period expiration
 							</CredenzaTitle>
 							<CredenzaDescription>
-								TLDR: Upgrade your account to continue syncing
-								your data
+								Upgrade your account to continue syncing
 							</CredenzaDescription>
 						</CredenzaHeader>
 						<div className="space-y-2 px-4 md:px-0 pb-2">
 							<p>
-								Once you run out of eval days, your data will no
-								longer be able to sync with the cloud and will
-								only be available on this device.
+								Once your eval days expire, your data will no
+								longer sync with the cloud and will only be
+								available on this device.
 							</p>
 							<p>
-								If you would like to continue syncing, you can
-								upgrade your account in the settings.
+								To continue syncing, upgrade your account in the
+								settings.
 							</p>
 							<p>
-								<b>Note:</b> If, after your eval period, you
-								would like to use the app without upgrading,
-								please continue using it on the same device. If
-								you switch devices and login, your data will not
-								be available.
-							</p>
-							<p>
-								If you want to switch to another device, you can
-								export your data from the settings on your
-								current device. Then, import on your new device
-								and login with your account.
+								<b>Note:</b> After the eval period, if you don’t
+								upgrade, the app will only work on this device.
+								Switching devices will result in data loss
+								unless you export and import your data via
+								settings.
 							</p>
 						</div>
 					</CredenzaContent>
