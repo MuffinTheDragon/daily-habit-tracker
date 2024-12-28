@@ -49,7 +49,7 @@ export default function Home() {
 
 			const modifiedHabits = allHabits.map((habit) => ({
 				...habit,
-				// lastChecked: getCurrentDate(),
+				lastChecked: getCurrentDate(),
 			}));
 
 			await db.habits.bulkPut(modifiedHabits);
@@ -69,7 +69,7 @@ export default function Home() {
 		<>
 			<Login />
 			<main className="flex flex-col items-center justify-between p-4 md:py-24 space-y-8">
-				<div className="grid gap-4">
+				<div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
 					<div className="flex justify-between items-center col-span-1 lg:col-span-2 gap-4">
 						<div className="space-y-4">
 							<h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
@@ -147,14 +147,24 @@ export default function Home() {
 							</AlertDescription>
 						</Alert>
 					)}
-					{habits.map((habit) => (
-						<HabitCard
-							key={habit.id}
-							habit={habit}
-							showMap={showMap}
-							paused={user[0]?.pauseStreaks || habit.archived}
-						/>
-					))}
+					{habits.map((habit, i) => {
+						const spanClass =
+							i === habits.length - 1 && habits.length % 2
+								? "lg:col-span-2"
+								: "";
+						return (
+							<div key={habit.id} className={spanClass}>
+								<HabitCard
+									key={habit.id}
+									habit={habit}
+									showMap={showMap}
+									paused={
+										user[0]?.pauseStreaks || habit.archived
+									}
+								/>
+							</div>
+						);
+					})}
 				</div>
 			</main>
 		</>
