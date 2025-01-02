@@ -83,22 +83,17 @@ export function getCurrentDate() {
 }
 
 export function getLastActiveDate(graph: GraphType[], created: Date) {
-	let lastCheckedDay;
-	let lastCheckedYear;
+	let lastCheckedDate;
 	for (let i = graph.length - 1; i >= 0; i--) {
 		const daysArray = graph[i].daysChecked;
 
 		if (daysArray.length > 0) {
-			lastCheckedDay = daysArray[daysArray.length - 1];
-			lastCheckedYear = graph[i].year;
+			lastCheckedDate = daysArray[daysArray.length - 1];
 			break;
 		}
 	}
 
-	if (!lastCheckedDay || !lastCheckedYear) return created;
+	if (!lastCheckedDate) return created;
 
-	const start = startOfYear(new Date(lastCheckedYear, 0, 1));
-	const fullDate = addDays(start, lastCheckedDay - 1);
-
-	return fullDate;
+	return lastCheckedDate;
 }

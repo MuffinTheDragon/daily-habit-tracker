@@ -3,11 +3,14 @@
 import { GraphType } from "@/data/HabitType";
 import { daysInYear } from "@/lib/utils";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
+import { getDayOfYear } from "date-fns";
 
 export const Graph = ({ graph }: { graph: GraphType[] }) => {
 	const [index, setIndex] = useState(graph.length - 1);
+
+	useEffect(() => setIndex(graph.length - 1), [graph]);
 
 	const isBackDisabled = index - 1 < 0;
 
@@ -46,8 +49,15 @@ const GetGraph = ({ graph }: { graph: GraphType }) => {
 
 	const arr = Array(numberOfDays).fill(0);
 
-	graph.daysChecked.forEach((day) => (arr[day - 1] = 1));
-	graph.manualDaysChecked.forEach((day) => (arr[day - 1] = 1));
+	graph.daysChecked.forEach((date) => {
+		const dayNumber = getDayOfYear(date);
+		arr[dayNumber - 1] = 1;
+	});
+
+	graph.manualDaysChecked.forEach((date) => {
+		const dayNumber = getDayOfYear(date);
+		arr[dayNumber - 1] = 1;
+	});
 
 	return (
 		<div className="graph mt-4">

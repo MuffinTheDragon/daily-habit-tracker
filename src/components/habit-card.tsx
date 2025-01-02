@@ -129,19 +129,19 @@ export const HabitCard = ({
 		const graph = [...model.graph];
 
 		const currentYear = new Date().getFullYear();
-		const dayOfYear = getDayOfYear();
+		const currentDate = getCurrentDate();
 
 		// create new graph since current year doesn't exist
 		if (graph.at(-1)?.year != currentYear) {
 			graph.push({
 				year: currentYear,
-				daysChecked: [dayOfYear],
+				daysChecked: [currentDate],
 				manualDaysChecked: [],
 			});
 		} else {
 			// checking
 			if (checked) {
-				graph.at(-1)!.daysChecked.push(dayOfYear);
+				graph.at(-1)!.daysChecked.push(currentDate);
 			}
 
 			// unchecking
@@ -227,7 +227,7 @@ export const HabitCard = ({
 			<CardFooter>
 				<div className="flex flex-col space-y-1 text-xs text-muted-foreground">
 					<p>Created: {model.created.toDateString()}</p>
-					{/* <p>Last check: {model.lastChecked.toDateString()}</p> */}
+					<p>Last update: {model.lastChecked.toDateString()}</p>
 				</div>
 			</CardFooter>
 		</Card>

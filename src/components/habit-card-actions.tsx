@@ -124,13 +124,12 @@ const FillPreviousDays = ({
 	const addDay = async () => {
 		if (!date) return;
 
-		const dayNumber = getDayOfYear(date);
-
 		const graph = [...model.graph];
 
-		if (graph.at(-1)!.manualDaysChecked.includes(dayNumber)) return;
+		if (model.graph.at(-1)!.manualDaysChecked.some((d) => +d === +date))
+			return;
 
-		graph.at(-1)!.manualDaysChecked.push(dayNumber);
+		graph.at(-1)!.manualDaysChecked.push(date);
 
 		setModel({ ...model, graph, checks: model.checks + 1 });
 
@@ -142,9 +141,12 @@ const FillPreviousDays = ({
 			return true;
 		}
 
-		const dayNumber = getDayOfYear(day);
+		if (model.graph.at(-1)!.daysChecked.some((d) => +d === +day))
+			return true;
 
-		if (model.graph.at(-1)!.daysChecked.includes(dayNumber)) return true;
+		if (model.graph.at(-1)!.manualDaysChecked.some((d) => +d === +day))
+			return true;
+
 		return day >= addDays(new Date(), -1);
 	};
 
