@@ -1,6 +1,7 @@
 export type GraphType = {
 	year: number;
 	daysChecked: number[];
+	manualDaysChecked: number[];
 };
 
 export type HabitType = {

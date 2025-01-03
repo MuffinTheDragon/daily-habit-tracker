@@ -60,7 +60,7 @@ export const AddHabit = ({ paused }: { paused: boolean }) => {
 			archived: false,
 			archivedDate: null,
 			streakFreezes: 3,
-			graph: [{ year, daysChecked: [] }],
+			graph: [{ year, daysChecked: [], manualDaysChecked: [] }],
 		};
 
 		await db.habits.add(habit);

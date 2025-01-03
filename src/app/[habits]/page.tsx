@@ -34,6 +34,7 @@ export default function Home() {
 			if (user[0]) {
 				await db.user.where({ id: user[0].id }).modify((i) => {
 					i.pauseStreaks = value;
+					i.pauseEndDate = !value ? getCurrentDate() : undefined;
 				});
 			} else {
 				await db.user.add({
@@ -42,18 +43,6 @@ export default function Home() {
 				});
 			}
 		});
-
-		// if unpausing, reset last checked for all habits
-		if (!value) {
-			const allHabits = await db.habits.toArray();
-
-			const modifiedHabits = allHabits.map((habit) => ({
-				...habit,
-				lastChecked: getCurrentDate(),
-			}));
-
-			await db.habits.bulkPut(modifiedHabits);
-		}
 	};
 
 	const logout = async () => {
@@ -157,6 +146,7 @@ export default function Home() {
 								<HabitCard
 									key={habit.id}
 									habit={habit}
+									user={user[0]}
 									showMap={showMap}
 									paused={
 										user[0]?.pauseStreaks || habit.archived

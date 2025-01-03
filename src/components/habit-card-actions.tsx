@@ -128,9 +128,9 @@ const FillPreviousDays = ({
 
 		const graph = [...model.graph];
 
-		if (graph.at(-1)!.daysChecked.includes(dayNumber)) return;
+		if (graph.at(-1)!.manualDaysChecked.includes(dayNumber)) return;
 
-		graph.at(-1)!.daysChecked.push(dayNumber);
+		graph.at(-1)!.manualDaysChecked.push(dayNumber);
 
 		setModel({ ...model, graph, checks: model.checks + 1 });
 

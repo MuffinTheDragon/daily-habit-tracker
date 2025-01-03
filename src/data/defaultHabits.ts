@@ -16,7 +16,7 @@ export const defaultHabits: HabitType[] = [
 		archived: false,
 		archivedDate: null,
 		streakFreezes: 3,
-		graph: [{ year, daysChecked: [] }],
+		graph: [{ year, daysChecked: [], manualDaysChecked: [] }],
 	},
 	{
 		id: "2",
@@ -32,8 +32,8 @@ export const defaultHabits: HabitType[] = [
 		archivedDate: null,
 		streakFreezes: 3,
 		graph: [
-			{ year: 2017, daysChecked: [39, 40, 55] },
-			{ year, daysChecked: [1, 18, 37] },
+			{ year: 2017, daysChecked: [39, 40, 55], manualDaysChecked: [] },
+			{ year, daysChecked: [1, 18, 37], manualDaysChecked: [] },
 		],
 	},
 ];

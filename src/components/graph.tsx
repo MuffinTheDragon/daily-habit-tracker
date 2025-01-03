@@ -47,6 +47,8 @@ const GetGraph = ({ graph }: { graph: GraphType }) => {
 	const arr = Array(numberOfDays).fill(0);
 
 	graph.daysChecked.forEach((day) => (arr[day - 1] = 1));
+	graph.manualDaysChecked.forEach((day) => (arr[day - 1] = 1));
+
 	return (
 		<div className="graph mt-4">
 			<ul className="months">

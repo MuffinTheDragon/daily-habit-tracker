@@ -1,5 +1,12 @@
+import { GraphType, HabitType } from "@/data/HabitType";
 import { type ClassValue, clsx } from "clsx";
-import { differenceInHours, format, parse } from "date-fns";
+import {
+	addDays,
+	differenceInHours,
+	format,
+	parse,
+	startOfYear,
+} from "date-fns";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
@@ -73,4 +80,25 @@ export function getCurrentDate() {
 	newDate.setMilliseconds(0);
 
 	return newDate;
+}
+
+export function getLastActiveDate(graph: GraphType[], created: Date) {
+	let lastCheckedDay;
+	let lastCheckedYear;
+	for (let i = graph.length - 1; i >= 0; i--) {
+		const daysArray = graph[i].daysChecked;
+
+		if (daysArray.length > 0) {
+			lastCheckedDay = daysArray[daysArray.length - 1];
+			lastCheckedYear = graph[i].year;
+			break;
+		}
+	}
+
+	if (!lastCheckedDay || !lastCheckedYear) return created;
+
+	const start = startOfYear(new Date(lastCheckedYear, 0, 1));
+	const fullDate = addDays(start, lastCheckedDay - 1);
+
+	return fullDate;
 }

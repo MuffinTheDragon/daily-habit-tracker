@@ -15,9 +15,10 @@ import {
 	getCurrentDate,
 	getDateByDayNumber,
 	getDayOfYear,
+	getLastActiveDate,
 } from "@/lib/utils";
 import { CheckedState } from "@radix-ui/react-checkbox";
-import { isEqual } from "date-fns";
+import { isEqual, max } from "date-fns";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { Graph } from "./graph";
@@ -25,15 +26,18 @@ import { HabitCardDescription } from "./habit-card-description";
 import { HabitCardStats } from "./habit-card-stats";
 import { HabitCardTitle } from "./habit-card-title";
 import { Badge } from "./ui/badge";
+import { UserType } from "@/data/userType";
 
 export const BaseNumberOfFreezes = 3;
 
 export const HabitCard = ({
 	habit,
+	user,
 	showMap,
 	paused,
 }: {
 	habit: HabitType;
+	user: UserType;
 	showMap: boolean;
 	paused: boolean;
 }) => {
@@ -52,13 +56,18 @@ export const HabitCard = ({
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [habit]);
 
-	// compute streak
+	// compute streak freezes
 	useEffect(() => {
+		console.log("riunm");
 		if (paused) return;
 
 		if (model.streak < 1) return;
 
-		const diff = diffInDaysFromNow(model.lastChecked);
+		const lastActiveDate = user?.pauseEndDate
+			? max([user.pauseEndDate, model.lastChecked])
+			: model.lastChecked;
+
+		const diff = diffInDaysFromNow(lastActiveDate);
 
 		if (diff > 1) {
 			// don't consider today in the calculation => we do -1
@@ -124,7 +133,11 @@ export const HabitCard = ({
 
 		// create new graph since current year doesn't exist
 		if (graph.at(-1)?.year != currentYear) {
-			graph.push({ year: currentYear, daysChecked: [dayOfYear] });
+			graph.push({
+				year: currentYear,
+				daysChecked: [dayOfYear],
+				manualDaysChecked: [],
+			});
 		} else {
 			// checking
 			if (checked) {
@@ -137,13 +150,11 @@ export const HabitCard = ({
 			}
 		}
 
-		// compute lastChecked date
-		// its either the day just pushed or when the habit was created
-		const lastCheckedDay = graph.at(-1)?.daysChecked.at(-1);
-
-		const lastCheckedDate = lastCheckedDay
-			? getDateByDayNumber(lastCheckedDay)
-			: model.created;
+		// compute last active date
+		const lastActiveDate = getLastActiveDate(graph, model.created);
+		const lastCheckedDate = user?.pauseEndDate
+			? max([lastActiveDate, user.pauseEndDate])
+			: lastActiveDate;
 
 		const newStreak = checked ? model.streak + 1 : model.streak - 1;
 
@@ -216,7 +227,7 @@ export const HabitCard = ({
 			<CardFooter>
 				<div className="flex flex-col space-y-1 text-xs text-muted-foreground">
 					<p>Created: {model.created.toDateString()}</p>
-					{/* <p>Last checked: {model.lastChecked.toDateString()}</p> */}
+					{/* <p>Last check: {model.lastChecked.toDateString()}</p> */}
 				</div>
 			</CardFooter>
 		</Card>
