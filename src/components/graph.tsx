@@ -9,13 +9,14 @@ import { useLiveQuery } from "dexie-react-hooks";
 import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 
-export const Graph = ({
-	graph,
-	habit,
-}: {
+type Props = {
 	graph: GraphType[];
 	habit: HabitType;
-}) => {
+};
+
+export const Graph = ({ ...props }: Props) => {
+	const { graph, habit } = props;
+
 	const [index, setIndex] = useState(graph.length - 1);
 
 	useEffect(() => setIndex(graph.length - 1), [graph]);
@@ -69,7 +70,7 @@ const GetGraph = ({ graph, habit }: { graph: GraphType; habit: HabitType }) => {
 		const endDay = getDayOfYear(time.end);
 
 		for (let i = startDay; i <= endDay; i++) {
-			const pausedDate = getDateByDayNumber(i);
+			const pausedDate = getDateByDayNumber(graphYear, i);
 
 			const pausedAfterCreated =
 				isAfter(pausedDate, startOfDay(habit.created)) ||

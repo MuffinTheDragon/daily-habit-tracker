@@ -8,25 +8,12 @@ import {
 	ArrowsPointingInIcon,
 	ArrowsPointingOutIcon,
 } from "@heroicons/react/24/outline";
-import { v4 as uuidv4 } from "uuid";
 
-export const ToggleView = ({ user }: { user?: UserType }) => {
-	const currentYear = new Date().getFullYear();
-
+export const ToggleView = ({ user }: { user: UserType }) => {
 	const onToggleChange = async (collapsed: boolean) => {
-		if (user) {
-			db.user.where({ id: user.id }).modify((i) => {
-				i.collapsed = collapsed;
-			});
-		} else {
-			await db.user.add({
-				id: uuidv4(),
-				created: new Date(),
-				pauseStreaks: false,
-				pauses: [{ year: currentYear, time: [] }],
-				collapsed,
-			});
-		}
+		await db.user.where({ id: user.id }).modify((i) => {
+			i.collapsed = collapsed;
+		});
 	};
 
 	return (

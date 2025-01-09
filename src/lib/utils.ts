@@ -1,13 +1,6 @@
 import { GraphType, HabitType } from "@/data/HabitType";
 import { type ClassValue, clsx } from "clsx";
-import {
-	differenceInHours,
-	format,
-	isEqual,
-	max,
-	parse,
-	startOfDay,
-} from "date-fns";
+import { differenceInHours, isEqual, max, parse, startOfDay } from "date-fns";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
@@ -26,10 +19,11 @@ export function daysInYear(year: number) {
 /**
  * Given a day number (e.g. 250th day of the year), return its full date (MMMM dd YYYY)
  * @param dayNumber
+ * @param year corresponding year
  * @returns full date
  */
-export function getDateByDayNumber(dayNumber: number) {
-	const parsedDate = parse(dayNumber.toString(), "DDD", new Date());
+export function getDateByDayNumber(year: number, dayNumber: number) {
+	const parsedDate = parse(dayNumber.toString(), "DDD", new Date(year, 0, 1));
 	return parsedDate;
 }
 

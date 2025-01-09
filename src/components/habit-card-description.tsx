@@ -1,20 +1,19 @@
 import { CardTitle } from "@/components/ui/card";
-
 import { HabitType } from "@/data/HabitType";
 import { CheckCircleIcon } from "@heroicons/react/24/solid";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import AutoGrowTextArea from "./auto-grow-textarea";
 import { Button } from "./ui/button";
 
 type Props = {
-	editingDescription: boolean;
-	setEditingDescription: Dispatch<SetStateAction<boolean>>;
 	model: HabitType;
 	setModel: Dispatch<SetStateAction<HabitType>>;
 };
-export const HabitCardDescription = ({ props }: { props: Props }) => {
-	const { editingDescription, model, setModel, setEditingDescription } =
-		props;
+export const HabitCardDescription = ({ ...props }: Props) => {
+	const { model, setModel } = props;
+
+	const [editingDescription, setEditingDescription] = useState(false);
+
 	return (
 		<>
 			{editingDescription ? (

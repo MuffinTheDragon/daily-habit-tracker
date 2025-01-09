@@ -2,39 +2,82 @@ import { CardTitle } from "@/components/ui/card";
 import { HabitType } from "@/data/HabitType";
 import {
 	cn,
+	getCurrentDate,
 	getLastCheckedDateNoDefault,
+	getLongestStreak,
 	isHabitDoneForToday,
 } from "@/lib/utils";
 import { CheckCircleIcon } from "@heroicons/react/24/solid";
 import { CheckedState } from "@radix-ui/react-checkbox";
 import confetti from "canvas-confetti";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
+import { BaseNumberOfFreezes } from "./habit-card";
 import { HabbitCardActions } from "./habit-card-actions";
 import { Button } from "./ui/button";
 import { Checkbox } from "./ui/checkbox";
 import { Input } from "./ui/input";
 
 type Props = {
-	editingTitle: boolean;
-	setEditingTitle: Dispatch<SetStateAction<boolean>>;
 	model: HabitType;
 	setModel: Dispatch<SetStateAction<HabitType>>;
-	markHabit: (v: CheckedState) => void;
+	initialFreezes: number;
 	paused: boolean;
 };
 
-export const HabitCardTitle = ({ props }: { props: Props }) => {
-	const {
-		editingTitle,
-		model,
-		setModel,
-		setEditingTitle,
-		markHabit,
-		paused,
-	} = props;
+export const HabitCardHeader = ({ ...props }: Props) => {
+	const { model, setModel, initialFreezes, paused } = props;
+
+	const [editingTitle, setEditingTitle] = useState(false);
 
 	const lastCheckedDate = getLastCheckedDateNoDefault(model.graph);
 	const isDoneForToday = isHabitDoneForToday(lastCheckedDate);
+
+	const markHabit = (v: CheckedState) => {
+		if (paused) return;
+
+		const checked = v ? true : false;
+
+		const graph = [...model.graph];
+
+		const currentYear = new Date().getFullYear();
+		const currentDate = getCurrentDate();
+
+		// create new graph since current year doesn't exist
+		if (graph.at(-1)?.year != currentYear) {
+			graph.push({
+				year: currentYear,
+				daysChecked: [currentDate],
+				manualDaysChecked: [],
+			});
+		} else {
+			// checking
+			if (checked) {
+				graph.at(-1)!.daysChecked.push(currentDate);
+			}
+
+			// unchecking
+			else {
+				graph.at(-1)!.daysChecked.pop();
+			}
+		}
+
+		const newStreak = checked ? model.streak + 1 : model.streak - 1;
+
+		const { longestStreak, longestStreakDateSet } = getLongestStreak(
+			model,
+			newStreak
+		);
+
+		setModel({
+			...model,
+			graph,
+			streak: newStreak,
+			longestStreak,
+			longestStreakDateSet,
+			streakFreezes: checked ? BaseNumberOfFreezes : initialFreezes,
+			checks: checked ? model.checks + 1 : model.checks - 1,
+		});
+	};
 
 	const onCheckChange = (value: CheckedState) => {
 		if (value) {

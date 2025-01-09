@@ -42,15 +42,15 @@ enum Dialogs {
 	"archive",
 }
 
-export const HabbitCardActions = ({
-	model,
-	setModel,
-	paused,
-}: {
+type Props = {
 	model: HabitType;
 	setModel: Dispatch<SetStateAction<HabitType>>;
 	paused: boolean;
-}) => {
+};
+
+export const HabbitCardActions = ({ ...props }: Props) => {
+	const { model, setModel, paused } = { ...props };
+
 	const [dialog, setDialog] = useState(Dialogs.addCheck);
 
 	return (
@@ -155,7 +155,11 @@ const FillPreviousDays = ({
 			<CredenzaHeader>
 				<CredenzaTitle>Add missed days</CredenzaTitle>
 				<CredenzaDescription>
-					They will not change your streak counter.
+					<p>
+						<b>Note:</b> This is just so you can check previous days
+						for consistency. They will not change your streaks or
+						freezes.
+					</p>
 				</CredenzaDescription>
 			</CredenzaHeader>
 			<Popover>
@@ -199,8 +203,8 @@ const FillPreviousDays = ({
 };
 
 const DeleteHabit = ({ model }: { model: HabitType }) => {
-	const deleteHabit = () => {
-		db.habits.delete(model.id);
+	const deleteHabit = async () => {
+		await db.habits.delete(model.id);
 	};
 	return (
 		<CredenzaContent>
@@ -223,8 +227,8 @@ const DeleteHabit = ({ model }: { model: HabitType }) => {
 };
 
 const Archive = ({ model }: { model: HabitType }) => {
-	const archiveHabit = () => {
-		db.habits.where({ id: model.id }).modify((i) => {
+	const archiveHabit = async () => {
+		await db.habits.where({ id: model.id }).modify((i) => {
 			i.archived = true;
 			i.archivedDate = getCurrentDate();
 		});

@@ -13,16 +13,17 @@ import {
 } from "@/components/ui/accordion";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
+import { HabitType } from "@/data/HabitType";
 import { db } from "@/db";
 import { getLastCheckedDateNoDefault, isHabitDoneForToday } from "@/lib/utils";
-import { Progress } from "@/components/ui/progress";
 import { useLiveQuery } from "dexie-react-hooks";
 import { useEffect, useState } from "react";
-import { HabitType } from "@/data/HabitType";
 
 export default function Home() {
 	const habits = useLiveQuery(() =>
+		// sorted in descending order by created date
 		db.habits.orderBy("created").reverse().toArray()
 	);
 
@@ -37,10 +38,9 @@ export default function Home() {
 
 	useEffect(() => {
 		if (habits) {
-			const sortedActiveHabits = habits
-				.filter((i) => !i.archived)
-				.sort((a, b) => b.created.getTime() - a.created.getTime());
+			const filteredActiveHabits = habits.filter((i) => !i.archived);
 
+			// sorted in descending order by archived date
 			const sortedArchivedHabits = habits
 				.filter((i) => i.archived)
 				.sort(
@@ -48,7 +48,7 @@ export default function Home() {
 						b.archivedDate!.getTime() - a.archivedDate!.getTime()
 				);
 
-			setActiveHabits(sortedActiveHabits);
+			setActiveHabits(filteredActiveHabits);
 			setArchivedHabits(sortedArchivedHabits);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -72,16 +72,14 @@ export default function Home() {
 		}
 	}, [habits]);
 
-	if (!habits) return null;
+	if (!habits || !user) return null;
 
 	return (
 		<>
 			<Login />
 			<Accordion type="single" collapsible>
 				<AccordionItem value="item-1" className="px-4">
-					{/* <div className="flex-col px-4"> */}
 					<AccordionTrigger className="flex justify-center items-center space-x-2 hover:no-underline">
-						{/* <InformationCircleIcon className="w-4 h-4" /> */}
 						<p className="pe-2">This project is open source!</p>
 					</AccordionTrigger>
 					<AccordionContent className="text-center">
@@ -93,7 +91,6 @@ export default function Home() {
 							in settings
 						</p>
 					</AccordionContent>
-					{/* </div> */}
 				</AccordionItem>
 			</Accordion>
 
@@ -127,7 +124,7 @@ export default function Home() {
 						<ToggleView user={user} />
 					</div>
 
-					{user?.pauseStreaks && (
+					{user.pauseStreaks && (
 						<Alert className="w-fut col-span-1 md:col-span-2">
 							<AlertDescription>
 								The app is currently paused. Change in settings
@@ -151,9 +148,6 @@ export default function Home() {
 									habit={habit}
 									user={user}
 									showMap={showMap}
-									paused={
-										user?.pauseStreaks || habit.archived
-									}
 								/>
 							</div>
 						);

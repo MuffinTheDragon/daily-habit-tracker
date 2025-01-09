@@ -28,7 +28,9 @@ export class Db extends Dexie {
 					});
 			});
 		this.on("populate", () => {
-			this.on("ready", () => {});
+			this.on("ready", () => {
+				return populate(this);
+			});
 		});
 
 		this.cloud.configure({
@@ -41,3 +43,16 @@ export class Db extends Dexie {
 }
 
 export const db = new Db();
+
+async function populate(db: Db) {
+	const userCount = await db.user.count();
+
+	if (userCount == 0) {
+		await db.user.add({
+			id: uuidv4(),
+			created: new Date(), // preserve time when user was created; used to grab first user
+			pauseStreaks: false,
+			pauses: [],
+		});
+	}
+}

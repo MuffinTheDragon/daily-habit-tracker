@@ -16,9 +16,9 @@ import { getCurrentDate } from "@/lib/utils";
 import { Cog6ToothIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { toast } from "sonner";
-import { v4 as uuidv4 } from "uuid";
+import { BaseNumberOfFreezes } from "./habit-card";
 
-export const Settings = ({ user }: { user?: UserType }) => {
+export const Settings = ({ user }: { user: UserType }) => {
 	const userId = db.cloud.currentUserId;
 
 	const currentYear = new Date().getFullYear();
@@ -26,46 +26,50 @@ export const Settings = ({ user }: { user?: UserType }) => {
 
 	const updatePause = async (value: boolean) => {
 		db.transaction("rw", [db.habits, db.user], async () => {
-			if (user) {
-				// start pause
-				if (value) {
-					const pauses = [...user.pauses];
+			if (value) await startPause(value);
+			else await endPause(value);
+		});
+	};
 
-					if (pauses.at(-1)?.year !== currentYear) {
-						pauses.push({ year: currentYear, time: [] });
-					}
+	const startPause = async (value: boolean) => {
+		if (!user) return;
 
-					await db.user.where({ id: user.id }).modify((i) => {
-						i.pauseStreaks = value;
-						i.pauseStartDate = currentDate;
-						i.pauses = pauses;
-					});
-				}
+		const pauses = [...user.pauses];
 
-				// end pause
-				else {
-					const pauses = [...user.pauses];
+		// pauses is sorted by year
+		if (pauses.at(-1)?.year !== currentYear) {
+			pauses.push({ year: currentYear, time: [] });
+		}
 
-					pauses.at(-1)?.time.push({
-						start: user.pauseStartDate!,
-						end: currentDate,
-					});
+		await db.user.where({ id: user.id }).modify((i) => {
+			i.pauseStreaks = value;
+			i.pauseStartDate = currentDate;
+			i.pauses = pauses;
+		});
+	};
 
-					await db.user.where({ id: user.id }).modify((i) => {
-						i.pauseStreaks = value;
-						i.pauseEndDate = currentDate;
-						i.pauses = pauses;
-					});
-				}
-			} else {
-				await db.user.add({
-					id: uuidv4(),
-					created: new Date(),
-					pauseStreaks: value,
-					pauseStartDate: currentDate,
-					pauses: [{ year: currentYear, time: [] }],
-				});
-			}
+	const endPause = async (value: boolean) => {
+		if (!user) return;
+
+		const pauses = [...user.pauses];
+
+		// pauses is sorted by year
+		pauses.at(-1)?.time.push({
+			start: user.pauseStartDate!,
+			end: currentDate,
+		});
+
+		await db.user.where({ id: user.id }).modify((i) => {
+			i.pauseStreaks = value;
+			i.pauseEndDate = currentDate;
+			i.pauses = pauses;
+		});
+
+		// after a pause ends, reset streak freezes
+		// this avoids the issue where before pause you have < 3 freezes
+		// but after pause its treated as if you have 3
+		await db.habits.toCollection().modify((i) => {
+			i.streakFreezes = BaseNumberOfFreezes;
 		});
 	};
 
