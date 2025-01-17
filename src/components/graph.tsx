@@ -91,7 +91,7 @@ const GetGraph = ({ graph, habit }: { graph: GraphType; habit: HabitType }) => {
 
 	graph.manualDaysChecked.forEach((date) => {
 		const dayNumber = getDayOfYear(date);
-		arr[dayNumber - 1] = 2;
+		arr[dayNumber - 1] = 3;
 	});
 
 	return (
@@ -136,12 +136,21 @@ const GetGraph = ({ graph, habit }: { graph: GraphType; habit: HabitType }) => {
 					/>
 					Missed
 				</div>
-				<div className="flex items-center">
+				<div className="flex items-center ps-[2.6rem]">
 					<div
 						data-level={1}
 						className="w-4 h-4 rounded-[5px] me-1"
 					/>
 					Paused
+				</div>
+			</div>
+			<div className="legend text-xs flex space-x-4 mb-2">
+				<div className="flex items-center">
+					<div
+						data-level={3}
+						className="w-4 h-4 rounded-[5px] me-1"
+					/>
+					Retro checked
 				</div>
 				<div className="flex items-center">
 					<div

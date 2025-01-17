@@ -84,6 +84,7 @@ export const HabitCard = ({
 			user?.pauseEndDate
 		);
 
+		console.log(lastUpdated);
 		const diff = diffInDaysFromNow(lastUpdated);
 
 		if (diff <= 1) return;
@@ -126,9 +127,8 @@ export const HabitCard = ({
 			});
 			setInitialFreezes(newStreakFreezes);
 		}
-
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
+	}, [model.streak]);
 
 	const markHabit = (v: CheckedState) => {
 		if (paused) return;

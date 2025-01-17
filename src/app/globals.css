@@ -155,3 +155,7 @@ input, textarea {
   .squares li[data-level="2"], .legend div[data-level="2"] {
     background-color: #196127;
   }
+
+  .squares li[data-level="3"], .legend div[data-level="3"] {
+    background-color: #1da138;
+  }
