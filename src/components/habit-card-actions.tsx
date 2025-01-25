@@ -137,7 +137,7 @@ const FillPreviousDays = ({
 	};
 
 	const isDayDisabled = (day: Date) => {
-		if (day < addDays(model.created, -1)) {
+		if (day <= addDays(model.created.setHours(0, 0, 0, 0), -1)) {
 			return true;
 		}
 

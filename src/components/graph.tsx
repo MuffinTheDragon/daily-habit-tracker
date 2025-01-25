@@ -5,7 +5,7 @@ import { daysInYear, getDateByDayNumber } from "@/lib/utils";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
-import { getDayOfYear, isAfter, isBefore, isFuture } from "date-fns";
+import { getDayOfYear, isAfter, isBefore, isEqual, isFuture } from "date-fns";
 import { useLiveQuery } from "dexie-react-hooks";
 import { db } from "@/db";
 
@@ -68,13 +68,16 @@ const GetGraph = ({ graph, habit }: { graph: GraphType; habit: HabitType }) => {
 		const startDay = getDayOfYear(time.start);
 		const endDay = getDayOfYear(time.end);
 
-		for (let i = startDay; i <= endDay; i++) {
+		for (let i = startDay; i < endDay; i++) {
 			const pausedDate = getDateByDayNumber(i);
 
-			const pausedAfterCreated = isAfter(pausedDate, habit.created);
+			const pausedAfterCreated =
+				isAfter(pausedDate, habit.created.setHours(0, 0, 0, 0)) ||
+				isEqual(pausedDate, habit.created.setHours(0, 0, 0, 0));
 
 			const pausedBeforeArchived = habit.archivedDate
-				? isBefore(pausedDate, habit.archivedDate)
+				? isBefore(pausedDate, habit.archivedDate) ||
+				  isEqual(pausedDate, habit.archivedDate)
 				: true;
 
 			if (pausedAfterCreated && pausedBeforeArchived) arr[i - 1] = 1;

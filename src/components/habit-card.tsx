@@ -229,7 +229,7 @@ export const HabitCard = ({
 					{model.archivedDate && (
 						<p>Archived: {model.archivedDate.toDateString()}</p>
 					)}
-					{/* <p>Last update: {model.lastChecked.toDateString()}</p> */}
+					<p>Last update: {model.lastChecked.toDateString()}</p>
 				</div>
 			</CardFooter>
 		</Card>

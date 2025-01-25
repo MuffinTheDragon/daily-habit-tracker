@@ -93,7 +93,7 @@ export function getLastActiveDate(graph: GraphType[], created: Date) {
 		}
 	}
 
-	if (!lastCheckedDate) return created;
+	if (!lastCheckedDate) return new Date(created.setHours(0, 0, 0, 0));
 
 	return lastCheckedDate;
 }
