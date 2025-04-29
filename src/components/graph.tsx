@@ -136,11 +136,22 @@ const GetGraph = ({
 					<li>Sun</li>
 				</ul>
 				<ul className="squares">
-					{arr.map((day, ind) => {
-						const level = day.toString();
-						// const text = getMonthAndDayOfWeek(ind + 1);
-						return <li key={ind} data-level={level}></li>;
-					})}
+					{/* Add empty placeholders based on the weekday of Jan 1st */}
+					{(() => {
+						const jan1 = new Date(graph.year, 0, 1); // Jan 1st
+						const weekdayOffset = (jan1.getDay() + 6) % 7; // convert Sun=0 to Sun=6, Mon=0
+						const leadingBlanks = Array.from(
+							{ length: weekdayOffset },
+							(_, i) => (
+								<li key={`blank-${i}`} className="invisible" />
+							)
+						);
+						const filledSquares = arr.map((day, ind) => {
+							const level = day.toString();
+							return <li key={ind} data-level={level}></li>;
+						});
+						return [...leadingBlanks, ...filledSquares];
+					})()}
 				</ul>
 			</div>
 			<div className="legend text-xs flex space-x-4 mb-2">
