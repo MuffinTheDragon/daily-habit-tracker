@@ -241,7 +241,7 @@ export default function Home() {
 
 					<div className="mt-12 border rounded-xl bg-card p-6 shadow-md">
 						{activeCard === 0 && (
-							<div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+							<div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
 								<div>
 									<h3 className="text-2xl font-semibold mb-4">
 										Offline Use
@@ -304,7 +304,7 @@ export default function Home() {
 						)}
 
 						{activeCard === 1 && (
-							<div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+							<div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
 								<div>
 									<h3 className="text-2xl font-semibold mb-4">
 										Track Your Streaks
@@ -350,7 +350,7 @@ export default function Home() {
 						)}
 
 						{activeCard === 2 && (
-							<div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+							<div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
 								<div>
 									<h3 className="text-2xl font-semibold mb-4">
 										Pause Your Activity
@@ -408,7 +408,7 @@ export default function Home() {
 						)}
 
 						{activeCard === 3 && (
-							<div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+							<div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
 								<div>
 									<h3 className="text-2xl font-semibold mb-4">
 										Visualize Your Progress
