@@ -13,9 +13,17 @@ export const HabitCardDescription = ({ ...props }: Props) => {
 	const { model } = props;
 
 	const [editingDescription, setEditingDescription] = useState(false);
+	const [currentDescription, setCurrentDescription] = useState(
+		model.description
+	);
 
-	const updateDescription = async (val: string) => {
-		await db.habits.update(model.id, { description: val });
+	const updateDescription = async () => {
+		if (currentDescription !== model.description) {
+			await db.habits.update(model.id, {
+				description: currentDescription,
+			});
+		}
+		setEditingDescription(false);
 	};
 
 	return (
@@ -24,13 +32,13 @@ export const HabitCardDescription = ({ ...props }: Props) => {
 				<div className="flex items-center space-x-2">
 					<AutoGrowTextArea
 						autoFocus
-						value={model.description}
-						onChange={(v) => updateDescription(v.target.value)}
+						value={currentDescription}
+						onChange={(v) => setCurrentDescription(v.target.value)}
 					/>
 					<Button
 						variant="ghost"
 						size="icon"
-						onClick={() => setEditingDescription(false)}
+						onClick={updateDescription}
 					>
 						<CheckCircleIcon className="h-6 w-6 text-green-600" />
 					</Button>

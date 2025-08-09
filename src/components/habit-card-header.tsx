@@ -28,6 +28,7 @@ export const HabitCardHeader = ({ ...props }: Props) => {
 	const { model, initialFreezes, paused } = props;
 
 	const [editingTitle, setEditingTitle] = useState(false);
+	const [currentName, setCurrentName] = useState(model.name);
 
 	const isDoneForToday = isHabitDoneForToday(model);
 
@@ -93,8 +94,11 @@ export const HabitCardHeader = ({ ...props }: Props) => {
 		markHabit(value);
 	};
 
-	const updateName = async (val: string) => {
-		await db.habits.update(model.id, { name: val });
+	const updateName = async () => {
+		if (currentName !== model.name) {
+			await db.habits.update(model.id, { name: currentName });
+		}
+		setEditingTitle(false);
 	};
 
 	return (
@@ -103,14 +107,10 @@ export const HabitCardHeader = ({ ...props }: Props) => {
 				<div className="flex items-center space-x-2">
 					<Input
 						autoFocus
-						value={model.name}
-						onChange={(v) => updateName(v.target.value)}
+						value={currentName}
+						onChange={(e) => setCurrentName(e.target.value)}
 					/>
-					<Button
-						variant="ghost"
-						size="icon"
-						onClick={() => setEditingTitle(false)}
-					>
+					<Button variant="ghost" size="icon" onClick={updateName}>
 						<CheckCircleIcon className="h-6 w-6 text-green-600" />
 					</Button>
 				</div>
