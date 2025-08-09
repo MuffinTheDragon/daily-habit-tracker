@@ -233,7 +233,7 @@ const Archive = ({ model }: { model: HabitType }) => {
 					<p className="truncate">Archive {model.name}?</p>
 				</CredenzaTitle>
 				<CredenzaDescription>
-					You can archvie this habit if you no longer want to track
+					You can archive this habit if you no longer want to track
 					it. <b className="underline">This is permanent</b>
 				</CredenzaDescription>
 			</CredenzaHeader>
