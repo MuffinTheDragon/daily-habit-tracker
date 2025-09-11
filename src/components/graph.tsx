@@ -148,7 +148,19 @@ const GetGraph = ({
 						);
 						const filledSquares = arr.map((day, ind) => {
 							const level = day.toString();
-							return <li key={ind} data-level={level}></li>;
+
+							// Get actual date from day of year
+							const date = new Date(graph.year, 0);
+							date.setDate(ind + 1);
+							const dateString = date.toDateString(); // e.g., "Mon Jan 01 2024"
+
+							return (
+								<li
+									key={ind}
+									data-level={level}
+									title={dateString}
+								></li>
+							);
 						});
 						return [...leadingBlanks, ...filledSquares];
 					})()}
@@ -187,3 +199,4 @@ const GetGraph = ({
 		</div>
 	);
 };
+
