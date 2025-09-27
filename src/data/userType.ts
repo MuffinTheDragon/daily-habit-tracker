@@ -6,5 +6,6 @@ export type UserType = {
 	pauseStartDate?: Date;
 	pauses: [Date, Date][];
 	collapsed?: boolean;
+	showMap?: boolean;
 	warningDismissDate?: Date;
 };

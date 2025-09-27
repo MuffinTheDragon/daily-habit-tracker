@@ -4,6 +4,7 @@ import { AddHabit } from "@/components/add-habit";
 import { HabitCard } from "@/components/habit-card";
 import { LicenseWarning } from "@/components/license-warning";
 import { Login } from "@/components/login";
+import { OfflineStatus } from "@/components/offline-status";
 import { Settings } from "@/components/settings";
 import { ToggleView } from "@/components/toggle-view";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -17,7 +18,6 @@ import { useLiveQuery } from "dexie-react-hooks";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Section } from "./section";
-import { OfflineStatus } from "@/components/offline-status";
 
 export const Habits = () => {
 	const habits = useLiveQuery(() =>
@@ -28,7 +28,7 @@ export const Habits = () => {
 	// grab the first user created
 	const user = useLiveQuery(() => db.user.orderBy("created").first());
 
-	const [showMap, setShowMap] = useState(false);
+	const [showMap, setShowMap] = useState(user?.showMap ?? false);
 
 	const [dailyProgress, setDailyProgress] = useState(0);
 
@@ -37,6 +37,12 @@ export const Habits = () => {
 	const [archivedHabits, setArchivedHabits] = useState<HabitType[]>([]);
 
 	const params = useSearchParams();
+
+	useEffect(() => {
+		if (user?.showMap !== undefined) {
+			setShowMap(user.showMap);
+		}
+	}, [user]);
 
 	// re-sync db on payment interaction
 	useEffect(() => {
@@ -82,6 +88,12 @@ export const Habits = () => {
 
 	if (!habits || !user) return null;
 
+	const handleShowMap = (value: boolean) => {
+		setShowMap(value);
+		// @ts-ignore
+		db.user.update(user.id, { showMap: value });
+	};
+
 	return (
 		<>
 			<Login />
@@ -106,7 +118,7 @@ export const Habits = () => {
 					<div className="flex items-center space-x-2 col-span-1 md:col-span-2">
 						<Button
 							variant="outline"
-							onClick={() => setShowMap(!showMap)}
+							onClick={() => handleShowMap(!showMap)}
 							className="w-fit col-span-1 lg:col-span-2 h-8 rounded-md px-3 text-xs md:h-9 md:px-4 md:py-2 md:text-sm"
 						>
 							{showMap ? "Hide map" : "Show map"}

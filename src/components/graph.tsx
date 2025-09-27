@@ -154,11 +154,20 @@ const GetGraph = ({
 							date.setDate(ind + 1);
 							const dateString = date.toDateString(); // e.g., "Mon Jan 01 2024"
 
+							const isToday =
+								startOfDay(date).getTime() ===
+								startOfDay(new Date()).getTime();
+
 							return (
 								<li
 									key={ind}
 									data-level={level}
 									title={dateString}
+									className={
+										isToday
+											? "bg-blue-100 outline outline-2 outline-blue-500 rounded-sm relative"
+											: ""
+									}
 								></li>
 							);
 						});
@@ -199,4 +208,3 @@ const GetGraph = ({
 		</div>
 	);
 };
-
