@@ -79,7 +79,7 @@ export default function Trends() {
 										<ChevronLeftIcon className="h-4 w-4 mr-2" />
 									</Link>
 								</Button>
-								<div className="hidden sm:block">
+								<div>
 									<h1 className="text-xl font-semibold">
 										Analytics
 									</h1>
@@ -195,12 +195,14 @@ export default function Trends() {
 																	}
 																	% completion
 																</span>
-																<span>
-																	{
-																		habit.streak
-																	}
-																	d streak
-																</span>
+																{!habit.streaksDisabled && (
+																	<span>
+																		{
+																			habit.streak
+																		}
+																		d streak
+																	</span>
+																)}
 															</div>
 														</div>
 													);
@@ -299,14 +301,16 @@ export default function Trends() {
 																				%
 																				completion
 																			</span>
-																			<span>
-																				{
-																					habit.streak
-																				}
+																			{!habit.streaksDisabled && (
+																				<span>
+																					{
+																						habit.streak
+																					}
 
-																				d
-																				streak
-																			</span>
+																					d
+																					streak
+																				</span>
+																			)}
 																		</div>
 																	</div>
 																);
