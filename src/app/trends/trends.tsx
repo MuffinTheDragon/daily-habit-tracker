@@ -592,7 +592,7 @@ const ConsistencyTab = ({
 						Percentage of times you completed this habit on each day
 					</CardDescription>
 				</CardHeader>
-				<CardContent>
+				<CardContent className="ring-0 focus:ring-0 focus-visible:ring-0">
 					<AnalyticsChart
 						data={dayChartData}
 						type="bar"

@@ -1,6 +1,7 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useTheme } from "next-themes";
 import {
 	Bar,
 	BarChart,
@@ -79,6 +80,10 @@ export const AnalyticsChart = ({
 	valueLabel = "Value",
 	valueSuffix = "",
 }: AnalyticsChartProps) => {
+	const { theme } = useTheme();
+	const hoverColor =
+		theme === "dark" ? "rgba(255, 255, 255, 0.08)" : "rgba(0, 0, 0, 0.05)";
+
 	const renderChart = () => {
 		switch (type) {
 			case "line":
@@ -107,6 +112,7 @@ export const AnalyticsChart = ({
 								domain={[0, 100]}
 							/>
 							<Tooltip
+								cursor={{ fill: hoverColor }}
 								content={
 									<CustomTooltip
 										valueLabel={valueLabel}
@@ -156,6 +162,7 @@ export const AnalyticsChart = ({
 								domain={[0, 100]}
 							/>
 							<Tooltip
+								cursor={{ fill: hoverColor }}
 								content={
 									<CustomTooltip
 										valueLabel={valueLabel}
@@ -198,6 +205,7 @@ export const AnalyticsChart = ({
 								))}
 							</Pie>
 							<Tooltip
+								cursor={{ fill: hoverColor }}
 								content={
 									<CustomTooltip
 										valueLabel={valueLabel}
