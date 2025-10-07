@@ -8,13 +8,16 @@ import { OfflineStatus } from "@/components/offline-status";
 import { Settings } from "@/components/settings";
 import { ToggleView } from "@/components/toggle-view";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
 import { HabitType } from "@/data/HabitType";
 import { db } from "@/db";
 import { isHabitDoneForToday } from "@/lib/utils";
+import { ChartBarIcon } from "@heroicons/react/24/outline";
 import { useLiveQuery } from "dexie-react-hooks";
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Section } from "./section";
@@ -122,6 +125,28 @@ export const Habits = () => {
 							className="w-fit col-span-1 lg:col-span-2 h-8 rounded-md px-3 text-xs md:h-9 md:px-4 md:py-2 md:text-sm"
 						>
 							{showMap ? "Hide map" : "Show map"}
+						</Button>
+						<Button
+							variant="outline"
+							asChild
+							className="h-8 rounded-md px-3 md:h-9 md:px-4 md:py-2 md:text-sm"
+						>
+							<div className="relative">
+								<Link
+									href="/trends"
+									className="inline-flex items-center rounded-md text-sm font-medium relative"
+								>
+									Analytics
+								</Link>
+								<span className="absolute -top-3 -right-2">
+									<Badge
+										variant="outline"
+										className="bg-purple-500 text-white px-1 py-0.5 rounded-full leading-none"
+									>
+										Beta
+									</Badge>
+								</span>
+							</div>
 						</Button>
 						<AddHabit paused={user?.pauseStreaks ?? false} />
 						<Separator
