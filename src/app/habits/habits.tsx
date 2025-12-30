@@ -20,7 +20,8 @@ import {
 	DndContext,
 	DragEndEvent,
 	KeyboardSensor,
-	PointerSensor,
+	MouseSensor,
+	TouchSensor,
 	useSensor,
 	useSensors,
 } from "@dnd-kit/core";
@@ -71,11 +72,12 @@ export const Habits = () => {
 	const params = useSearchParams();
 
 	const sensors = useSensors(
-		useSensor(PointerSensor, {
+		useSensor(MouseSensor, {
 			activationConstraint: {
 				distance: 8,
 			},
 		}),
+		useSensor(TouchSensor),
 		useSensor(KeyboardSensor, {
 			coordinateGetter: sortableKeyboardCoordinates,
 		})
