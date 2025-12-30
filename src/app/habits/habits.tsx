@@ -77,7 +77,11 @@ export const Habits = () => {
 				distance: 8,
 			},
 		}),
-		useSensor(TouchSensor),
+		useSensor(TouchSensor, {
+			activationConstraint: {
+				distance: 8,
+			},
+		}),
 		useSensor(KeyboardSensor, {
 			coordinateGetter: sortableKeyboardCoordinates,
 		})
