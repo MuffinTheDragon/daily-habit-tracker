@@ -135,7 +135,7 @@ const GetGraph = ({
 					<li>Sat</li>
 					<li>Sun</li>
 				</ul>
-				<ul className="squares">
+				<ul className="squares px-1">
 					{/* Add empty placeholders based on the weekday of Jan 1st */}
 					{(() => {
 						const jan1 = new Date(graph.year, 0, 1); // Jan 1st
