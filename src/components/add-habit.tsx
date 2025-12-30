@@ -16,6 +16,7 @@ import {
 	CredenzaTrigger,
 } from "./responsive-dialog";
 import { Button } from "./ui/button";
+import { Checkbox } from "./ui/checkbox";
 import {
 	Form,
 	FormControl,
@@ -26,7 +27,6 @@ import {
 	FormMessage,
 } from "./ui/form";
 import { Input } from "./ui/input";
-import { Checkbox } from "./ui/checkbox";
 
 const formSchema = z.object({
 	name: z.string().min(1, { message: "Name is required" }),
@@ -51,6 +51,14 @@ export const AddHabit = ({ paused }: { paused: boolean }) => {
 
 		const now = getCurrentDate();
 		console.log(values);
+
+		// Get the maximum order value to place new habit at the end
+		const allHabits = await db.habits.toArray();
+		const maxOrder = allHabits.reduce((max, h) => {
+			const order = h.order ?? -1;
+			return order > max ? order : max;
+		}, -1);
+
 		const habit: HabitType = {
 			id: uuidv4(),
 			created: new Date(), // store time for sorting purposes
@@ -65,6 +73,7 @@ export const AddHabit = ({ paused }: { paused: boolean }) => {
 			archivedDate: null,
 			streakFreezes: 3,
 			graph: [{ year, daysChecked: [], manualDaysChecked: [] }],
+			order: maxOrder + 1,
 		};
 
 		await db.habits.add(habit);

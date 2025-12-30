@@ -18,4 +18,5 @@ export type HabitType = {
 	streakFreezes: number;
 	graph: GraphType[];
 	streaksDisabled?: boolean;
+	order?: number;
 };

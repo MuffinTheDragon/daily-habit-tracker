@@ -1,11 +1,11 @@
 "use client";
 
 import { AddHabit } from "@/components/add-habit";
-import { HabitCard } from "@/components/habit-card";
 import { LicenseWarning } from "@/components/license-warning";
 import { Login } from "@/components/login";
 import { OfflineStatus } from "@/components/offline-status";
 import { Settings } from "@/components/settings";
+import { SortableHabitItem } from "@/components/sortable-habit-item";
 import { ToggleView } from "@/components/toggle-view";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
@@ -15,6 +15,21 @@ import { Separator } from "@/components/ui/separator";
 import { HabitType } from "@/data/HabitType";
 import { db } from "@/db";
 import { isHabitDoneForToday } from "@/lib/utils";
+import {
+	closestCorners,
+	DndContext,
+	DragEndEvent,
+	KeyboardSensor,
+	PointerSensor,
+	useSensor,
+	useSensors,
+} from "@dnd-kit/core";
+import {
+	arrayMove,
+	rectSortingStrategy,
+	SortableContext,
+	sortableKeyboardCoordinates,
+} from "@dnd-kit/sortable";
 import { ChartBarIcon } from "@heroicons/react/24/outline";
 import { useLiveQuery } from "dexie-react-hooks";
 import Link from "next/link";
@@ -23,10 +38,24 @@ import { useEffect, useState } from "react";
 import { Section } from "./section";
 
 export const Habits = () => {
-	const habits = useLiveQuery(() =>
-		// sorted in descending order by created date
-		db.habits.orderBy("created").reverse().toArray()
-	);
+	const habits = useLiveQuery(async () => {
+		const allHabits = await db.habits.toArray();
+		// Create a copy of the array before sorting (Dexie returns read-only arrays)
+		// Sort by order if available, otherwise by created date (for backward compatibility)
+		return [...allHabits].sort((a, b) => {
+			const orderA = a.order ?? Infinity;
+			const orderB = b.order ?? Infinity;
+			if (orderA !== Infinity || orderB !== Infinity) {
+				const orderDiff = (orderA ?? 0) - (orderB ?? 0);
+				// If orders are equal, use created date as tiebreaker for stability
+				if (orderDiff === 0) {
+					return b.created.getTime() - a.created.getTime();
+				}
+				return orderDiff;
+			}
+			return b.created.getTime() - a.created.getTime();
+		});
+	});
 
 	// grab the first user created
 	const user = useLiveQuery(() => db.user.orderBy("created").first());
@@ -40,6 +69,17 @@ export const Habits = () => {
 	const [archivedHabits, setArchivedHabits] = useState<HabitType[]>([]);
 
 	const params = useSearchParams();
+
+	const sensors = useSensors(
+		useSensor(PointerSensor, {
+			activationConstraint: {
+				distance: 8,
+			},
+		}),
+		useSensor(KeyboardSensor, {
+			coordinateGetter: sortableKeyboardCoordinates,
+		})
+	);
 
 	useEffect(() => {
 		if (user?.showMap !== undefined) {
@@ -63,6 +103,7 @@ export const Habits = () => {
 
 	useEffect(() => {
 		if (habits) {
+			// Sort incompleted habits by order (they're already sorted from the query)
 			const incompleted = habits.filter(
 				(i) => !i.archived && !isHabitDoneForToday(i)
 			);
@@ -88,6 +129,39 @@ export const Habits = () => {
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [habits]);
+
+	const handleDragEnd = async (event: DragEndEvent) => {
+		const { active, over } = event;
+
+		if (!over || active.id === over.id) {
+			return;
+		}
+
+		// Get current state to ensure we have the latest array
+		setIncompletedHabits((currentHabits) => {
+			const oldIndex = currentHabits.findIndex((h) => h.id === active.id);
+			const newIndex = currentHabits.findIndex((h) => h.id === over.id);
+
+			if (oldIndex === -1 || newIndex === -1) {
+				return currentHabits;
+			}
+
+			// Use arrayMove to correctly handle the reordering
+			const newHabits = arrayMove(currentHabits, oldIndex, newIndex);
+
+			// Update order in database
+			// Use a transaction to update all at once for better performance
+			db.transaction("rw", db.habits, async () => {
+				for (let i = 0; i < newHabits.length; i++) {
+					await db.habits.update(newHabits[i].id, { order: i });
+				}
+			}).catch((error) => {
+				console.error("Error updating habit order:", error);
+			});
+
+			return newHabits;
+		});
+	};
 
 	if (!habits || !user) return null;
 
@@ -169,23 +243,27 @@ export const Habits = () => {
 						className="col-span-1 md:col-span-2"
 					/>
 
-					{incompletedHabits.map((habit, i) => {
-						const spanClass =
-							i === incompletedHabits.length - 1 &&
-							incompletedHabits.length % 2
-								? "md:col-span-2"
-								: "";
-						return (
-							<div key={habit.id} className={spanClass}>
-								<HabitCard
-									key={habit.id}
-									habit={habit}
-									user={user}
-									showMap={showMap}
-								/>
-							</div>
-						);
-					})}
+					<DndContext
+						sensors={sensors}
+						collisionDetection={closestCorners}
+						onDragEnd={handleDragEnd}
+					>
+						<SortableContext
+							items={incompletedHabits.map((h) => h.id)}
+							strategy={rectSortingStrategy}
+						>
+							{incompletedHabits.map((habit, i) => {
+								return (
+									<SortableHabitItem
+										key={habit.id}
+										habit={habit}
+										user={user}
+										showMap={showMap}
+									/>
+								);
+							})}
+						</SortableContext>
+					</DndContext>
 
 					<Section
 						title="Completed"

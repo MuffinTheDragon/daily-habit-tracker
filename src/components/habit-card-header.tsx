@@ -109,6 +109,8 @@ export const HabitCardHeader = ({ ...props }: Props) => {
 						autoFocus
 						value={currentName}
 						onChange={(e) => setCurrentName(e.target.value)}
+						onPointerDown={(e) => e.stopPropagation()}
+						onKeyDown={(e) => e.stopPropagation()}
 					/>
 					<Button variant="ghost" size="icon" onClick={updateName}>
 						<CheckCircleIcon className="h-6 w-6 text-green-600" />

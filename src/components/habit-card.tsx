@@ -18,6 +18,7 @@ import {
 	getLastUpdatedDate,
 	getStreakFreezes,
 } from "@/lib/utils";
+import { isEqual } from "date-fns";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Graph } from "./graph";
@@ -26,7 +27,6 @@ import { HabitCardHeader } from "./habit-card-header";
 import { HabitCardStats } from "./habit-card-stats";
 import { Badge } from "./ui/badge";
 import { Separator } from "./ui/separator";
-import { isEqual } from "date-fns";
 
 export const BaseNumberOfFreezes = 3;
 
