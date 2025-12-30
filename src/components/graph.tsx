@@ -111,7 +111,10 @@ const GetGraph = ({
 
 	return (
 		<div>
-			<div className="graph mt-4">
+			<div
+				className="graph mt-4"
+				onTouchStart={(e) => e.stopPropagation()}
+			>
 				<ul className="months">
 					<li>Jan</li>
 					<li>Feb</li>
