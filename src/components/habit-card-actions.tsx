@@ -115,12 +115,16 @@ const FillPreviousDays = ({ model }: { model: HabitType }) => {
 	const addDay = async () => {
 		if (!date) return;
 
+		const year = date.getFullYear();
 		const graph = [...model.graph];
 
-		if (model.graph.at(-1)!.manualDaysChecked.some((d) => +d === +date))
-			return;
+		const graphYear = graph.find((g) => g.year === year);
+		if (!graphYear) return;
 
-		graph.at(-1)!.manualDaysChecked.push(date);
+		if (graphYear.manualDaysChecked.some((d) => +d === +date)) return;
+		if (graphYear.daysChecked.some((d) => +d === +date)) return;
+
+		graphYear.manualDaysChecked.push(date);
 
 		await db.habits.update(model.id, { graph, checks: model.checks + 1 });
 
@@ -128,15 +132,17 @@ const FillPreviousDays = ({ model }: { model: HabitType }) => {
 	};
 
 	const isDayDisabled = (day: Date) => {
+		const year = day.getFullYear();
 		if (day <= addDays(startOfDay(model.created), -1)) {
 			return true;
 		}
 
-		if (model.graph.at(-1)!.daysChecked.some((d) => +d === +day))
-			return true;
+		const graphYear = model.graph.find((g) => g.year === year);
+		if (!graphYear) return true;
 
-		if (model.graph.at(-1)!.manualDaysChecked.some((d) => +d === +day))
-			return true;
+		if (graphYear.daysChecked.some((d) => +d === +day)) return true;
+
+		if (graphYear.manualDaysChecked.some((d) => +d === +day)) return true;
 
 		return day >= addDays(new Date(), -1);
 	};
@@ -176,7 +182,6 @@ const FillPreviousDays = ({ model }: { model: HabitType }) => {
 					<Calendar
 						mode="single"
 						disabled={isDayDisabled}
-						fromMonth={new Date(currentYear, 0)}
 						toMonth={new Date(currentYear, 11, 31)}
 						selected={date}
 						onSelect={setDate}
